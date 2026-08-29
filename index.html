@@ -77,15 +77,20 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
 </style>
 </head>
 <body>
-<div id="cinematicIntro" class="cinematic-intro" aria-hidden="true">
+<video class="page-video-bg" autoplay muted loop playsinline preload="auto">
+  <source src="./priority-lexus-homepage-video.mp4" type="video/mp4">
+</video>
+<div class="page-video-dim" aria-hidden="true"></div>
+
+<div id="cinematicIntro" class="cinematic-intro active play" aria-hidden="true">
   <div class="cinematic-inner">
     <img src="./priority-lexus-vb-wordmark-white.png" alt="" class="cinematic-logo">
-    <div class="cinematic-line"></div>
+    
   </div>
 </div>
 
 <main id="app" aria-live="polite">
-<div class="demo-badge">Prototype · simulated data</div>
+
 
 <section id="home" class="screen active" data-screen="home">
   <div class="home-art" aria-hidden="true">
@@ -99,7 +104,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
       <i class="particle p1"></i><i class="particle red p2"></i><i class="particle p3"></i><i class="particle p4"></i>
       <i class="particle red p5"></i><i class="particle p6"></i><i class="particle p7"></i><i class="particle red p8"></i>
     </div>
-    <video class="hero-video" autoplay muted loop playsinline preload="auto"><source src="./priority-lexus-homepage-video.mp4" type="video/mp4"></video><div class="hero-video-shade" aria-hidden="true"></div><div class="hero-copy">
+    <div class="hero-copy">
       <div class="hero-small">Welcome to</div>
       <div class="brand-lockup" aria-label="Priority Lexus Virginia Beach">
         <img class="hero-logo" src="./priority-lexus-vb-wordmark-white.png" alt="Priority Lexus Virginia Beach">
@@ -109,7 +114,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
   </div>
   <div class="home-prompt">Your visit. Your Lexus. Your way.</div>
   <div class="home-grid">
-    <button class="portal ask-team ask-specialist" data-go="pfl"><span class="portal-title">PRIORITIES<br>FOR LIFE</span><span class="portal-sub">See what lifetime ownership benefits can mean for you.</span><span class="portal-arrow">→</span></button>
+    <button class="portal ask-team ask-specialist force-red-cta force-red-cta force-red-cta" data-go="pfl"><span class="portal-title">PRIORITIES<br>FOR LIFE</span><span class="portal-sub">See what lifetime ownership benefits can mean for you.</span><span class="portal-arrow">→</span></button>
     <button class="portal" data-go="priority-certified"><span class="portal-title">PRIORITY<br>CERTIFIED</span><span class="portal-sub">Explore lifetime powertrain and ownership benefits.</span><span class="portal-arrow">→</span></button>
     <button class="portal" data-go="lcertified"><span class="portal-title">L/CERTIFIED<br>BY LEXUS</span><span class="portal-sub">Discover the Lexus certified ownership experience.</span><span class="portal-arrow">→</span></button>
     <button class="portal" data-go="finder"><span class="portal-title">FIND YOUR<br>LEXUS</span><span class="portal-sub">Explore models, compare choices and request a specialist.</span><span class="portal-arrow">→</span></button>
@@ -118,7 +123,8 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <div><strong>Need a hand?</strong><span>Request a Lexus specialist at any time.</span></div>
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
-  <footer class="version-footer">Priority Lexus Kiosk · Version 0.10</footer>
+  <div class="prototype-footer-block">Prototype · Simulated Data</div>
+<footer class="version-footer">Priority Lexus Kiosk · Version 0.11</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
@@ -163,7 +169,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
 </section>
 
 <section id="quiz" class="screen" data-screen="quiz">
-  <div class="topbar"><button class="icon-btn" data-go="finder" aria-label="Back">←</button><div class="brand">LEXUS <span>MATCH</span></div><button class="icon-btn home-highlight" data-home aria-label="Home" >⌂</button></div>
+  <div class="topbar"><button class="icon-btn force-red-cta" data-go="finder" aria-label="Back">←</button><div class="brand">LEXUS <span>MATCH</span></div><button class="icon-btn home-highlight" data-home aria-label="Home" >⌂</button></div>
   <div class="progress"><span id="quizProgress" style="width:33%"></span></div>
   <div class="section-head"><div class="eyebrow" id="quizEyebrow">Question 1 of 3</div><h1 class="title" id="quizQuestion">What matters most?</h1></div>
   <div id="quizChoices" class="choice-grid"></div>
@@ -680,36 +686,7 @@ button[title*="Home" i]::after{
 }
 </style>
 
-<script>
-(function(){
-  const overlay=document.getElementById('cinematicIntro');
-  if(!overlay) return;
-  let idleTimer=null;
-  let playing=false;
-  function playCinematic(){
-    if(playing) return;
-    playing=true;
-    overlay.classList.add('active');
-    requestAnimationFrame(()=>overlay.classList.add('play'));
-    window.setTimeout(()=>{
-      overlay.classList.remove('play');
-      overlay.classList.remove('active');
-      playing=false;
-    },3600);
-  }
-  function resetIdle(){
-    if(idleTimer) clearTimeout(idleTimer);
-    idleTimer=setTimeout(playCinematic,60000);
-  }
-  ['pointerdown','touchstart','keydown'].forEach(evt=>{
-    document.addEventListener(evt,resetIdle,{passive:true});
-  });
-  window.addEventListener('load',()=>{
-    playCinematic();
-    resetIdle();
-  });
-})();
-</script>
+
 
 <style>
 .prototype-note,
@@ -1085,6 +1062,113 @@ button[class*="ask-specialist"],
       root.querySelectorAll('input[type="range"]').forEach(el=>{el.value=el.max;fire(el);});
       if(root.offsetParent!==null) runSavingsMotion(root);
     }
+  });
+})();
+</script>
+
+<style>
+html,body{min-height:100%;background:#050506!important}
+body{position:relative;isolation:isolate}
+.page-video-bg{position:fixed;inset:0;width:100vw;height:100vh;object-fit:cover;z-index:-3;pointer-events:none}
+.page-video-dim{position:fixed;inset:0;z-index:-2;background:rgba(0,0,0,.60);pointer-events:none}
+.hero{background:transparent!important}
+.hero-video,.hero-video-shade{display:none!important}
+.cinematic-line{display:none!important}
+
+.cinematic-intro{opacity:1!important;visibility:visible;background:#050506}
+.cinematic-intro:not(.active){opacity:0!important;visibility:hidden}
+body:not(.cinematic-ready) > *:not(.cinematic-intro):not(.page-video-bg):not(.page-video-dim){visibility:hidden}
+body.cinematic-ready > *{visibility:visible}
+
+.prototype-footer-block{
+  position:relative!important;float:none!important;inset:auto!important;width:100%!important;
+  box-sizing:border-box;margin:28px 0 0!important;padding:14px 20px 12px!important;
+  text-align:center!important;display:block!important;color:#8a8a91!important;font-size:11px!important;
+  letter-spacing:.16em!important;text-transform:uppercase!important;border-top:1px solid rgba(255,255,255,.08);
+  background:rgba(0,0,0,.28)
+}
+.prototype-badge,.demo-badge,.prototype-note,.simulated-note{position:static!important;transform:none!important;inset:auto!important}
+
+.home-grid .portal{
+  opacity:1!important;
+  background:radial-gradient(circle at 78% 12%,rgba(255,255,255,.045),transparent 30%),
+             linear-gradient(145deg,#17171a 0%,#0c0c0f 58%,#070708 100%)!important;
+}
+.home-grid .portal-arrow{
+  position:relative!important;left:0!important;width:12px!important;height:12px!important;margin-top:0!important;
+  font-size:0!important;border-radius:50%!important;background:#7bd8ff!important;
+  box-shadow:0 0 7px rgba(123,216,255,.75),0 0 16px rgba(123,216,255,.38)!important;
+  animation:portalLedPulse 2.6s ease-in-out infinite!important
+}
+.home-grid .portal-arrow::before,.home-grid .portal-arrow::after{display:none!important}
+@keyframes portalLedPulse{
+  0%,100%{opacity:.32;box-shadow:0 0 3px rgba(123,216,255,.28)}
+  50%{opacity:1;box-shadow:0 0 8px rgba(123,216,255,.95),0 0 20px rgba(123,216,255,.58)}
+}
+
+.force-red-cta{
+  background:linear-gradient(180deg,#cf1823,#a40710)!important;color:#fff!important;
+  border:1px solid #e22b35!important;
+  box-shadow:0 8px 24px rgba(177,15,24,.30), inset 0 1px 0 rgba(255,255,255,.18)!important
+}
+.force-red-cta:hover,.force-red-cta:active,.force-red-cta:focus{
+  background:linear-gradient(180deg,#db1c28,#b20b15)!important;color:#fff!important
+}
+
+.screen:not(#home),.overlay,.modal,.drawer,.panel,.content-panel{
+  background:rgba(5,5,7,.60)!important;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)
+}
+.benefit-card,.slide-card,.inventory-card,.vehicle-card,.choice-card,.compare-card,.result-card,
+.recommend-card,.recommendation-card,.panel-card{
+  background:rgba(12,12,15,.60)!important;border:1px solid rgba(255,255,255,.12)!important;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:1!important;
+  width:100%!important;max-width:760px!important;height:520px!important;min-height:520px!important;
+  max-height:520px!important;box-sizing:border-box!important
+}
+button,.btn,.portal,.force-red-cta{opacity:1!important}
+
+@media(max-width:700px){
+  .benefit-card,.slide-card,.inventory-card,.vehicle-card,.choice-card,.compare-card,.result-card,
+  .recommend-card,.recommendation-card,.panel-card{
+    height:430px!important;min-height:430px!important;max-height:430px!important
+  }
+}
+</style>
+
+<script>
+(function(){
+  const overlay=document.getElementById('cinematicIntro');
+  if(!overlay){ document.body.classList.add('cinematic-ready'); return; }
+
+  let idleTimer=null;
+  let playing=true;
+
+  function resetIdle(){
+    clearTimeout(idleTimer);
+    idleTimer=setTimeout(playCinematic,60000);
+  }
+
+  function finishInitial(){
+    overlay.classList.remove('play','active');
+    document.body.classList.add('cinematic-ready');
+    playing=false;
+    resetIdle();
+  }
+
+  function playCinematic(){
+    if(playing) return;
+    playing=true;
+    overlay.classList.add('active','play');
+    setTimeout(()=>{
+      overlay.classList.remove('play','active');
+      playing=false;
+      resetIdle();
+    },3600);
+  }
+
+  document.addEventListener('DOMContentLoaded',()=>setTimeout(finishInitial,3600));
+  ['pointerdown','touchstart','keydown'].forEach(evt=>{
+    document.addEventListener(evt,resetIdle,{passive:true});
   });
 })();
 </script>
