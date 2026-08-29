@@ -86,7 +86,11 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
   <div class="cinematic-inner">
     <img src="./priority-lexus-vb-wordmark-white.png" alt="" class="cinematic-logo">
     
-  </div>
+  
+    <div class="cinematic-glow" aria-hidden="true"></div>
+    <div class="cinematic-orbit" aria-hidden="true"></div>
+    <div class="cinematic-line" aria-hidden="true"><span></span></div>
+    </div>
 </div>
 
 <main id="app" aria-live="polite">
@@ -124,7 +128,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
   <div class="prototype-footer-block">Prototype · Simulated Data</div>
-<footer class="version-footer">Priority Lexus Kiosk · Version 0.11</footer>
+<footer class="version-footer">Priority Lexus Kiosk · Version 0.12</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
@@ -1135,10 +1139,254 @@ button,.btn,.portal,.force-red-cta{opacity:1!important}
 }
 </style>
 
+
+
+<style>
+/* v0.12 full-screen video background restored */
+html,body{
+  min-height:100%;
+  background:#050506!important;
+}
+body{
+  position:relative;
+  isolation:isolate;
+  overflow-x:hidden;
+}
+.page-video-bg{
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100vh!important;
+  min-width:100%!important;
+  min-height:100%!important;
+  object-fit:cover!important;
+  object-position:center center!important;
+  z-index:-4!important;
+  opacity:1!important;
+  display:block!important;
+  pointer-events:none!important;
+}
+.page-video-dim{
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100vh!important;
+  z-index:-3!important;
+  background:rgba(0,0,0,.60)!important;
+  pointer-events:none!important;
+}
+.hero,
+.screen,
+main,
+.app,
+.shell,
+.page{
+  background-color:transparent!important;
+}
+
+/* Remove divider between hero and the four main buttons */
+.hero{
+  border-bottom:0!important;
+  box-shadow:none!important;
+}
+.hero::after{
+  border:0!important;
+  box-shadow:none!important;
+}
+.home-prompt,
+.home-grid{
+  border-top:0!important;
+}
+.home-grid::before,
+.home-grid::after{
+  display:none!important;
+}
+
+/* Cinematic intro */
+.cinematic-intro{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  background:
+    radial-gradient(circle at 50% 42%,rgba(255,255,255,.045),transparent 28%),
+    linear-gradient(180deg,#050506 0%,#030304 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:1;
+  visibility:visible;
+  transition:opacity 1.15s cubic-bezier(.2,.7,.2,1), visibility 1.15s;
+  overflow:hidden;
+}
+.cinematic-intro:not(.active){
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+.cinematic-inner{
+  position:relative;
+  width:min(80vw,820px);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  transform:translateY(4px);
+}
+.cinematic-logo{
+  position:relative;
+  z-index:4;
+  width:100%;
+  height:auto;
+  opacity:0;
+  transform:scale(.90);
+  filter:blur(10px);
+}
+.cinematic-intro.play .cinematic-logo{
+  animation:cinLogoDramatic 1.55s cubic-bezier(.18,.8,.2,1) forwards;
+}
+.cinematic-glow{
+  position:absolute;
+  z-index:1;
+  width:62%;
+  aspect-ratio:1;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.12),rgba(255,255,255,.025) 40%,transparent 70%);
+  filter:blur(18px);
+  opacity:0;
+  transform:scale(.65);
+}
+.cinematic-intro.play .cinematic-glow{
+  animation:cinGlow 2.8s ease-out forwards;
+}
+.cinematic-orbit{
+  position:absolute;
+  z-index:2;
+  width:74%;
+  aspect-ratio:1;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:50%;
+  opacity:0;
+  transform:scale(.75) rotate(0deg);
+}
+.cinematic-orbit::before,
+.cinematic-orbit::after{
+  content:"";
+  position:absolute;
+  inset:12%;
+  border:1px solid rgba(255,255,255,.05);
+  border-radius:50%;
+}
+.cinematic-orbit::after{
+  inset:25%;
+}
+.cinematic-intro.play .cinematic-orbit{
+  animation:cinOrbit 3.2s ease-out forwards;
+}
+.cinematic-line{
+  position:relative;
+  z-index:5;
+  width:min(72%,560px);
+  height:3px;
+  margin-top:30px;
+  background:rgba(255,255,255,.08);
+  overflow:hidden;
+  border-radius:999px;
+  box-shadow:0 0 16px rgba(255,255,255,.04);
+}
+.cinematic-line span{
+  display:block;
+  width:0%;
+  height:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#777,#fff,#a60d18,#fff,#8a8a8f);
+  background-size:240% 100%;
+  box-shadow:0 0 12px rgba(255,255,255,.28);
+}
+.cinematic-intro.play .cinematic-line span{
+  animation:cinLoadBar 3.1s cubic-bezier(.18,.75,.2,1) forwards,
+            cinGradientTravel 1.8s linear infinite;
+}
+.cinematic-intro::before,
+.cinematic-intro::after{
+  content:"";
+  position:absolute;
+  width:45vw;
+  height:45vw;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.035);
+  opacity:.4;
+}
+.cinematic-intro::before{
+  left:-15vw;
+  top:-15vw;
+  animation:cinDriftA 8s ease-in-out infinite alternate;
+}
+.cinematic-intro::after{
+  right:-18vw;
+  bottom:-18vw;
+  animation:cinDriftB 9s ease-in-out infinite alternate;
+}
+
+@keyframes cinLogoDramatic{
+  0%{opacity:0;transform:scale(.90);filter:blur(10px)}
+  45%{opacity:1;transform:scale(1.025);filter:blur(0)}
+  72%{opacity:1;transform:scale(1)}
+  100%{opacity:1;transform:scale(1)}
+}
+@keyframes cinGlow{
+  0%{opacity:0;transform:scale(.65)}
+  45%{opacity:.8;transform:scale(1)}
+  100%{opacity:.25;transform:scale(1.15)}
+}
+@keyframes cinOrbit{
+  0%{opacity:0;transform:scale(.75) rotate(0deg)}
+  35%{opacity:.45}
+  100%{opacity:.12;transform:scale(1.15) rotate(34deg)}
+}
+@keyframes cinLoadBar{
+  0%{width:0%}
+  18%{width:14%}
+  48%{width:56%}
+  72%{width:78%}
+  100%{width:100%}
+}
+@keyframes cinGradientTravel{
+  to{background-position:240% 0}
+}
+@keyframes cinDriftA{
+  from{transform:translate(0,0) scale(1)}
+  to{transform:translate(5vw,3vw) scale(1.08)}
+}
+@keyframes cinDriftB{
+  from{transform:translate(0,0) scale(1)}
+  to{transform:translate(-4vw,-3vw) scale(1.06)}
+}
+
+/* Smooth interface reveal */
+body:not(.cinematic-ready) .app-shell,
+body:not(.cinematic-ready) main,
+body:not(.cinematic-ready) .screen,
+body:not(.cinematic-ready) .version-footer,
+body:not(.cinematic-ready) .prototype-footer-block{
+  opacity:0!important;
+}
+body.cinematic-ready .app-shell,
+body.cinematic-ready main,
+body.cinematic-ready .screen,
+body.cinematic-ready .version-footer,
+body.cinematic-ready .prototype-footer-block{
+  opacity:1!important;
+  transition:opacity 1.1s ease!important;
+}
+</style>
+
 <script>
 (function(){
   const overlay=document.getElementById('cinematicIntro');
-  if(!overlay){ document.body.classList.add('cinematic-ready'); return; }
+  if(!overlay){
+    document.body.classList.add('cinematic-ready');
+    return;
+  }
 
   let idleTimer=null;
   let playing=true;
@@ -1148,25 +1396,34 @@ button,.btn,.portal,.force-red-cta{opacity:1!important}
     idleTimer=setTimeout(playCinematic,60000);
   }
 
-  function finishInitial(){
-    overlay.classList.remove('play','active');
+  function revealInterface(){
     document.body.classList.add('cinematic-ready');
-    playing=false;
-    resetIdle();
+    requestAnimationFrame(()=>{
+      overlay.classList.remove('play');
+      setTimeout(()=>{
+        overlay.classList.remove('active');
+        playing=false;
+        resetIdle();
+      },850);
+    });
   }
 
   function playCinematic(){
     if(playing) return;
     playing=true;
-    overlay.classList.add('active','play');
-    setTimeout(()=>{
-      overlay.classList.remove('play','active');
-      playing=false;
-      resetIdle();
-    },3600);
+    overlay.classList.add('active');
+    void overlay.offsetWidth;
+    overlay.classList.add('play');
+    setTimeout(revealInterface,3600);
   }
 
-  document.addEventListener('DOMContentLoaded',()=>setTimeout(finishInitial,3600));
+  // Initial load: cinematic owns the first frame
+  document.documentElement.style.background='#050506';
+  document.addEventListener('DOMContentLoaded',()=>{
+    overlay.classList.add('active','play');
+    setTimeout(revealInterface,3600);
+  });
+
   ['pointerdown','touchstart','keydown'].forEach(evt=>{
     document.addEventListener(evt,resetIdle,{passive:true});
   });
