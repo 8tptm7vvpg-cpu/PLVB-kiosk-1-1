@@ -77,6 +77,13 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
 </style>
 </head>
 <body>
+<div id="cinematicIntro" class="cinematic-intro" aria-hidden="true">
+  <div class="cinematic-inner">
+    <img src="./priority-lexus-vb-wordmark-white.png" alt="" class="cinematic-logo">
+    <div class="cinematic-line"></div>
+  </div>
+</div>
+
 <main id="app" aria-live="polite">
 <div class="demo-badge">Prototype · simulated data</div>
 
@@ -92,7 +99,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
       <i class="particle p1"></i><i class="particle red p2"></i><i class="particle p3"></i><i class="particle p4"></i>
       <i class="particle red p5"></i><i class="particle p6"></i><i class="particle p7"></i><i class="particle red p8"></i>
     </div>
-    <div class="hero-copy">
+    <div class="hero-ghost-word" aria-hidden="true">LEXUS</div><div class="hero-copy">
       <div class="hero-small">Welcome to</div>
       <div class="brand-lockup" aria-label="Priority Lexus Virginia Beach">
         <img class="hero-logo" src="./priority-lexus-vb-wordmark-white.png" alt="Priority Lexus Virginia Beach">
@@ -111,11 +118,11 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <div><strong>Need a hand?</strong><span>Request a Lexus specialist at any time.</span></div>
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
-  <footer class="version-footer">Priority Lexus Kiosk · Version 0.6</footer>
+  <footer class="version-footer">Priority Lexus Kiosk · Version 0.7</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
-  <div class="topbar"><div class="brand">PRIORITY <span>LEXUS</span></div><button class="icon-btn" data-home aria-label="Home">⌂</button></div>
+  <div class="topbar"><div class="brand">PRIORITY <span>LEXUS</span></div><button class="icon-btn home-highlight" data-home aria-label="Home" >⌂</button></div>
   <div class="section-head"><div class="eyebrow">Priorities for Life</div><h1 class="title">How much could you save?</h1><p class="subtitle">Move the controls to see an illustrative estimate of lifetime ownership value.</p></div>
   <div class="panel calc-total"><div class="eyebrow">Estimated ownership value</div><div class="amount" id="calcAmount">$13,140</div><small>Illustrative prototype estimate · actual savings vary</small></div>
   <div class="panel">
@@ -128,7 +135,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
 </section>
 
 <section id="priority-certified" class="screen benefit-screen" data-screen="priority-certified">
-  <div class="topbar"><div class="brand">PRIORITY <span>CERTIFIED</span></div><button class="icon-btn" data-home aria-label="Home">⌂</button></div>
+  <div class="topbar"><div class="brand">PRIORITY <span>CERTIFIED</span></div><button class="icon-btn home-highlight" data-home aria-label="Home" >⌂</button></div>
   <div class="progress"><span id="pcProgress" style="width:25%"></span></div>
   <div class="benefit-stage"><div id="pcCard" class="benefit-card"></div></div>
   <div id="pcDots" class="dots"></div>
@@ -137,7 +144,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
 </section>
 
 <section id="lcertified" class="screen benefit-screen" data-screen="lcertified">
-  <div class="topbar"><div class="brand">L/CERTIFIED <span>BY LEXUS</span></div><button class="icon-btn" data-home aria-label="Home">⌂</button></div>
+  <div class="topbar"><div class="brand">L/CERTIFIED <span>BY LEXUS</span></div><button class="icon-btn home-highlight" data-home aria-label="Home" >⌂</button></div>
   <div class="progress"><span id="lcProgress" style="width:16.6%"></span></div>
   <div class="benefit-stage"><div id="lcCard" class="benefit-card"></div></div>
   <div id="lcDots" class="dots"></div>
@@ -146,7 +153,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
 </section>
 
 <section id="finder" class="screen" data-screen="finder">
-  <div class="topbar"><div class="brand">FIND YOUR <span>LEXUS</span></div><button class="icon-btn" data-home aria-label="Home">⌂</button></div>
+  <div class="topbar"><div class="brand">FIND YOUR <span>LEXUS</span></div><button class="icon-btn home-highlight" data-home aria-label="Home" >⌂</button></div>
   <div class="section-head"><div class="eyebrow">Digital Showroom</div><h1 class="title">How would you like to explore?</h1><p class="subtitle">Browse the lineup or answer a few quick questions and let us narrow it down.</p></div>
   <div class="choice-grid">
     <button class="touch" data-finder-mode="browse"><strong>I KNOW WHAT I WANT</strong><small>Browse SUVs, sedans, performance and electrified Lexus models.</small></button>
@@ -156,14 +163,14 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
 </section>
 
 <section id="quiz" class="screen" data-screen="quiz">
-  <div class="topbar"><button class="icon-btn" data-go="finder" aria-label="Back">←</button><div class="brand">LEXUS <span>MATCH</span></div><button class="icon-btn" data-home aria-label="Home">⌂</button></div>
+  <div class="topbar"><button class="icon-btn" data-go="finder" aria-label="Back">←</button><div class="brand">LEXUS <span>MATCH</span></div><button class="icon-btn home-highlight" data-home aria-label="Home" >⌂</button></div>
   <div class="progress"><span id="quizProgress" style="width:33%"></span></div>
   <div class="section-head"><div class="eyebrow" id="quizEyebrow">Question 1 of 3</div><h1 class="title" id="quizQuestion">What matters most?</h1></div>
   <div id="quizChoices" class="choice-grid"></div>
 </section>
 
 <section id="match" class="screen" data-screen="match">
-  <div class="topbar"><button class="icon-btn" data-go="finder" aria-label="Back">←</button><div class="brand">YOUR <span>MATCH</span></div><button class="icon-btn" data-home aria-label="Home">⌂</button></div>
+  <div class="topbar"><button class="icon-btn" data-go="finder" aria-label="Back">←</button><div class="brand">YOUR <span>MATCH</span></div><button class="icon-btn home-highlight" data-home aria-label="Home" >⌂</button></div>
   <div class="quiz-summary" id="quizSummary"></div>
   <div class="match-card"><div class="eyebrow" style="color:#444">A great place to start</div><div class="big-model" id="matchModel">RX</div><h2 id="matchName" style="font-size:34px">RX 350h</h2><p id="matchReason">A refined midsize luxury SUV with hybrid efficiency and everyday versatility.</p></div>
   <div class="footer-actions"><button class="ghost-cta" id="compareFromMatch">COMPARE</button><button class="white-cta" data-go="inventory">SEE AVAILABLE</button></div>
@@ -171,7 +178,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
 </section>
 
 <section id="inventory" class="screen" data-screen="inventory">
-  <div class="topbar"><button class="icon-btn" data-go="finder" aria-label="Back">←</button><div class="brand">AVAILABLE <span>LEXUS</span></div><button class="icon-btn" data-home aria-label="Home">⌂</button></div>
+  <div class="topbar"><button class="icon-btn" data-go="finder" aria-label="Back">←</button><div class="brand">AVAILABLE <span>LEXUS</span></div><button class="icon-btn home-highlight" data-home aria-label="Home" >⌂</button></div>
   <div class="section-head"><div class="eyebrow">Prototype inventory feed</div><h1 class="title">Swipe the showroom.</h1><p class="subtitle">These vehicles are simulated. Live vAuto/CDK inventory can replace this data layer later.</p></div>
   <div class="list-bar"><strong>♡ <span id="favCount">0</span> in Your Lexus List</strong><button id="openCompare">COMPARE LIST</button></div>
   <div id="inventoryCards" class="inventory-scroll"></div>
@@ -179,14 +186,14 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
 </section>
 
 <section id="compare" class="screen" data-screen="compare">
-  <div class="topbar"><button class="icon-btn" data-go="inventory" aria-label="Back">←</button><div class="brand">COMPARE <span>LEXUS</span></div><button class="icon-btn" data-home aria-label="Home">⌂</button></div>
+  <div class="topbar"><button class="icon-btn" data-go="inventory" aria-label="Back">←</button><div class="brand">COMPARE <span>LEXUS</span></div><button class="icon-btn home-highlight" data-home aria-label="Home" >⌂</button></div>
   <div class="section-head"><div class="eyebrow">Side by side</div><h1 class="title">Compare two favorites.</h1><p class="subtitle" id="compareHint">Add at least two vehicles to Your Lexus List.</p></div>
   <div id="compareGrid" class="compare-grid"></div>
   <div class="footer-actions"><button class="red-cta wide" data-help="Vehicle comparison assistance">SHOW THESE TO A SPECIALIST</button></div>
 </section>
 
 <section id="help" class="screen" data-screen="help">
-  <div class="topbar"><button class="icon-btn" id="helpBack" aria-label="Back">←</button><div class="brand">LEXUS <span>CONCIERGE</span></div><button class="icon-btn" data-home aria-label="Home">⌂</button></div>
+  <div class="topbar"><button class="icon-btn" id="helpBack" aria-label="Back">←</button><div class="brand">LEXUS <span>CONCIERGE</span></div><button class="icon-btn home-highlight" data-home aria-label="Home" >⌂</button></div>
   <div class="section-head"><div class="eyebrow">We're here when you're ready</div><h1 class="title">How can our team help?</h1><p class="subtitle">Choose what you need and we'll simulate an immediate dealership notification.</p></div>
   <div class="help-options">
     <button class="touch help-choice" data-help-choice="Sales assistance"><strong>SALES</strong><small>I'd like help choosing or seeing a Lexus.</small></button>
@@ -197,7 +204,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
 </section>
 
 <section id="help-confirm" class="screen" data-screen="help-confirm">
-  <div class="topbar"><button class="icon-btn" data-go="help" aria-label="Back">←</button><div class="brand">LEXUS <span>CONCIERGE</span></div><button class="icon-btn" data-home aria-label="Home">⌂</button></div>
+  <div class="topbar"><button class="icon-btn" data-go="help" aria-label="Back">←</button><div class="brand">LEXUS <span>CONCIERGE</span></div><button class="icon-btn home-highlight" data-home aria-label="Home" >⌂</button></div>
   <div class="section-head"><div class="eyebrow">One last step</div><h1 class="title">Who should we welcome?</h1><p class="subtitle">First name is optional. We'll only use it in this simulated request.</p></div>
   <input id="guestName" class="name-input" maxlength="24" autocomplete="off" placeholder="First name (optional)" />
   <div class="confirm-context"><span>Request context</span><strong id="requestContext">Sales assistance</strong></div>
@@ -206,7 +213,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
 </section>
 
 <section id="requesting" class="screen" data-screen="requesting">
-  <div class="topbar"><div class="brand">PRIORITY <span>CONCIERGE</span></div><button class="icon-btn" data-home aria-label="Home">⌂</button></div>
+  <div class="topbar"><div class="brand">PRIORITY <span>CONCIERGE</span></div><button class="icon-btn home-highlight" data-home aria-label="Home" >⌂</button></div>
   <div class="request-animation">
     <div class="pulse-ring">⌁</div>
     <div class="eyebrow">Simulating dealership communication</div>
@@ -217,7 +224,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
 </section>
 
 <section id="claimed" class="screen" data-screen="claimed">
-  <div class="topbar"><div class="brand">PRIORITY <span>CONCIERGE</span></div><button class="icon-btn" data-home aria-label="Home">⌂</button></div>
+  <div class="topbar"><div class="brand">PRIORITY <span>CONCIERGE</span></div><button class="icon-btn home-highlight" data-home aria-label="Home" >⌂</button></div>
   <div style="margin:auto;text-align:center;width:100%">
     <div class="eyebrow">Request claimed · demo</div>
     <div class="claimed-person" id="claimedName">JESSICA</div>
@@ -370,3 +377,336 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
   .hero-logo{width:min(88%,420px)!important;max-height:120px;margin:0 auto 12px!important}
 }
 </style>
+
+<style>
+/* v0.7 Lexus white-card system + motion pass */
+:root{
+  --lux-card:#f5f5f3;
+  --lux-card-2:#ffffff;
+  --lux-ink:#0b0b0d;
+  --lux-soft:#bfc0c3;
+}
+
+/* Cinematic load / idle intro */
+.cinematic-intro{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  background:#050506;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .7s ease;
+}
+.cinematic-intro.active{opacity:1;pointer-events:auto}
+.cinematic-inner{
+  width:min(78vw,760px);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+.cinematic-logo{
+  width:100%;
+  height:auto;
+  opacity:0;
+  transform:scale(.94);
+}
+.cinematic-intro.play .cinematic-logo{
+  animation:cinematicLogoIn 1.5s cubic-bezier(.2,.8,.2,1) forwards;
+}
+.cinematic-line{
+  width:0;
+  height:2px;
+  margin-top:26px;
+  background:linear-gradient(90deg,#6d6d72,#fff,#a50000,#fff,#6d6d72);
+  background-size:240% 100%;
+  opacity:.8;
+}
+.cinematic-intro.play .cinematic-line{
+  animation:cinematicLine 1.4s .45s ease forwards, gradientTravel 4s linear infinite 1.8s;
+}
+@keyframes cinematicLogoIn{
+  0%{opacity:0;transform:scale(.94);filter:blur(8px)}
+  55%{opacity:1;transform:scale(1);filter:blur(0)}
+  100%{opacity:1;transform:scale(1)}
+}
+@keyframes cinematicLine{
+  from{width:0;opacity:0}
+  to{width:68%;opacity:1}
+}
+@keyframes gradientTravel{to{background-position:240% 0}}
+
+/* More alive hero */
+.hero{overflow:hidden}
+.hero-ghost-word{
+  position:absolute;
+  z-index:1;
+  left:50%;
+  bottom:-.08em;
+  transform:translateX(-50%);
+  width:120%;
+  text-align:center;
+  font-family:"Arial Black","Helvetica Neue",Arial,sans-serif;
+  font-size:clamp(140px,18vw,300px);
+  font-weight:900;
+  letter-spacing:-.07em;
+  color:rgba(255,255,255,.055);
+  line-height:.75;
+  white-space:nowrap;
+  user-select:none;
+  animation:ghostLexMotion 13s ease-in-out infinite alternate;
+}
+@keyframes ghostLexMotion{
+  0%{transform:translateX(-50%) translateY(0) scale(1);letter-spacing:-.07em}
+  50%{transform:translateX(-49%) translateY(-8px) scale(1.015);letter-spacing:-.055em}
+  100%{transform:translateX(-51%) translateY(4px) scale(.995);letter-spacing:-.065em}
+}
+
+/* White-card language for the four main portals */
+.home-grid .portal{
+  background:
+    radial-gradient(circle at 82% 18%,rgba(160,160,166,.14),transparent 34%),
+    linear-gradient(145deg,#ffffff 0%,#f3f3f1 52%,#dedee0 100%) !important;
+  color:var(--lux-ink)!important;
+  border:1px solid rgba(255,255,255,.9)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.95),
+    0 14px 35px rgba(0,0,0,.24)!important;
+  overflow:hidden;
+}
+.home-grid .portal::before{
+  content:"LEXUS";
+  position:absolute;
+  right:-.04em;
+  bottom:-.18em;
+  font-family:"Arial Black","Helvetica Neue",Arial,sans-serif;
+  font-size:clamp(64px,8vw,120px);
+  font-weight:900;
+  letter-spacing:-.08em;
+  color:rgba(20,20,22,.045);
+  line-height:1;
+  z-index:0;
+  animation:cardGhostMove 11s ease-in-out infinite alternate;
+}
+.home-grid .portal::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  padding:2px;
+  border-radius:inherit;
+  background:linear-gradient(115deg,#e8e8e8,#8c8c92,#fff,#9d0b12,#f2f2f2,#6f6f75);
+  background-size:260% 260%;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  animation:gradientBorderMotion 7s linear infinite;
+  pointer-events:none;
+}
+.home-grid .portal > *{position:relative;z-index:1}
+.home-grid .portal-title,
+.home-grid .portal-sub,
+.home-grid .portal-arrow{color:var(--lux-ink)!important}
+@keyframes cardGhostMove{
+  from{transform:translateX(0)}
+  to{transform:translateX(-10px)}
+}
+@keyframes gradientBorderMotion{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+/* White-card treatment across section slides/cards, but preserve red CTAs/buttons */
+.benefit-card,
+.inventory-card,
+.vehicle-card,
+.choice-card,
+.compare-card,
+.result-card,
+.recommend-card,
+.recommendation-card,
+.slide-card,
+.card:not(.red):not(.danger),
+.panel-card{
+  background:
+    radial-gradient(circle at 80% 18%,rgba(155,155,160,.12),transparent 34%),
+    linear-gradient(145deg,#ffffff 0%,#f5f5f3 50%,#dedee0 100%) !important;
+  color:var(--lux-ink)!important;
+  border:1px solid rgba(255,255,255,.92)!important;
+  box-shadow:0 16px 36px rgba(0,0,0,.24)!important;
+  position:relative;
+  overflow:hidden;
+}
+.benefit-card::before,
+.inventory-card::before,
+.vehicle-card::before,
+.choice-card::before,
+.compare-card::before,
+.result-card::before,
+.recommend-card::before,
+.recommendation-card::before,
+.slide-card::before,
+.panel-card::before{
+  content:"LEXUS";
+  position:absolute;
+  z-index:0;
+  right:-.05em;
+  bottom:-.18em;
+  font-family:"Arial Black","Helvetica Neue",Arial,sans-serif;
+  font-size:clamp(72px,10vw,150px);
+  font-weight:900;
+  line-height:1;
+  letter-spacing:-.08em;
+  color:rgba(20,20,22,.04);
+  pointer-events:none;
+  animation:cardGhostMove 12s ease-in-out infinite alternate;
+}
+.benefit-card > *,
+.inventory-card > *,
+.vehicle-card > *,
+.choice-card > *,
+.compare-card > *,
+.result-card > *,
+.recommend-card > *,
+.recommendation-card > *,
+.slide-card > *,
+.panel-card > *{position:relative;z-index:1}
+
+.benefit-card *,
+.inventory-card *,
+.vehicle-card *,
+.choice-card *,
+.compare-card *,
+.result-card *,
+.recommend-card *,
+.recommendation-card *,
+.slide-card *,
+.panel-card *{
+  color:inherit;
+}
+
+/* Keep red CTA/action buttons red */
+button.primary,
+button.red,
+.btn-primary,
+.cta-primary,
+.request-btn,
+.claim-btn,
+.action-red{
+  background:#b10f18!important;
+  color:#fff!important;
+  border-color:#b10f18!important;
+}
+
+/* Home control */
+.home-highlight,
+button[aria-label*="Home" i],
+button[title*="Home" i]{
+  background:#fff!important;
+  color:#08080a!important;
+  border:1px solid rgba(255,255,255,.95)!important;
+  border-radius:999px!important;
+  box-shadow:0 4px 18px rgba(0,0,0,.24)!important;
+  position:relative;
+  overflow:hidden;
+}
+.home-highlight::after,
+button[aria-label*="Home" i]::after,
+button[title*="Home" i]::after{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius:inherit;
+  padding:2px;
+  background:linear-gradient(120deg,#fff,#a8a8ad,#b10f18,#fff,#77777d);
+  background-size:240% 240%;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  animation:homePulse 5s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes homePulse{
+  0%,78%{opacity:.18;background-position:0% 50%}
+  88%{opacity:1}
+  100%{opacity:.18;background-position:100% 50%}
+}
+
+/* subtle ambient motion on white cards */
+.home-grid .portal,
+.benefit-card,
+.inventory-card,
+.vehicle-card,
+.choice-card,
+.compare-card,
+.result-card,
+.recommend-card,
+.recommendation-card,
+.slide-card,
+.panel-card{
+  animation:ambientFloat 8s ease-in-out infinite alternate;
+}
+@keyframes ambientFloat{
+  from{transform:translateY(0)}
+  to{transform:translateY(-3px)}
+}
+
+/* Mobile: reduce hero height further */
+@media(max-width:700px){
+  .hero{height:255px!important;min-height:0!important;padding:18px 16px 18px!important;margin-bottom:16px!important}
+  .hero-logo{width:min(82%,340px)!important;max-height:90px!important;margin:0 auto 8px!important}
+  .hero-caption{font-size:10px!important;margin-top:8px!important}
+  .hero-ghost-word{font-size:86px!important;bottom:-.02em!important}
+  .home-prompt{margin-bottom:14px!important}
+  .home-grid{gap:10px!important}
+  .portal{min-height:152px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero-ghost-word,
+  .home-grid .portal,
+  .benefit-card,
+  .inventory-card,
+  .vehicle-card,
+  .choice-card,
+  .compare-card,
+  .result-card,
+  .recommend-card,
+  .recommendation-card,
+  .slide-card,
+  .panel-card{animation:none!important}
+}
+</style>
+
+<script>
+(function(){
+  const overlay=document.getElementById('cinematicIntro');
+  if(!overlay) return;
+  let idleTimer=null;
+  let playing=false;
+  function playCinematic(){
+    if(playing) return;
+    playing=true;
+    overlay.classList.add('active');
+    requestAnimationFrame(()=>overlay.classList.add('play'));
+    window.setTimeout(()=>{
+      overlay.classList.remove('play');
+      overlay.classList.remove('active');
+      playing=false;
+    },3600);
+  }
+  function resetIdle(){
+    if(idleTimer) clearTimeout(idleTimer);
+    idleTimer=setTimeout(playCinematic,60000);
+  }
+  ['pointerdown','touchstart','keydown'].forEach(evt=>{
+    document.addEventListener(evt,resetIdle,{passive:true});
+  });
+  window.addEventListener('load',()=>{
+    playCinematic();
+    resetIdle();
+  });
+})();
+</script>
