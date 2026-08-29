@@ -83,7 +83,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
 <div class="page-video-dim" aria-hidden="true"></div>
 
 <div id="cinematicIntro" class="cinematic-intro active play" aria-hidden="true">
-  <div class="cinematic-inner">
+  <div class="cinematic-particles" aria-hidden="true"></div><div class="cinematic-inner">
     <img src="./priority-lexus-vb-wordmark-white.png" alt="" class="cinematic-logo">
     
   
@@ -93,6 +93,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     </div>
 </div>
 
+<div id="lexusFlyby" class="lexus-flyby" aria-hidden="true">LEXUS</div>
 <main id="app" aria-live="polite">
 
 
@@ -128,7 +129,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
   <div class="prototype-footer-block">Prototype · Simulated Data</div>
-<footer class="version-footer">Priority Lexus Kiosk · Version 0.12</footer>
+<footer class="version-footer">Priority Lexus Kiosk · Version 0.13</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
@@ -1380,52 +1381,370 @@ body.cinematic-ready .prototype-footer-block{
 }
 </style>
 
+
+
+<style>
+/* v0.13 definitive background cleanup */
+
+/* Exactly two visual background layers:
+   1) video
+   2) one 60% black dimmer */
+html,body{
+  margin:0!important;
+  min-height:100%!important;
+  background:#000!important;
+}
+body{
+  position:relative!important;
+  isolation:isolate!important;
+}
+.page-video-bg{
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100vh!important;
+  min-width:100%!important;
+  min-height:100%!important;
+  object-fit:cover!important;
+  object-position:center center!important;
+  display:block!important;
+  opacity:1!important;
+  visibility:visible!important;
+  z-index:-20!important;
+  pointer-events:none!important;
+}
+.page-video-dim{
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100vh!important;
+  background:rgba(0,0,0,.60)!important;
+  opacity:1!important;
+  z-index:-19!important;
+  pointer-events:none!important;
+}
+
+/* Remove opaque backgrounds that were hiding video */
+#app,
+main#app,
+.screen,
+.screen.active,
+.hero,
+.app,
+.shell,
+.page{
+  background:none!important;
+  background-color:transparent!important;
+  background-image:none!important;
+}
+#app{
+  width:min(100%,1080px)!important;
+  min-height:100vh!important;
+  margin:0 auto!important;
+}
+
+/* Keep content panels translucent at 60%; buttons remain solid */
+.panel,
+.content-panel,
+.benefit-card,
+.slide-card,
+.inventory-card,
+.vehicle-card,
+.choice-card,
+.compare-card,
+.result-card,
+.recommend-card,
+.recommendation-card,
+.panel-card,
+.concierge-dock{
+  background:rgba(10,10,13,.60)!important;
+  backdrop-filter:blur(8px)!important;
+  -webkit-backdrop-filter:blur(8px)!important;
+  opacity:1!important;
+}
+button,.portal,.touch,.mini-cta,.red-cta,.white-cta,.ghost-cta,.icon-btn{
+  opacity:1!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+/* Exact rich red gradient style used for requested CTAs */
+.mini-cta,
+.footer-actions .ghost-cta[data-help],
+.footer-actions button[data-help],
+button.force-red-cta{
+  background:linear-gradient(180deg,#c91a22 0%,#a00c13 52%,#76090e 100%)!important;
+  border:1px solid #ee343b!important;
+  color:#fff!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.22),
+    0 0 0 1px rgba(121,5,10,.65),
+    0 10px 28px rgba(160,10,18,.30)!important;
+}
+.mini-cta:active,
+.footer-actions .ghost-cta[data-help]:active,
+.footer-actions button[data-help]:active{
+  background:linear-gradient(180deg,#df222b 0%,#b80e17 52%,#860b11 100%)!important;
+}
+
+/* All top-left Back controls get the rich red style */
+.topbar .icon-btn[data-go]{
+  background:linear-gradient(180deg,#c91a22 0%,#a00c13 52%,#76090e 100%)!important;
+  border:1px solid #ee343b!important;
+  color:#fff!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 8px 22px rgba(160,10,18,.26)!important;
+}
+
+/* All four main portals: same black resting state and red interaction state */
+.home-grid .portal{
+  background:
+    radial-gradient(circle at 78% 12%,rgba(255,255,255,.045),transparent 30%),
+    linear-gradient(145deg,#17171a 0%,#0c0c0f 58%,#070708 100%)!important;
+  border:1px solid rgba(255,255,255,.14)!important;
+  transition:
+    background .22s ease,
+    border-color .22s ease,
+    box-shadow .22s ease,
+    transform .18s ease!important;
+}
+.home-grid .portal:hover,
+.home-grid .portal:active,
+.home-grid .portal:focus-visible{
+  background:
+    radial-gradient(circle at 78% 12%,rgba(255,255,255,.10),transparent 30%),
+    linear-gradient(180deg,#bd151d 0%,#8f0b11 58%,#5d080c 100%)!important;
+  border-color:#ee343b!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 12px 30px rgba(159,8,17,.34)!important;
+}
+.home-grid .portal:hover .portal-sub,
+.home-grid .portal:active .portal-sub,
+.home-grid .portal:focus-visible .portal-sub{
+  color:rgba(255,255,255,.86)!important;
+}
+
+/* Smooth cinematic sequence — no stop/restart blur */
+.cinematic-intro{
+  position:fixed!important;
+  inset:0!important;
+  z-index:9999!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:hidden!important;
+  background:#030304!important;
+  opacity:1;
+  visibility:visible;
+  transition:opacity 1.2s cubic-bezier(.22,.61,.36,1),visibility 1.2s!important;
+}
+.cinematic-intro:not(.active){
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+.cinematic-inner{
+  position:relative!important;
+  z-index:4!important;
+  width:min(80vw,820px)!important;
+}
+.cinematic-logo{
+  width:100%!important;
+  height:auto!important;
+  opacity:0;
+  transform:scale(.93);
+  filter:blur(8px);
+}
+.cinematic-intro.play .cinematic-logo{
+  animation:cinematicContinuous 3.55s cubic-bezier(.2,.72,.2,1) both!important;
+}
+@keyframes cinematicContinuous{
+  0%{opacity:0;transform:scale(.93);filter:blur(8px)}
+  24%{opacity:.72;transform:scale(.985);filter:blur(2px)}
+  42%{opacity:1;transform:scale(1.015);filter:blur(0)}
+  72%{opacity:1;transform:scale(1);filter:blur(0)}
+  100%{opacity:1;transform:scale(1);filter:blur(0)}
+}
+
+/* cinematic loading bar */
+.cinematic-line{
+  position:relative!important;
+  z-index:5!important;
+  width:min(72%,560px)!important;
+  height:3px!important;
+  margin:30px auto 0!important;
+  background:rgba(255,255,255,.08)!important;
+  border-radius:999px!important;
+  overflow:hidden!important;
+}
+.cinematic-line span{
+  display:block!important;
+  height:100%!important;
+  width:0;
+  border-radius:inherit!important;
+  background:linear-gradient(90deg,#737378,#fff,#b20d18,#fff,#85858a)!important;
+  background-size:240% 100%!important;
+}
+.cinematic-intro.play .cinematic-line span{
+  animation:
+    cinLoadSmooth 3.25s cubic-bezier(.18,.72,.15,1) forwards,
+    cinBarTravel 1.4s linear infinite!important;
+}
+@keyframes cinLoadSmooth{
+  0%{width:0}
+  15%{width:8%}
+  42%{width:43%}
+  70%{width:76%}
+  88%{width:94%}
+  100%{width:100%}
+}
+@keyframes cinBarTravel{to{background-position:240% 0}}
+
+/* Denser cinematic particles */
+.cinematic-particles{
+  position:absolute!important;
+  inset:0!important;
+  z-index:2!important;
+  overflow:hidden!important;
+  pointer-events:none!important;
+}
+.cinematic-particles i{
+  position:absolute;
+  width:3px;
+  height:3px;
+  border-radius:50%;
+  background:#fff;
+  opacity:.28;
+  box-shadow:0 0 8px rgba(255,255,255,.45);
+  animation:cinParticleFloat linear infinite;
+}
+.cinematic-particles i.red{
+  background:#d71920;
+  box-shadow:0 0 9px rgba(215,25,32,.55);
+}
+@keyframes cinParticleFloat{
+  0%{transform:translate3d(0,25px,0) scale(.6);opacity:0}
+  18%{opacity:.38}
+  75%{opacity:.22}
+  100%{transform:translate3d(var(--dx),-110vh,0) scale(1.1);opacity:0}
+}
+
+/* Recurring translucent LEXUS fly-through */
+.lexus-flyby{
+  position:fixed;
+  z-index:-18;
+  top:34vh;
+  left:0;
+  width:max-content;
+  font-family:"Arial Black","Helvetica Neue",Arial,sans-serif;
+  font-size:33vh;
+  line-height:.8;
+  font-weight:900;
+  letter-spacing:-.08em;
+  color:rgba(255,255,255,.30);
+  opacity:0;
+  white-space:nowrap;
+  pointer-events:none;
+  user-select:none;
+  transform:translateX(-120%);
+}
+.lexus-flyby.run-left{
+  animation:lexusFlyLeft 4.4s cubic-bezier(.16,.65,.22,1) forwards;
+}
+.lexus-flyby.run-right{
+  left:auto;
+  right:0;
+  transform:translateX(120%);
+  animation:lexusFlyRight 4.4s cubic-bezier(.16,.65,.22,1) forwards;
+}
+@keyframes lexusFlyLeft{
+  0%{opacity:0;transform:translateX(-120%)}
+  12%{opacity:.30}
+  82%{opacity:.30}
+  100%{opacity:0;transform:translateX(110vw)}
+}
+@keyframes lexusFlyRight{
+  0%{opacity:0;transform:translateX(120%)}
+  12%{opacity:.30}
+  82%{opacity:.30}
+  100%{opacity:0;transform:translateX(-110vw)}
+}
+</style>
+
 <script>
 (function(){
   const overlay=document.getElementById('cinematicIntro');
-  if(!overlay){
-    document.body.classList.add('cinematic-ready');
-    return;
+  const particleHost=document.querySelector('.cinematic-particles');
+  const flyby=document.getElementById('lexusFlyby');
+
+  // Build a denser particle field around the cinematic logo.
+  if(particleHost && !particleHost.children.length){
+    const count=54;
+    for(let i=0;i<count;i++){
+      const p=document.createElement('i');
+      if(i%8===0) p.classList.add('red');
+      p.style.left=(4+Math.random()*92)+'%';
+      p.style.top=(35+Math.random()*62)+'%';
+      p.style.setProperty('--dx',((Math.random()-.5)*180)+'px');
+      p.style.animationDuration=(4.5+Math.random()*5.5)+'s';
+      p.style.animationDelay=(-Math.random()*8)+'s';
+      p.style.width=p.style.height=(2+Math.random()*3)+'px';
+      particleHost.appendChild(p);
+    }
   }
 
   let idleTimer=null;
   let playing=true;
 
-  function resetIdle(){
+  function armIdle(){
     clearTimeout(idleTimer);
     idleTimer=setTimeout(playCinematic,60000);
   }
 
-  function revealInterface(){
+  function endCinematic(){
     document.body.classList.add('cinematic-ready');
-    requestAnimationFrame(()=>{
-      overlay.classList.remove('play');
-      setTimeout(()=>{
-        overlay.classList.remove('active');
-        playing=false;
-        resetIdle();
-      },850);
-    });
+    overlay.classList.remove('active');
+    playing=false;
+    armIdle();
   }
 
   function playCinematic(){
-    if(playing) return;
+    if(!overlay || playing) return;
     playing=true;
-    overlay.classList.add('active');
+    overlay.classList.remove('play');
     void overlay.offsetWidth;
-    overlay.classList.add('play');
-    setTimeout(revealInterface,3600);
+    overlay.classList.add('active');
+    requestAnimationFrame(()=>overlay.classList.add('play'));
+    setTimeout(endCinematic,4300);
   }
 
-  // Initial load: cinematic owns the first frame
-  document.documentElement.style.background='#050506';
-  document.addEventListener('DOMContentLoaded',()=>{
-    overlay.classList.add('active','play');
-    setTimeout(revealInterface,3600);
-  });
+  if(overlay){
+    // Initial page load begins in cinematic state immediately from HTML.
+    document.addEventListener('DOMContentLoaded',()=>{
+      overlay.classList.add('active','play');
+      setTimeout(endCinematic,4300);
+    });
+  }else{
+    document.body.classList.add('cinematic-ready');
+  }
 
   ['pointerdown','touchstart','keydown'].forEach(evt=>{
-    document.addEventListener(evt,resetIdle,{passive:true});
+    document.addEventListener(evt,armIdle,{passive:true});
   });
+
+  // Every 15 seconds send a translucent LEXUS word across the video.
+  if(flyby){
+    let direction=0;
+    function runFlyby(){
+      flyby.classList.remove('run-left','run-right');
+      void flyby.offsetWidth;
+      flyby.classList.add(direction%2===0?'run-left':'run-right');
+      direction++;
+    }
+    setTimeout(runFlyby,9000);
+    setInterval(runFlyby,15000);
+  }
 })();
 </script>
