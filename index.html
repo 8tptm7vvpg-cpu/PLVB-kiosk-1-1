@@ -99,17 +99,17 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
       <i class="particle p1"></i><i class="particle red p2"></i><i class="particle p3"></i><i class="particle p4"></i>
       <i class="particle red p5"></i><i class="particle p6"></i><i class="particle p7"></i><i class="particle red p8"></i>
     </div>
-    <video class="hero-video" autoplay muted loop playsinline preload="auto"><source src="./priority-lexus-homepage-video.mp4" type="video/mp4"></video><div class="hero-video-shade" aria-hidden="true"></div><div class="hero-ghost-word" aria-hidden="true">LEXUS</div><div class="hero-copy">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto"><source src="./priority-lexus-homepage-video.mp4" type="video/mp4"></video><div class="hero-video-shade" aria-hidden="true"></div><div class="hero-copy">
       <div class="hero-small">Welcome to</div>
       <div class="brand-lockup" aria-label="Priority Lexus Virginia Beach">
         <img class="hero-logo" src="./priority-lexus-vb-wordmark-white.png" alt="Priority Lexus Virginia Beach">
       </div>
-      <div class="hero-caption">Tap below to begin your Lexus experience</div>
+      <div class="hero-caption"></div>
     </div>
   </div>
   <div class="home-prompt">Your visit. Your Lexus. Your way.</div>
   <div class="home-grid">
-    <button class="portal" data-go="pfl"><span class="portal-title">PRIORITIES<br>FOR LIFE</span><span class="portal-sub">See what lifetime ownership benefits can mean for you.</span><span class="portal-arrow">→</span></button>
+    <button class="portal ask-team ask-specialist" data-go="pfl"><span class="portal-title">PRIORITIES<br>FOR LIFE</span><span class="portal-sub">See what lifetime ownership benefits can mean for you.</span><span class="portal-arrow">→</span></button>
     <button class="portal" data-go="priority-certified"><span class="portal-title">PRIORITY<br>CERTIFIED</span><span class="portal-sub">Explore lifetime powertrain and ownership benefits.</span><span class="portal-arrow">→</span></button>
     <button class="portal" data-go="lcertified"><span class="portal-title">L/CERTIFIED<br>BY LEXUS</span><span class="portal-sub">Discover the Lexus certified ownership experience.</span><span class="portal-arrow">→</span></button>
     <button class="portal" data-go="finder"><span class="portal-title">FIND YOUR<br>LEXUS</span><span class="portal-sub">Explore models, compare choices and request a specialist.</span><span class="portal-arrow">→</span></button>
@@ -118,7 +118,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <div><strong>Need a hand?</strong><span>Request a Lexus specialist at any time.</span></div>
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
-  <footer class="version-footer">Priority Lexus Kiosk · Version 0.9</footer>
+  <footer class="version-footer">Priority Lexus Kiosk · Version 0.10</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
@@ -852,3 +852,239 @@ button.red,
   border-color:#b10f18!important;
 }
 </style>
+
+<style>
+/* v0.10 intro refinements */
+.hero-video-shade{background:rgba(0,0,0,.60)!important}
+.hero-ghost-word{display:none!important}
+
+.hero{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+.hero-copy{
+  width:100%;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  transform:translateY(10px);
+}
+.hero-logo{
+  width:min(90%,860px)!important;
+  max-height:250px!important;
+  margin:0 auto 8px!important;
+}
+.hero-small,
+.welcome-text{
+  margin-top:12px!important;
+  text-align:center!important;
+}
+.home-prompt{display:none!important}
+
+/* Center prototype badge/block */
+.prototype-note,
+.simulated-note,
+.prototype-badge,
+.demo-badge,
+[class*="prototype"],
+[class*="simulated"]{
+  text-align:center!important;
+}
+.prototype-note,
+.simulated-note,
+.prototype-badge,
+.demo-badge{
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+
+/* Homepage cards: copy anchored comfortably bottom-left */
+.home-grid .portal{
+  position:relative!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-start!important;
+  justify-content:flex-end!important;
+  text-align:left!important;
+  padding:28px 28px 30px!important;
+  min-height:240px;
+}
+.home-grid .portal-title,
+.home-grid .portal-sub{
+  text-align:left!important;
+  width:100%;
+  max-width:92%!important;
+  margin-left:0!important;
+  margin-right:0!important;
+}
+.home-grid .portal-title{margin-bottom:8px!important}
+.home-grid .portal-sub{margin-bottom:22px!important}
+
+/* Make portal arrow a designed horizontal cue aligned to text start */
+.home-grid .portal-arrow{
+  position:relative!important;
+  left:0!important;
+  right:auto!important;
+  bottom:auto!important;
+  width:46%!important;
+  height:18px!important;
+  margin-top:0!important;
+  display:block!important;
+  font-size:0!important;
+  color:transparent!important;
+}
+.home-grid .portal-arrow::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:50%;
+  width:calc(100% - 12px);
+  height:1px;
+  background:linear-gradient(90deg,#fff,rgba(255,255,255,.65));
+  transform:translateY(-50%);
+}
+.home-grid .portal-arrow::after{
+  content:"";
+  position:absolute;
+  right:0;
+  top:50%;
+  width:9px;
+  height:9px;
+  border-top:1.5px solid #fff;
+  border-right:1.5px solid #fff;
+  transform:translateY(-50%) rotate(45deg);
+}
+
+/* Red CTA consistency */
+.ask-team,
+.ask-specialist,
+button[class*="ask-team"],
+button[class*="ask-specialist"],
+.btn-ask-team,
+.btn-ask-specialist{
+  background:#b10f18!important;
+  color:#fff!important;
+  border-color:#b10f18!important;
+}
+
+/* Standardize carousel/slide dimensions */
+.benefit-card,
+.slide-card,
+.inventory-card,
+.vehicle-card,
+.choice-card,
+.compare-card,
+.result-card,
+.recommend-card,
+.recommendation-card,
+.panel-card{
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:760px!important;
+  min-height:520px!important;
+  height:520px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+}
+.benefit-stage,
+.carousel-stage,
+.slide-stage{
+  min-height:540px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+
+/* Mobile */
+@media(max-width:700px){
+  .hero{height:225px!important;min-height:0!important;padding:12px 14px 14px!important}
+  .hero-copy{transform:translateY(12px)}
+  .hero-logo{width:min(94%,390px)!important;max-height:112px!important;margin-bottom:2px!important}
+  .hero-small,.welcome-text{margin-top:8px!important}
+  .home-grid .portal{
+    min-height:165px!important;
+    padding:20px 18px 22px!important;
+  }
+  .home-grid .portal-sub{margin-bottom:16px!important}
+  .home-grid .portal-arrow{width:48%!important}
+  .benefit-card,
+  .slide-card,
+  .inventory-card,
+  .vehicle-card,
+  .choice-card,
+  .compare-card,
+  .result-card,
+  .recommend-card,
+  .recommendation-card,
+  .panel-card{
+    min-height:430px!important;
+    height:430px!important;
+  }
+  .benefit-stage,
+  .carousel-stage,
+  .slide-stage{min-height:450px!important}
+}
+</style>
+
+<script>
+(function(){
+  function num(el){ return el ? Number(el.max || 0) : 0; }
+  function fire(el){
+    if(!el) return;
+    el.dispatchEvent(new Event('input',{bubbles:true}));
+    el.dispatchEvent(new Event('change',{bubbles:true}));
+  }
+  function animateSlider(el, from, to, duration, done){
+    if(!el) { if(done) done(); return; }
+    const start=performance.now();
+    function step(now){
+      const p=Math.min(1,(now-start)/duration);
+      el.value=from+(to-from)*p;
+      fire(el);
+      if(p<1) requestAnimationFrame(step); else if(done) done();
+    }
+    requestAnimationFrame(step);
+  }
+  function runSavingsMotion(root){
+    if(!root || root.dataset.savingsAnimated==="1") return;
+    const sliders=[...root.querySelectorAll('input[type="range"]')];
+    if(!sliders.length) return;
+    root.dataset.savingsAnimated="1";
+    sliders.forEach(el=>{el.value=el.max;fire(el);});
+    setTimeout(()=>{
+      sliders.forEach(el=>{
+        const hi=Number(el.max), lo=Number(el.min);
+        animateSlider(el,hi,lo,420,()=>animateSlider(el,lo,hi,520));
+      });
+    },180);
+  }
+  function findSavingsRoot(){
+    return [...document.querySelectorAll('.screen,section,div')].find(el=>{
+      const t=(el.textContent||'').toLowerCase();
+      return t.includes('savings calculator') || t.includes('priorities for life');
+    });
+  }
+  window.addEventListener('load',()=>{
+    const root=findSavingsRoot();
+    if(root){
+      const obs=new MutationObserver(()=>{
+        const cs=getComputedStyle(root);
+        const visible=cs.display!=='none' && cs.visibility!=='hidden' && root.offsetParent!==null;
+        if(visible) runSavingsMotion(root);
+      });
+      obs.observe(document.body,{attributes:true,subtree:true,attributeFilter:['class','style']});
+      // initialize at max even before first reveal
+      root.querySelectorAll('input[type="range"]').forEach(el=>{el.value=el.max;fire(el);});
+      if(root.offsetParent!==null) runSavingsMotion(root);
+    }
+  });
+})();
+</script>
