@@ -129,7 +129,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
   <div class="prototype-footer-block">Prototype · Simulated Data</div>
-<footer class="version-footer">Priority Lexus Kiosk · Version 0.13</footer>
+<footer class="version-footer">Priority Lexus Kiosk · Version 0.14</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
@@ -1748,3 +1748,59 @@ button.force-red-cta{
   }
 })();
 </script>
+
+<style>
+/* v0.14 hero logo cleanup */
+.hero-copy{
+  position:relative!important;
+  z-index:4!important;
+  width:100%!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:initial!important;
+  letter-spacing:normal!important;
+  text-transform:none!important;
+  font-family:inherit!important;
+  font-weight:normal!important;
+  line-height:normal!important;
+}
+.hero-logo{
+  display:block!important;
+  position:relative!important;
+  z-index:5!important;
+  width:min(90%,860px)!important;
+  max-width:860px!important;
+  height:auto!important;
+  max-height:none!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  margin:0 auto!important;
+  padding:0!important;
+  transform:none!important;
+  filter:none!important;
+  opacity:1!important;
+  visibility:visible!important;
+  font-family:initial!important;
+  font-size:initial!important;
+  font-weight:initial!important;
+  font-style:initial!important;
+  line-height:initial!important;
+  letter-spacing:initial!important;
+  text-transform:none!important;
+  text-shadow:none!important;
+  -webkit-text-stroke:0!important;
+  color:initial!important;
+}
+.priority-word,.lexus-word,.vb-word,.brand-lockup{display:none!important}
+.hero .particles,.hero .particle,.hero-particles,.cinematic-particles{display:block!important}
+@media(max-width:700px){
+  .hero-logo{
+    width:min(94%,420px)!important;
+    max-width:420px!important;
+    height:auto!important;
+    margin:0 auto!important;
+  }
+}
+</style>
