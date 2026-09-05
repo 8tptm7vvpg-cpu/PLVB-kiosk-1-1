@@ -131,7 +131,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
   <div class="prototype-footer-block">Prototype · Simulated Data</div>
-<footer class="version-footer">Priority Lexus Kiosk · Version 0.24</footer>
+<footer class="version-footer">Priority Lexus Kiosk · Version 0.25</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
@@ -375,7 +375,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
   let currentModelId = null;
 
   const models = [
-    {id:'uxh', model:'UX', year:'2026', name:'UX HYBRID', category:'suv', body:'Compact Crossover', seats:'5', power:['Hybrid'], drive:'AWD available', traits:['Efficiency','City-friendly','Technology'], tagline:'Compact luxury with hybrid efficiency.', desc:'A nimble entry into Lexus luxury for drivers who value efficiency, an easy-to-place footprint and everyday refinement.', tone:'urban'},
+    {id:'uxh', image:'./vehicle-images/ux.png', model:'UX', year:'2026', name:'UX HYBRID', category:'suv', body:'Compact Crossover', seats:'5', power:['Hybrid'], drive:'AWD available', traits:['Efficiency','City-friendly','Technology'], tagline:'Compact luxury with hybrid efficiency.', desc:'A nimble entry into Lexus luxury for drivers who value efficiency, an easy-to-place footprint and everyday refinement.', tone:'urban'},
     {id:'nx', image:'./vehicle-images/nx.png', model:'NX', year:'2026', name:'NX', category:'suv', body:'Compact Luxury SUV', seats:'5', power:['Gas','Hybrid','Plug-in Hybrid'], drive:'AWD', traits:['Versatility','Efficiency','Technology'], tagline:'The stylish Lexus luxury crossover.', desc:'A flexible luxury crossover with three powertrain paths, responsive proportions and a polished cabin for everyday life.', tone:'silver'},
     {id:'rx', image:'./vehicle-images/rx.png', model:'RX', year:'2026', name:'RX', category:'suv', body:'Midsize Luxury SUV', seats:'5', power:['Gas','Hybrid','Plug-in Hybrid'], drive:'AWD available', traits:['Comfort','Versatility','Luxury'], tagline:'The icon of refined everyday luxury.', desc:'The RX balances a composed ride, generous comfort and an unusually broad choice of powertrains.', tone:'graphite'},
     {id:'rz', image:'./vehicle-images/rz.png', model:'RZ', year:'2026', name:'RZ', category:'suv', body:'All-Electric Luxury SUV', seats:'5', power:['Electric'], drive:'DIRECT4 AWD available', traits:['Electric','Technology','Performance'], tagline:'A distinctly Lexus battery-electric experience.', desc:'Quiet electric propulsion, expressive design and technology-forward driving define the RZ.', tone:'electric'},
@@ -385,8 +385,8 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     {id:'es', image:'./vehicle-images/es.png', model:'ES', year:'2026', name:'ES', category:'car', body:'Luxury Sedan', seats:'5', power:['Hybrid','Electric'], drive:'FWD / AWD available', traits:['Comfort','Efficiency','Technology'], tagline:'A new era for the Lexus luxury sedan.', desc:'The redesigned ES combines a serene sedan experience with hybrid and battery-electric choices.', tone:'wavelength'},
     {id:'is', image:'./vehicle-images/is.png', model:'IS', year:'2026', name:'IS', category:'car', body:'Sport Sedan', seats:'5', power:['Gas'], drive:'RWD / AWD available', traits:['Performance','Driver-focused','Style'], tagline:'The driver-focused Lexus sport sedan.', desc:'Compact proportions, expressive design and a more connected driving personality make IS the athletic sedan choice.', tone:'infrared'},
     {id:'ls', model:'LS', year:'2026', name:'LS', category:'car', body:'Flagship Luxury Sedan', seats:'5', power:['Gas'], drive:'RWD / AWD available', traits:['Flagship','Comfort','Craftsmanship'], tagline:'The original Lexus flagship.', desc:'A quiet, deeply refined luxury sedan centered on craftsmanship, comfort and effortless long-distance travel.', tone:'midnight'},
-    {id:'lc', model:'LC', year:'2026', name:'LC', category:'car', body:'Luxury Coupe', seats:'4', power:['Gas'], drive:'RWD', traits:['Performance','Design','Craftsmanship'], tagline:'A grand touring statement piece.', desc:'The LC is the emotional design flagship: dramatic proportions, naturally aspirated performance and handcrafted detail.', tone:'copper'},
-    {id:'lcc', model:'LC', year:'2026', name:'LC CONVERTIBLE', category:'car', body:'Luxury Convertible', seats:'4', power:['Gas'], drive:'RWD', traits:['Open-air','Performance','Design'], tagline:'Open-air grand touring, the Lexus way.', desc:'The LC Convertible turns the grand touring formula into a more sensory, open-air Lexus experience.', tone:'blue'}
+    {id:'lc', image:'./vehicle-images/lc.png', model:'LC', year:'2026', name:'LC', category:'car', body:'Luxury Coupe', seats:'4', power:['Gas'], drive:'RWD', traits:['Performance','Design','Craftsmanship'], tagline:'A grand touring statement piece.', desc:'The LC is the emotional design flagship: dramatic proportions, naturally aspirated performance and handcrafted detail.', tone:'copper'},
+    {id:'lcc', image:'./vehicle-images/lc.png', model:'LC', year:'2026', name:'LC CONVERTIBLE', category:'car', body:'Luxury Convertible', seats:'4', power:['Gas'], drive:'RWD', traits:['Open-air','Performance','Design'], tagline:'Open-air grand touring, the Lexus way.', desc:'The LC Convertible turns the grand touring formula into a more sensory, open-air Lexus experience.', tone:'blue'}
   ];
 
   const quiz=[
