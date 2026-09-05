@@ -131,7 +131,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
   <div class="prototype-footer-block">Prototype · Simulated Data</div>
-<footer class="version-footer">Priority Lexus Kiosk · Version 0.26</footer>
+<footer class="version-footer">Priority Lexus Kiosk · Version 0.27</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
@@ -2657,5 +2657,38 @@ button.force-red-cta{
   bottom:auto!important;
   height:100%!important;
   object-position:center top!important;
+}
+</style>
+
+<style>
+/* v0.27 — All Models two-column gallery alignment only.
+   These offsets compensate for differing artwork proportions without
+   changing recommendation, detail, or compare views. */
+#lineupGrid [data-model="uxh"] .model-vehicle-img{
+  top:-18px!important;
+  height:112%!important;
+}
+#lineupGrid [data-model="gx"] .model-vehicle-img{
+  top:-16px!important;
+  height:110%!important;
+}
+#lineupGrid [data-model="es"] .model-vehicle-img{
+  top:-10px!important;
+  height:106%!important;
+}
+#lineupGrid [data-model="is"] .model-vehicle-img{
+  top:-14px!important;
+  height:109%!important;
+}
+#lineupGrid [data-model="rz"] .model-vehicle-img{
+  top:-7px!important;
+  height:104%!important;
+}
+
+/* Keep the corrected LC exactly where it is. */
+#lineupGrid [data-model="lc"] .model-vehicle-img,
+#lineupGrid [data-model="lcc"] .model-vehicle-img{
+  top:0!important;
+  height:100%!important;
 }
 </style>
