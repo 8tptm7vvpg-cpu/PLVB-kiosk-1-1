@@ -131,7 +131,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
   <div class="prototype-footer-block">Prototype · Simulated Data</div>
-<footer class="version-footer">Priority Lexus Kiosk · Version 0.22</footer>
+<footer class="version-footer">Priority Lexus Kiosk · Version 0.23</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
@@ -139,10 +139,29 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
   <div class="section-head"><div class="eyebrow">Priorities for Life</div><h1 class="title">How much could you save?</h1><p class="subtitle">Move the controls to see an illustrative estimate of lifetime ownership value.</p></div>
   <div class="panel calc-total"><div class="eyebrow">Estimated ownership value</div><div class="amount" id="calcAmount">$13,140</div><small>Illustrative prototype estimate · actual savings vary</small></div>
   <div class="panel">
-    <div class="range-row"><div class="range-label"><span>Years you plan to own</span><strong id="yearsOut">8 years</strong></div><input id="years" class="range" type="range" min="1" max="12" value="8" /></div>
-    <div class="range-row"><div class="range-label"><span>Miles driven each year</span><strong id="milesOut">12,000 mi</strong></div><input id="miles" class="range" type="range" min="5000" max="25000" step="1000" value="12000" /></div>
-    <div class="breakdown"><div class="saving"><b id="oilValue">$4,800</b><span>Oil & filter changes</span></div><div class="saving"><b id="inspectionValue">$320</b><span>Virginia inspections</span></div><div class="saving"><b id="towingValue">$1,200</b><span>Towing / roadside value</span></div><div class="saving"><b id="guaranteeValue">$6,820</b><span>Guarantee value model</span></div></div>
-    <p class="fineprint">Priorities for Life includes qualifying lifetime benefits such as oil & filter changes, Virginia state inspections, engine guarantee, and parts/service guarantees. Exclusions apply. This calculator is a prototype illustration, not a contractual quote.</p>
+    <div class="range-row"><div class="range-label"><span>Years you plan to own</span><strong id="yearsOut">10 years</strong></div><input id="years" class="range" type="range" min="1" max="12" value="10" /></div>
+    <div class="range-row"><div class="range-label"><span>Miles driven each year</span><strong id="milesOut">15,000 mi</strong></div><input id="miles" class="range" type="range" min="5000" max="25000" step="1000" value="15000" /></div>
+    <div class="breakdown pfl-breakdown">
+      <div class="saving"><b id="oilValue">$2,400</b><span>Oil &amp; filter changes</span></div>
+      <div class="saving"><b id="inspectionValue">$200</b><span>Virginia inspections</span></div>
+      <div class="saving"><b id="shuttleValue">$240</b><span>Shuttle service</span></div>
+      <div class="saving"><b id="towingValue">$300</b><span>Towing</span></div>
+      <div class="saving"><b id="guaranteeValue">$10,000</b><span>Engine Guarantee on new models</span></div>
+    </div>
+    <p class="fineprint">Priorities for Life includes qualifying lifetime benefits such as oil &amp; filter changes, Virginia state inspections, engine guarantee, installed parts/service guarantee, and towing. Exclusions and limitations apply. This calculator is an illustrative ownership-value model, not a contractual quote.</p>
+  </div>
+  <div class="pfl-hooks-panel" aria-label="Priorities for Life benefits">
+    <div class="pfl-hooks-kicker">WHAT'S INCLUDED</div>
+    <div class="pfl-hook-stage">
+      <div class="pfl-hook-number" id="pflHookNumber">01</div>
+      <div class="pfl-hook-copy">
+        <div class="pfl-hook-title" id="pflHookTitle">Oil &amp; Filter Changes</div>
+        <div class="pfl-hook-life" id="pflHookLife">FOR LIFE*</div>
+        <p id="pflHookDesc">Keep your engine running smoothly with complimentary oil and filter changes.</p>
+      </div>
+      <div class="pfl-hook-progress"><span id="pflHookProgress"></span></div>
+    </div>
+    <div class="pfl-hook-dots" id="pflHookDots"></div>
   </div>
   <div class="footer-actions"><button class="ghost-cta" data-help="Priorities for Life question">ASK A SPECIALIST</button><button class="white-cta" data-home>DONE</button></div>
 </section>
@@ -318,9 +337,28 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
   // Calculator
   const years=document.getElementById('years'),miles=document.getElementById('miles');
   function updateCalc(){
-    const y=+years.value,m=+miles.value; document.getElementById('yearsOut').textContent=`${y} ${y===1?'year':'years'}`; document.getElementById('milesOut').textContent=`${m.toLocaleString()} mi`;
-    const oil=Math.round(y*Math.max(2,m/6000)*85), inspect=y*40, towing=Math.round(y*150), guarantee=Math.round(1600+y*450+(m/1000)*18); const total=oil+inspect+towing+guarantee;
-    document.getElementById('oilValue').textContent='$'+oil.toLocaleString(); document.getElementById('inspectionValue').textContent='$'+inspect.toLocaleString(); document.getElementById('towingValue').textContent='$'+towing.toLocaleString(); document.getElementById('guaranteeValue').textContent='$'+guarantee.toLocaleString(); document.getElementById('calcAmount').textContent='$'+total.toLocaleString();
+    const y=+years.value,m=+miles.value;
+    const projectedMiles=y*m;
+    document.getElementById('yearsOut').textContent=`${y} ${y===1?'year':'years'}`;
+    document.getElementById('milesOut').textContent=`${m.toLocaleString()} mi`;
+
+    // Lexus PFL reference model: 10 years / 150,000 miles = $13,140.
+    // Routine-use benefits scale with projected ownership mileage; the engine
+    // lifetime-guarantee value remains the published $10,000 reference value.
+    const usageFactor=Math.max(.05, projectedMiles/150000);
+    const oil=Math.round(2400*usageFactor);
+    const inspect=Math.round(200*(y/10));
+    const shuttle=Math.round(240*usageFactor);
+    const towing=Math.round(300*usageFactor);
+    const guarantee=10000;
+    const total=oil+inspect+shuttle+towing+guarantee;
+
+    document.getElementById('oilValue').textContent='$'+oil.toLocaleString();
+    document.getElementById('inspectionValue').textContent='$'+inspect.toLocaleString();
+    document.getElementById('shuttleValue').textContent='$'+shuttle.toLocaleString();
+    document.getElementById('towingValue').textContent='$'+towing.toLocaleString();
+    document.getElementById('guaranteeValue').textContent='$'+guarantee.toLocaleString();
+    document.getElementById('calcAmount').textContent='$'+total.toLocaleString();
   }
   years.addEventListener('input',updateCalc); miles.addEventListener('input',updateCalc); updateCalc();
 
@@ -2316,6 +2354,223 @@ button.force-red-cta{
         }, WAIT);
       }
     }
+  });
+})();
+</script>
+
+<style>
+/* v0.23 — Priorities for Life benefit showcase */
+.pfl-breakdown{
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+}
+.pfl-hooks-panel{
+  margin-top:16px;
+  margin-bottom:16px;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:26px;
+  padding:18px;
+  background:rgba(8,8,10,.64);
+  backdrop-filter:blur(10px);
+  overflow:hidden;
+  position:relative;
+}
+.pfl-hooks-panel::before{
+  content:"";
+  position:absolute;
+  inset:-40% -20%;
+  background:radial-gradient(circle at 75% 25%,rgba(211,24,32,.16),transparent 28%);
+  pointer-events:none;
+  animation:pflAmbient 8s ease-in-out infinite alternate;
+}
+@keyframes pflAmbient{
+  from{transform:translate3d(-2%,0,0) scale(1)}
+  to{transform:translate3d(3%,2%,0) scale(1.08)}
+}
+.pfl-hooks-kicker{
+  position:relative;
+  z-index:2;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.18em;
+  color:#888991;
+  margin-bottom:12px;
+}
+.pfl-hook-stage{
+  position:relative;
+  z-index:2;
+  min-height:150px;
+  border-radius:20px;
+  padding:18px 20px 24px;
+  background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.025));
+  overflow:hidden;
+}
+.pfl-hook-number{
+  position:absolute;
+  right:14px;
+  top:5px;
+  font-size:78px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:-.08em;
+  color:rgba(255,255,255,.055);
+}
+.pfl-hook-copy{
+  position:relative;
+  z-index:2;
+  transform:translateY(0);
+  opacity:1;
+}
+.pfl-hook-copy.is-changing{
+  animation:pflHookSwap .55s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes pflHookSwap{
+  0%{opacity:0;transform:translateY(16px);filter:blur(8px)}
+  100%{opacity:1;transform:translateY(0);filter:blur(0)}
+}
+.pfl-hook-title{
+  font-size:clamp(20px,2.6vw,30px);
+  font-weight:900;
+  letter-spacing:-.035em;
+  line-height:1.05;
+}
+.pfl-hook-life{
+  margin-top:3px;
+  font-size:clamp(30px,4vw,48px);
+  font-weight:900;
+  line-height:1;
+  letter-spacing:-.05em;
+  background:linear-gradient(90deg,#fff,#d9d9dd,#fff);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.pfl-hook-copy p{
+  margin-top:10px;
+  max-width:80%;
+  font-size:12px;
+  line-height:1.45;
+  color:#aaaab1;
+}
+.pfl-hook-progress{
+  position:absolute;
+  left:20px;
+  right:20px;
+  bottom:12px;
+  height:2px;
+  border-radius:999px;
+  background:rgba(255,255,255,.09);
+  overflow:hidden;
+}
+.pfl-hook-progress span{
+  display:block;
+  width:0;
+  height:100%;
+  background:linear-gradient(90deg,#fff,#d71920,#fff);
+}
+.pfl-hook-progress span.run{
+  animation:pflHookTimer 5s linear forwards;
+}
+@keyframes pflHookTimer{from{width:0}to{width:100%}}
+.pfl-hook-dots{
+  position:relative;
+  z-index:2;
+  display:flex;
+  justify-content:center;
+  gap:7px;
+  margin-top:12px;
+}
+.pfl-hook-dots i{
+  display:block;
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:rgba(255,255,255,.18);
+  transition:.25s ease;
+}
+.pfl-hook-dots i.on{
+  width:18px;
+  border-radius:999px;
+  background:#fff;
+}
+@media(max-width:700px){
+  .pfl-breakdown{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .pfl-breakdown .saving:last-child{grid-column:1/-1}
+  .pfl-hook-stage{min-height:142px}
+  .pfl-hook-copy p{max-width:88%}
+}
+</style>
+
+<script>
+/* v0.23 — 5-second infinite PFL hook rotation */
+(function(){
+  const hooks=[
+    {
+      title:'Oil & Filter Changes',
+      life:'FOR LIFE*',
+      desc:'Keep your engine running smoothly with complimentary oil and filter changes.'
+    },
+    {
+      title:'State Inspections',
+      life:'FOR LIFE*',
+      desc:'For Virginia residents, annual state inspections are covered.'
+    },
+    {
+      title:'Engine Guaranteed',
+      life:'FOR LIFE*',
+      desc:'Select new vehicles include a lifetime engine guarantee.'
+    },
+    {
+      title:'Parts & Service Guaranteed',
+      life:'FOR LIFE*',
+      desc:'Installed parts and qualifying service include a lifetime guarantee.'
+    },
+    {
+      title:'Towing Guaranteed',
+      life:'FOR LIFE*',
+      desc:'Qualifying towing service is included within applicable distance limitations.'
+    }
+  ];
+
+  let idx=0;
+  let timer=null;
+  const screen=document.getElementById('pfl');
+  const title=document.getElementById('pflHookTitle');
+  const life=document.getElementById('pflHookLife');
+  const desc=document.getElementById('pflHookDesc');
+  const num=document.getElementById('pflHookNumber');
+  const dots=document.getElementById('pflHookDots');
+  const progress=document.getElementById('pflHookProgress');
+
+  if(!screen || !title || !life || !desc || !num || !dots || !progress) return;
+
+  dots.innerHTML=hooks.map((_,i)=>`<i class="${i===0?'on':''}"></i>`).join('');
+
+  function render(){
+    const hook=hooks[idx];
+    const copy=title.closest('.pfl-hook-copy');
+    copy.classList.remove('is-changing');
+    void copy.offsetWidth;
+    title.textContent=hook.title;
+    life.textContent=hook.life;
+    desc.textContent=hook.desc;
+    num.textContent=String(idx+1).padStart(2,'0');
+    [...dots.children].forEach((d,i)=>d.classList.toggle('on',i===idx));
+    copy.classList.add('is-changing');
+
+    progress.classList.remove('run');
+    void progress.offsetWidth;
+    progress.classList.add('run');
+  }
+
+  function advance(){
+    if(!screen.classList.contains('active')) return;
+    idx=(idx+1)%hooks.length;
+    render();
+  }
+
+  document.addEventListener('DOMContentLoaded',function(){
+    render();
+    timer=setInterval(advance,5000);
   });
 })();
 </script>
