@@ -131,7 +131,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
   <div class="prototype-footer-block">Prototype · Simulated Data</div>
-<footer class="version-footer">Priority Lexus Kiosk · Version 0.19</footer>
+<footer class="version-footer">Priority Lexus Kiosk · Version 0.20</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
@@ -165,44 +165,71 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
   <div class="footer-actions"><button class="red-cta wide" data-help="L/Certified vehicle assistance">ASK ABOUT L/CERTIFIED</button></div>
 </section>
 
+
 <section id="finder" class="screen" data-screen="finder">
-  <div class="topbar"><div class="brand">FIND YOUR <span>LEXUS</span></div><button class="icon-btn home-highlight" data-home aria-label="Home" >⌂</button></div>
-  <div class="section-head"><div class="eyebrow">Digital Showroom</div><h1 class="title">How would you like to explore?</h1><p class="subtitle">Browse the lineup or answer a few quick questions and let us narrow it down.</p></div>
-  <div class="choice-grid">
-    <button class="touch" data-finder-mode="browse"><strong>I KNOW WHAT I WANT</strong><small>Browse SUVs, sedans, performance and electrified Lexus models.</small></button>
-    <button class="touch" data-finder-mode="guide"><strong>HELP ME CHOOSE</strong><small>Tell us what matters and we'll suggest a starting point.</small></button>
+  <div class="topbar"><div class="brand">FIND YOUR <span>LEXUS</span></div><button class="icon-btn home-highlight" data-home aria-label="Home">⌂</button></div>
+  <div class="section-head">
+    <div class="eyebrow">Digital Showroom</div>
+    <h1 class="title">Find the Lexus that fits you.</h1>
+    <p class="subtitle">Explore the current model family or answer a few quick questions and we'll narrow the lineup to your strongest matches.</p>
   </div>
-  <div class="footer-actions"><button class="ghost-cta wide" data-help="Vehicle shopping assistance">ASK A LEXUS SPECIALIST</button></div>
+  <div class="choice-grid finder-launch">
+    <button class="touch finder-launch-card" data-finder-mode="browse">
+      <span class="finder-index">01</span><strong>EXPLORE THE LINEUP</strong><small>Browse SUVs, sedans, coupes and electrified Lexus models.</small>
+    </button>
+    <button class="touch finder-launch-card" data-finder-mode="guide">
+      <span class="finder-index">02</span><strong>HELP ME CHOOSE</strong><small>Tell us what matters and we'll recommend the Lexus models that fit best.</small>
+    </button>
+  </div>
+  <div class="footer-actions"><button class="red-cta wide" data-help="Vehicle shopping assistance">ASK A LEXUS SPECIALIST</button></div>
+</section>
+
+<section id="lineup" class="screen" data-screen="lineup">
+  <div class="topbar"><button class="icon-btn" data-go="finder" aria-label="Back">←</button><div class="brand">LEXUS <span>LINEUP</span></div><button class="icon-btn home-highlight" data-home aria-label="Home">⌂</button></div>
+  <div class="section-head compact-head">
+    <div class="eyebrow">Explore the family</div>
+    <h1 class="title">Choose your direction.</h1>
+    <p class="subtitle">Tap a model to explore its personality, powertrains and ideal use case.</p>
+  </div>
+  <div class="lineup-filters" id="lineupFilters">
+    <button class="lineup-filter on" data-lineup-filter="all">ALL</button>
+    <button class="lineup-filter" data-lineup-filter="suv">SUVs</button>
+    <button class="lineup-filter" data-lineup-filter="car">CARS</button>
+    <button class="lineup-filter" data-lineup-filter="electrified">ELECTRIFIED</button>
+  </div>
+  <div id="lineupGrid" class="lineup-grid"></div>
+  <div class="footer-actions"><button class="red-cta wide" data-help="Lexus lineup browsing assistance">ASK A LEXUS SPECIALIST</button></div>
 </section>
 
 <section id="quiz" class="screen" data-screen="quiz">
-  <div class="topbar"><button class="icon-btn force-red-cta" data-go="finder" aria-label="Back">←</button><div class="brand">LEXUS <span>MATCH</span></div><button class="icon-btn home-highlight" data-home aria-label="Home" >⌂</button></div>
-  <div class="progress"><span id="quizProgress" style="width:33%"></span></div>
-  <div class="section-head"><div class="eyebrow" id="quizEyebrow">Question 1 of 3</div><h1 class="title" id="quizQuestion">What matters most?</h1></div>
+  <div class="topbar"><button class="icon-btn" data-go="finder" aria-label="Back">←</button><div class="brand">LEXUS <span>MATCH</span></div><button class="icon-btn home-highlight" data-home aria-label="Home">⌂</button></div>
+  <div class="progress"><span id="quizProgress" style="width:25%"></span></div>
+  <div class="section-head"><div class="eyebrow" id="quizEyebrow">Question 1 of 4</div><h1 class="title" id="quizQuestion">What kind of Lexus feels right?</h1></div>
   <div id="quizChoices" class="choice-grid"></div>
 </section>
 
 <section id="match" class="screen" data-screen="match">
-  <div class="topbar"><button class="icon-btn" data-go="finder" aria-label="Back">←</button><div class="brand">YOUR <span>MATCH</span></div><button class="icon-btn home-highlight" data-home aria-label="Home" >⌂</button></div>
+  <div class="topbar"><button class="icon-btn" data-go="finder" aria-label="Back">←</button><div class="brand">YOUR <span>MATCHES</span></div><button class="icon-btn home-highlight" data-home aria-label="Home">⌂</button></div>
   <div class="quiz-summary" id="quizSummary"></div>
-  <div class="match-card"><div class="eyebrow" style="color:#444">A great place to start</div><div class="big-model" id="matchModel">RX</div><h2 id="matchName" style="font-size:34px">RX 350h</h2><p id="matchReason">A refined midsize luxury SUV with hybrid efficiency and everyday versatility.</p></div>
-  <div class="footer-actions"><button class="ghost-cta" id="compareFromMatch">COMPARE</button><button class="white-cta" data-go="inventory">SEE AVAILABLE</button></div>
-  <div class="footer-actions"><button class="red-cta wide" data-help="Selected Lexus model">REQUEST THIS LEXUS</button></div>
+  <div class="section-head compact-head">
+    <div class="eyebrow">Based on what you told us</div>
+    <h1 class="title">Three places to start.</h1>
+    <p class="subtitle">These are model recommendations—not inventory results. A Lexus specialist can help you explore trims and availability next.</p>
+  </div>
+  <div id="matchGrid" class="match-grid"></div>
+  <div class="footer-actions"><button class="ghost-cta" data-go="quiz">RESTART</button><button class="red-cta" data-help="Help reviewing Lexus recommendations">ASK A LEXUS SPECIALIST</button></div>
 </section>
 
-<section id="inventory" class="screen" data-screen="inventory">
-  <div class="topbar"><button class="icon-btn" data-go="finder" aria-label="Back">←</button><div class="brand">AVAILABLE <span>LEXUS</span></div><button class="icon-btn home-highlight" data-home aria-label="Home" >⌂</button></div>
-  <div class="section-head"><div class="eyebrow">Prototype inventory feed</div><h1 class="title">Swipe the showroom.</h1><p class="subtitle">These vehicles are simulated. Live vAuto/CDK inventory can replace this data layer later.</p></div>
-  <div class="list-bar"><strong>♡ <span id="favCount">0</span> in Your Lexus List</strong><button id="openCompare">COMPARE LIST</button></div>
-  <div id="inventoryCards" class="inventory-scroll"></div>
-  <div class="footer-actions"><button class="red-cta wide" data-help="Inventory browsing assistance">ASK A LEXUS SPECIALIST</button></div>
+<section id="model" class="screen model-screen" data-screen="model">
+  <div class="topbar"><button class="icon-btn" id="modelBack" aria-label="Back">←</button><div class="brand">EXPLORE <span>LEXUS</span></div><button class="icon-btn home-highlight" data-home aria-label="Home">⌂</button></div>
+  <div id="modelPresentation"></div>
 </section>
 
 <section id="compare" class="screen" data-screen="compare">
-  <div class="topbar"><button class="icon-btn" data-go="inventory" aria-label="Back">←</button><div class="brand">COMPARE <span>LEXUS</span></div><button class="icon-btn home-highlight" data-home aria-label="Home" >⌂</button></div>
-  <div class="section-head"><div class="eyebrow">Side by side</div><h1 class="title">Compare two favorites.</h1><p class="subtitle" id="compareHint">Add at least two vehicles to Your Lexus List.</p></div>
+  <div class="topbar"><button class="icon-btn" id="compareBack" aria-label="Back">←</button><div class="brand">COMPARE <span>MODELS</span></div><button class="icon-btn home-highlight" data-home aria-label="Home">⌂</button></div>
+  <div class="section-head compact-head"><div class="eyebrow">Side by side</div><h1 class="title">Your Lexus shortlist.</h1><p class="subtitle" id="compareHint">Save two models to compare their personalities.</p></div>
   <div id="compareGrid" class="compare-grid"></div>
-  <div class="footer-actions"><button class="red-cta wide" data-help="Vehicle comparison assistance">SHOW THESE TO A SPECIALIST</button></div>
+  <div class="footer-actions"><button class="red-cta wide" data-help="Help comparing Lexus models">SHOW THESE TO A SPECIALIST</button></div>
 </section>
 
 <section id="help" class="screen" data-screen="help">
@@ -259,13 +286,6 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
   const favorites = new Set();
   const staffNames = ['JESSICA','ALEX','MORGAN','CHRIS'];
 
-  const vehicles = [
-    {id:'rx350p',model:'RX',name:'2026 RX 350 Premium',color:'Cloudburst Gray',power:'2.4L Turbo',drive:'AWD',seats:'5',type:'Midsize SUV',status:'ON PROPERTY',stock:'L260184'},
-    {id:'rx350h',model:'RX',name:'2026 RX 350h Luxury',color:'Caviar',power:'Hybrid',drive:'AWD',seats:'5',type:'Midsize SUV',status:'ON PROPERTY',stock:'L260221'},
-    {id:'nx350h',model:'NX',name:'2026 NX 350h Premium',color:'Atomic Silver',power:'Hybrid',drive:'AWD',seats:'5',type:'Compact SUV',status:'IN TRANSIT',stock:'L260263'},
-    {id:'tx350',model:'TX',name:'2026 TX 350 Premium',color:'Eminent White Pearl',power:'2.4L Turbo',drive:'AWD',seats:'7',type:'3-Row SUV',status:'ON PROPERTY',stock:'L260197'},
-    {id:'es350e',model:'ES',name:'2026 ES 350e',color:'Iridium',power:'Electric',drive:'FWD',seats:'5',type:'Luxury Sedan',status:'IN TRANSIT',stock:'L260301'}
-  ];
 
   const pcBenefits = [
     {label:'POWERTRAIN COVERAGE',big:'FOR LIFE',desc:'Qualifying Priority Certified vehicles include lifetime coverage for core powertrain components, subject to program terms and exclusions.'},
@@ -286,7 +306,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     const target=document.querySelector(`[data-screen="${id}"]`); if(!target) return;
     previous=current; current=id; screens.forEach(s=>s.classList.toggle('active',s===target));
     window.scrollTo(0,0); resetIdle();
-    if(id==='inventory') renderInventory(); if(id==='compare') renderCompare();
+    if(id==='lineup') renderLineup(); if(id==='compare') renderCompare();
   }
   function home(){ show('home'); helpSource=''; quizStep=0; }
   document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.go)));
@@ -309,24 +329,250 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     document.getElementById(prefix+'Prev').addEventListener('click',()=>{idx=(idx-1+data.length)%data.length;render()}); document.getElementById(prefix+'Next').addEventListener('click',()=>{idx=(idx+1)%data.length;render()}); render(); }
   setupCarousel('pc',pcBenefits); setupCarousel('lc',lcBenefits);
 
-  // Finder
-  document.querySelectorAll('[data-finder-mode]').forEach(b=>b.addEventListener('click',()=>{ if(b.dataset.finderMode==='guide'){quizStep=0;Object.keys(quizAnswers).forEach(k=>delete quizAnswers[k]);renderQuiz();show('quiz')} else show('inventory'); }));
-  const quiz=[
-    {q:'What matters most?',key:'priority',choices:['Luxury & comfort','Family space','Performance','Efficiency']},
-    {q:'How many passengers?',key:'passengers',choices:['1–2','3–5','6+','Flexible']},
-    {q:'What powertrain interests you?',key:'power',choices:['Gas','Hybrid','Electric','Show me everything']}
-  ];
-  function renderQuiz(){const item=quiz[quizStep];document.getElementById('quizEyebrow').textContent=`Question ${quizStep+1} of ${quiz.length}`;document.getElementById('quizQuestion').textContent=item.q;document.getElementById('quizProgress').style.width=((quizStep+1)/quiz.length*100)+'%'; const wrap=document.getElementById('quizChoices');wrap.innerHTML='';item.choices.forEach(c=>{const b=document.createElement('button');b.className='touch';b.innerHTML=`<strong>${c}</strong><small>Tap to continue</small>`;b.addEventListener('click',()=>{quizAnswers[item.key]=c;if(quizStep<quiz.length-1){quizStep++;renderQuiz()}else{renderMatch();show('match')}});wrap.appendChild(b)});}
-  function renderMatch(){let model='RX',name='RX 350h',reason='A refined midsize luxury SUV with hybrid efficiency and everyday versatility.'; if(quizAnswers.passengers==='6+'){model='TX';name='TX 350';reason='Three-row luxury and generous passenger space make the TX a natural starting point for larger families.'} else if(quizAnswers.priority==='Performance'){model='IS';name='IS 350 F SPORT';reason='A driver-focused Lexus sedan with a more athletic personality and expressive design.'} else if(quizAnswers.power==='Electric'){model='ES';name='ES 350e';reason='An all-electric Lexus sedan is a compelling place to begin your electrified luxury search.'} else if(quizAnswers.priority==='Efficiency'){model='NX';name='NX 350h';reason='Compact luxury proportions with hybrid efficiency and everyday flexibility.'}
-    document.getElementById('matchModel').textContent=model;document.getElementById('matchName').textContent=name;document.getElementById('matchReason').textContent=reason;document.getElementById('quizSummary').innerHTML=Object.values(quizAnswers).map(v=>`<span class="chip">${v}</span>`).join(''); helpSource=`Interested in ${name}`; }
-  document.getElementById('compareFromMatch').addEventListener('click',()=>show('inventory'));
+  // Lexus model discovery
+  const savedModels = new Set();
+  let lineupFilter = 'all';
+  let modelReturnScreen = 'lineup';
+  let currentModelId = null;
 
-  // Inventory and favorites
-  function renderInventory(){const wrap=document.getElementById('inventoryCards'); wrap.innerHTML=vehicles.map(v=>`<article class="vehicle"><div class="vehicle-art"><div class="vehicle-model-watermark">${v.model}</div></div><div class="vehicle-info"><h3>${v.name}</h3><div class="vehicle-meta">${v.color}<br>${v.power} · ${v.drive} · ${v.seats} seats</div><span class="availability">${v.status} · ${v.stock}</span><div class="vehicle-actions"><button class="fav ${favorites.has(v.id)?'on':''}" data-fav="${v.id}">${favorites.has(v.id)?'♥ SAVED':'♡ SAVE'}</button><button data-request-vehicle="${v.id}">SEE THIS LEXUS</button></div></div></article>`).join(''); document.getElementById('favCount').textContent=favorites.size;
-    wrap.querySelectorAll('[data-fav]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.fav;favorites.has(id)?favorites.delete(id):favorites.add(id);toast(favorites.has(id)?'Added to Your Lexus List':'Removed from Your Lexus List');renderInventory()}));
-    wrap.querySelectorAll('[data-request-vehicle]').forEach(b=>b.addEventListener('click',()=>{const v=vehicles.find(x=>x.id===b.dataset.requestVehicle);helpSource=`${v.name} · ${v.color} · ${v.status} · ${v.stock}`;helpChoice='Sales assistance';openHelpConfirm()})); }
-  document.getElementById('openCompare').addEventListener('click',()=>show('compare'));
-  function renderCompare(){const selected=vehicles.filter(v=>favorites.has(v.id)).slice(0,2),grid=document.getElementById('compareGrid'),hint=document.getElementById('compareHint'); if(selected.length<2){hint.textContent='Add at least two vehicles to Your Lexus List.';grid.innerHTML='<div class="panel" style="grid-column:1/-1;text-align:center;color:#999">Save two vehicles from inventory to unlock a side-by-side comparison.</div>';return;} hint.textContent='Your first two saved vehicles are shown below.'; grid.innerHTML=selected.map(v=>`<div class="compare-col"><div class="compare-model">${v.model}</div><h3 style="margin:8px 0 18px">${v.name}</h3>${[['Body',v.type],['Powertrain',v.power],['Drive',v.drive],['Seats',v.seats],['Availability',v.status],['Color',v.color]].map(r=>`<div class="compare-row"><span>${r[0]}</span><b>${r[1]}</b></div>`).join('')}</div>`).join(''); helpSource=`Comparing ${selected.map(v=>v.name).join(' vs ')}`; }
+  const models = [
+    {id:'uxh', model:'UX', year:'2026', name:'UX HYBRID', category:'suv', body:'Compact Crossover', seats:'5', power:['Hybrid'], drive:'AWD available', traits:['Efficiency','City-friendly','Technology'], tagline:'Compact luxury with hybrid efficiency.', desc:'A nimble entry into Lexus luxury for drivers who value efficiency, an easy-to-place footprint and everyday refinement.', tone:'urban'},
+    {id:'nx', model:'NX', year:'2026', name:'NX', category:'suv', body:'Compact Luxury SUV', seats:'5', power:['Gas','Hybrid','Plug-in Hybrid'], drive:'AWD', traits:['Versatility','Efficiency','Technology'], tagline:'The stylish Lexus luxury crossover.', desc:'A flexible luxury crossover with three powertrain paths, responsive proportions and a polished cabin for everyday life.', tone:'silver'},
+    {id:'rx', model:'RX', year:'2026', name:'RX', category:'suv', body:'Midsize Luxury SUV', seats:'5', power:['Gas','Hybrid','Plug-in Hybrid'], drive:'AWD available', traits:['Comfort','Versatility','Luxury'], tagline:'The icon of refined everyday luxury.', desc:'The RX balances a composed ride, generous comfort and an unusually broad choice of powertrains.', tone:'graphite'},
+    {id:'rz', model:'RZ', year:'2026', name:'RZ', category:'suv', body:'All-Electric Luxury SUV', seats:'5', power:['Electric'], drive:'DIRECT4 AWD available', traits:['Electric','Technology','Performance'], tagline:'A distinctly Lexus battery-electric experience.', desc:'Quiet electric propulsion, expressive design and technology-forward driving define the RZ.', tone:'electric'},
+    {id:'tx', model:'TX', year:'2026', name:'TX', category:'suv', body:'Three-Row Luxury SUV', seats:'6–7', power:['Gas','Hybrid','Plug-in Hybrid'], drive:'AWD available', traits:['Family space','Comfort','Versatility'], tagline:'Three rows designed around real life.', desc:'The TX is the family-space specialist: three usable rows, flexible powertrains and an emphasis on passenger comfort.', tone:'pearl'},
+    {id:'gx', model:'GX', year:'2026', name:'GX', category:'suv', body:'Luxury Adventure SUV', seats:'5–7', power:['Gas'], drive:'Full-time 4WD', traits:['Adventure','Capability','Luxury'], tagline:'Luxury with a more adventurous point of view.', desc:'Body-on-frame capability, unmistakable presence and available Overtrail personality make the GX the rugged choice.', tone:'earth'},
+    {id:'lx', model:'LX', year:'2026', name:'LX', category:'suv', body:'Flagship Luxury SUV', seats:'4–7', power:['Gas','Hybrid'], drive:'Full-time 4WD', traits:['Flagship','Capability','Luxury'], tagline:'The flagship Lexus SUV.', desc:'The LX pairs commanding road presence and serious capability with the richest SUV expression in the Lexus family.', tone:'black'},
+    {id:'es', model:'ES', year:'2026', name:'ES', category:'car', body:'Luxury Sedan', seats:'5', power:['Hybrid','Electric'], drive:'FWD / AWD available', traits:['Comfort','Efficiency','Technology'], tagline:'A new era for the Lexus luxury sedan.', desc:'The redesigned ES combines a serene sedan experience with hybrid and battery-electric choices.', tone:'wavelength'},
+    {id:'is', model:'IS', year:'2026', name:'IS', category:'car', body:'Sport Sedan', seats:'5', power:['Gas'], drive:'RWD / AWD available', traits:['Performance','Driver-focused','Style'], tagline:'The driver-focused Lexus sport sedan.', desc:'Compact proportions, expressive design and a more connected driving personality make IS the athletic sedan choice.', tone:'infrared'},
+    {id:'ls', model:'LS', year:'2026', name:'LS', category:'car', body:'Flagship Luxury Sedan', seats:'5', power:['Gas'], drive:'RWD / AWD available', traits:['Flagship','Comfort','Craftsmanship'], tagline:'The original Lexus flagship.', desc:'A quiet, deeply refined luxury sedan centered on craftsmanship, comfort and effortless long-distance travel.', tone:'midnight'},
+    {id:'lc', model:'LC', year:'2026', name:'LC', category:'car', body:'Luxury Coupe', seats:'4', power:['Gas'], drive:'RWD', traits:['Performance','Design','Craftsmanship'], tagline:'A grand touring statement piece.', desc:'The LC is the emotional design flagship: dramatic proportions, naturally aspirated performance and handcrafted detail.', tone:'copper'},
+    {id:'lcc', model:'LC', year:'2026', name:'LC CONVERTIBLE', category:'car', body:'Luxury Convertible', seats:'4', power:['Gas'], drive:'RWD', traits:['Open-air','Performance','Design'], tagline:'Open-air grand touring, the Lexus way.', desc:'The LC Convertible turns the grand touring formula into a more sensory, open-air Lexus experience.', tone:'blue'}
+  ];
+
+  const quiz=[
+    {q:'What kind of Lexus feels right?',key:'body',choices:[
+      {label:'SUV / CROSSOVER',value:'suv',sub:'Higher seating, utility and flexibility.'},
+      {label:'SEDAN / COUPE',value:'car',sub:'Lower, sleeker and more road-focused.'},
+      {label:'I’M OPEN',value:'open',sub:'Show me the strongest fit regardless of body style.'},
+      {label:'ELECTRIFIED FIRST',value:'electrified',sub:'Start with hybrid, plug-in hybrid or electric choices.'}
+    ]},
+    {q:'How much passenger space do you need?',key:'passengers',choices:[
+      {label:'1–2 PEOPLE',value:'small',sub:'Compact proportions work well.'},
+      {label:'3–5 PEOPLE',value:'medium',sub:'Two comfortable rows are enough.'},
+      {label:'6+ PEOPLE',value:'large',sub:'I need real three-row capability.'},
+      {label:'FLEXIBLE',value:'flexible',sub:'Passenger count changes often.'}
+    ]},
+    {q:'What matters most in the experience?',key:'priority',choices:[
+      {label:'COMFORT & LUXURY',value:'comfort',sub:'Quiet, refined and relaxed.'},
+      {label:'PERFORMANCE',value:'performance',sub:'More engaging and expressive.'},
+      {label:'EFFICIENCY',value:'efficiency',sub:'Go farther with less fuel or no fuel.'},
+      {label:'ADVENTURE & SPACE',value:'adventure',sub:'Capability, cargo and flexibility.'}
+    ]},
+    {q:'Which powertrain direction interests you?',key:'power',choices:[
+      {label:'GAS',value:'Gas',sub:'Traditional power and fast refueling.'},
+      {label:'HYBRID',value:'Hybrid',sub:'Electrified efficiency without plugging in.'},
+      {label:'PLUG-IN / ELECTRIC',value:'Electric',sub:'More electric driving.'},
+      {label:'SHOW ME EVERYTHING',value:'all',sub:'Keep every powertrain in play.'}
+    ]}
+  ];
+
+  function isElectrified(m){ return m.power.some(p=>/Hybrid|Electric|Plug-in/i.test(p)); }
+
+  function renderLineup(){
+    const wrap=document.getElementById('lineupGrid');
+    const items=models.filter(m=>{
+      if(lineupFilter==='all') return true;
+      if(lineupFilter==='electrified') return isElectrified(m);
+      return m.category===lineupFilter;
+    });
+    wrap.innerHTML=items.map((m,i)=>`
+      <button class="model-tile tone-${m.tone}" data-model="${m.id}">
+        <div class="model-tile-stage">
+          <span class="model-year">${m.year}</span>
+          <span class="model-ghost">${m.model}</span>
+          <div class="css-vehicle ${m.category==='car'?'car-shape':'suv-shape'}"></div>
+        </div>
+        <div class="model-tile-copy">
+          <div><span class="model-type">${m.body}</span><h3>${m.name}</h3></div>
+          <span class="model-led"></span>
+        </div>
+        <p>${m.tagline}</p>
+        <div class="model-powerline">${m.power.map(p=>`<span>${p}</span>`).join('')}</div>
+      </button>`).join('');
+    bindModelButtons(wrap,'lineup');
+  }
+
+  document.querySelectorAll('[data-lineup-filter]').forEach(b=>b.addEventListener('click',()=>{
+    lineupFilter=b.dataset.lineupFilter;
+    document.querySelectorAll('[data-lineup-filter]').forEach(x=>x.classList.toggle('on',x===b));
+    renderLineup();
+  }));
+
+  document.querySelectorAll('[data-finder-mode]').forEach(b=>b.addEventListener('click',()=>{
+    if(b.dataset.finderMode==='guide'){
+      quizStep=0; Object.keys(quizAnswers).forEach(k=>delete quizAnswers[k]); renderQuiz(); show('quiz');
+    }else{
+      lineupFilter='all';
+      document.querySelectorAll('[data-lineup-filter]').forEach(x=>x.classList.toggle('on',x.dataset.lineupFilter==='all'));
+      renderLineup(); show('lineup');
+    }
+  }));
+
+  function renderQuiz(){
+    const item=quiz[quizStep];
+    document.getElementById('quizEyebrow').textContent=`Question ${quizStep+1} of ${quiz.length}`;
+    document.getElementById('quizQuestion').textContent=item.q;
+    document.getElementById('quizProgress').style.width=((quizStep+1)/quiz.length*100)+'%';
+    const wrap=document.getElementById('quizChoices');
+    wrap.innerHTML='';
+    item.choices.forEach(c=>{
+      const b=document.createElement('button');
+      b.className='touch quiz-choice';
+      b.innerHTML=`<strong>${c.label}</strong><small>${c.sub}</small>`;
+      b.addEventListener('click',()=>{
+        quizAnswers[item.key]=c.value;
+        if(quizStep<quiz.length-1){quizStep++;renderQuiz();}
+        else{renderMatches();show('match');}
+      });
+      wrap.appendChild(b);
+    });
+  }
+
+  function scoreModel(m){
+    let score=0;
+    const a=quizAnswers;
+    if(a.body==='suv' && m.category==='suv') score+=5;
+    if(a.body==='car' && m.category==='car') score+=5;
+    if(a.body==='electrified' && isElectrified(m)) score+=6;
+    if(a.passengers==='large'){
+      if(m.id==='tx') score+=10;
+      if(m.id==='gx'||m.id==='lx') score+=8;
+    }
+    if(a.passengers==='medium' && /5/.test(m.seats)) score+=3;
+    if(a.passengers==='small' && ['uxh','nx','is','lc','lcc'].includes(m.id)) score+=3;
+    if(a.priority==='comfort'){
+      if(m.traits.some(t=>/Comfort|Luxury|Flagship/i.test(t))) score+=6;
+    }
+    if(a.priority==='performance'){
+      if(m.traits.some(t=>/Performance|Driver/i.test(t))) score+=7;
+    }
+    if(a.priority==='efficiency'){
+      if(isElectrified(m)) score+=6;
+      if(['uxh','nx','es','rz'].includes(m.id)) score+=3;
+    }
+    if(a.priority==='adventure'){
+      if(['gx','lx','tx','rx','nx'].includes(m.id)) score+=7;
+    }
+    if(a.power && a.power!=='all'){
+      if(a.power==='Electric'){
+        if(m.power.includes('Electric')||m.power.includes('Plug-in Hybrid')) score+=7;
+      }else if(m.power.includes(a.power)) score+=7;
+    }
+    return score;
+  }
+
+  function reasonFor(m){
+    const reasons=[];
+    if(quizAnswers.passengers==='large' && ['tx','gx','lx'].includes(m.id)) reasons.push('the passenger space you asked for');
+    if(quizAnswers.priority==='comfort' && m.traits.some(t=>/Comfort|Luxury|Flagship/i.test(t))) reasons.push('a strong comfort-and-luxury focus');
+    if(quizAnswers.priority==='performance' && m.traits.some(t=>/Performance|Driver/i.test(t))) reasons.push('a more engaging driving personality');
+    if(quizAnswers.priority==='efficiency' && isElectrified(m)) reasons.push('electrified efficiency');
+    if(quizAnswers.priority==='adventure' && ['gx','lx','tx','rx','nx'].includes(m.id)) reasons.push('useful space and capability');
+    if(quizAnswers.power==='Electric' && (m.power.includes('Electric')||m.power.includes('Plug-in Hybrid'))) reasons.push('an electric-driving option');
+    return reasons.length ? `It lines up with ${reasons.slice(0,2).join(' and ')}.` : m.tagline;
+  }
+
+  function renderMatches(){
+    const ranked=[...models].sort((a,b)=>scoreModel(b)-scoreModel(a)).slice(0,3);
+    document.getElementById('quizSummary').innerHTML=Object.values(quizAnswers).map(v=>`<span class="chip">${v}</span>`).join('');
+    document.getElementById('matchGrid').innerHTML=ranked.map((m,i)=>`
+      <button class="recommend-card tone-${m.tone}" data-model="${m.id}">
+        <div class="recommend-rank">0${i+1}</div>
+        <div class="recommend-art">
+          <span>${m.model}</span><div class="css-vehicle ${m.category==='car'?'car-shape':'suv-shape'}"></div>
+        </div>
+        <div class="recommend-copy">
+          <div class="eyebrow">${m.body}</div>
+          <h2>${m.name}</h2>
+          <p>${reasonFor(m)}</p>
+          <div class="model-powerline">${m.power.map(p=>`<span>${p}</span>`).join('')}</div>
+        </div>
+      </button>`).join('');
+    bindModelButtons(document.getElementById('matchGrid'),'match');
+  }
+
+  function bindModelButtons(root,returnScreen){
+    root.querySelectorAll('[data-model]').forEach(b=>b.addEventListener('click',()=>{
+      modelReturnScreen=returnScreen;
+      openModel(b.dataset.model);
+    }));
+  }
+
+  function openModel(id){
+    const m=models.find(x=>x.id===id); if(!m) return;
+    currentModelId=id;
+    helpSource=`Interested in ${m.year} Lexus ${m.name}`;
+    const isSaved=savedModels.has(id);
+    document.getElementById('modelPresentation').innerHTML=`
+      <article class="model-hero-card tone-${m.tone}">
+        <div class="model-stage-large">
+          <div class="model-stage-year">${m.year}</div>
+          <div class="model-stage-name">${m.model}</div>
+          <div class="model-stage-line"></div>
+          <div class="css-vehicle hero-vehicle ${m.category==='car'?'car-shape':'suv-shape'}"></div>
+          <div class="model-stage-note">MODEL DISCOVERY · NOT LIVE INVENTORY</div>
+        </div>
+        <div class="model-copy-large">
+          <div class="eyebrow">${m.body}</div>
+          <h1>${m.name}</h1>
+          <p class="model-tagline">${m.tagline}</p>
+          <p class="model-desc">${m.desc}</p>
+          <div class="model-spec-grid">
+            <div><span>POWERTRAIN</span><b>${m.power.join(' · ')}</b></div>
+            <div><span>SEATING</span><b>${m.seats}</b></div>
+            <div><span>DRIVE</span><b>${m.drive}</b></div>
+            <div><span>PERSONALITY</span><b>${m.traits.slice(0,2).join(' · ')}</b></div>
+          </div>
+          <div class="trait-row">${m.traits.map(t=>`<span>${t}</span>`).join('')}</div>
+          <div class="model-actions">
+            <button class="ghost-cta" id="saveModel">${isSaved?'♥ SAVED':'♡ SAVE TO MY LIST'}</button>
+            <button class="ghost-cta" id="compareModels">COMPARE SAVED</button>
+            <button class="red-cta" id="askModel">ASK A LEXUS SPECIALIST</button>
+          </div>
+        </div>
+      </article>`;
+    document.getElementById('saveModel').addEventListener('click',()=>{
+      savedModels.has(id)?savedModels.delete(id):savedModels.add(id);
+      toast(savedModels.has(id)?`${m.name} added to your Lexus list`:`${m.name} removed from your list`);
+      openModel(id);
+    });
+    document.getElementById('compareModels').addEventListener('click',()=>{renderCompare();show('compare');});
+    document.getElementById('askModel').addEventListener('click',()=>openHelp(`Interested in ${m.year} Lexus ${m.name}`));
+    show('model');
+  }
+
+  document.getElementById('modelBack').addEventListener('click',()=>show(modelReturnScreen||'lineup'));
+  document.getElementById('compareBack').addEventListener('click',()=>show(currentModelId?'model':'lineup'));
+
+  function renderCompare(){
+    const selected=models.filter(m=>savedModels.has(m.id)).slice(0,2);
+    const grid=document.getElementById('compareGrid');
+    const hint=document.getElementById('compareHint');
+    if(selected.length<2){
+      hint.textContent='Save two models to compare their personalities.';
+      grid.innerHTML='<div class="panel compare-empty">Save two Lexus models from the lineup or model presentation to unlock a side-by-side comparison.</div>';
+      return;
+    }
+    hint.textContent='Your first two saved Lexus models are shown below.';
+    grid.innerHTML=selected.map(m=>`
+      <div class="compare-col tone-${m.tone}">
+        <div class="compare-visual"><span>${m.model}</span><div class="css-vehicle ${m.category==='car'?'car-shape':'suv-shape'}"></div></div>
+        <div class="compare-model">${m.name}</div>
+        ${[['Body',m.body],['Powertrain',m.power.join(' · ')],['Drive',m.drive],['Seats',m.seats],['Best for',m.traits.slice(0,2).join(' · ')]].map(r=>`<div class="compare-row"><span>${r[0]}</span><b>${r[1]}</b></div>`).join('')}
+      </div>`).join('');
+    helpSource=`Comparing ${selected.map(m=>m.name).join(' vs ')}`;
+  }
 
   // Concierge
   function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600)}
@@ -1909,5 +2155,117 @@ button.force-red-cta{
   text-shadow:none!important;
   box-shadow:none!important;
   mix-blend-mode:normal!important;
+}
+</style>
+
+<style>
+/* v0.20 — model discovery showroom */
+.compact-head{margin-bottom:18px!important}
+.finder-launch{margin-top:18px}
+.finder-launch-card{position:relative;overflow:hidden;text-align:left!important}
+.finder-index{position:absolute;right:20px;top:14px;font-size:54px;font-weight:900;color:rgba(255,255,255,.055);letter-spacing:-.06em}
+.quiz-choice{text-align:left!important;align-items:flex-start!important}
+
+.lineup-filters{display:flex;gap:10px;overflow-x:auto;padding:2px 0 18px;scrollbar-width:none}
+.lineup-filters::-webkit-scrollbar{display:none}
+.lineup-filter{min-width:max-content;border:1px solid rgba(255,255,255,.16);background:rgba(8,8,10,.82);color:#aaa;padding:12px 18px;border-radius:999px;font-weight:800;letter-spacing:.08em}
+.lineup-filter.on,.lineup-filter:active{background:#fff;color:#070708;border-color:#fff}
+
+.lineup-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.model-tile{border:1px solid rgba(255,255,255,.14);border-radius:26px;background:rgba(10,10,12,.92);padding:0;overflow:hidden;color:#fff;text-align:left;min-height:360px;transition:.25s ease}
+.model-tile:active,.model-tile:hover{transform:translateY(-2px);border-color:#d92530;box-shadow:0 16px 38px rgba(0,0,0,.35)}
+.model-tile-stage{height:190px;position:relative;overflow:hidden;background:radial-gradient(circle at 72% 32%,rgba(255,255,255,.12),transparent 32%),linear-gradient(145deg,#202025,#09090b)}
+.model-year{position:absolute;left:18px;top:16px;color:rgba(255,255,255,.62);font-size:11px;letter-spacing:.18em}
+.model-ghost{position:absolute;right:10px;top:10px;font-size:76px;line-height:.9;font-weight:900;letter-spacing:-.08em;color:rgba(255,255,255,.07)}
+.model-tile-copy{display:flex;justify-content:space-between;align-items:end;padding:20px 20px 8px}
+.model-type{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#8f8f96}
+.model-tile h3{font-size:32px;line-height:1;margin:7px 0 0;letter-spacing:-.04em}
+.model-tile p{padding:0 20px;color:#b5b5bc;line-height:1.45;font-size:13px;min-height:38px}
+.model-led{width:10px;height:10px;border-radius:50%;background:#7bd8ff;box-shadow:0 0 12px rgba(123,216,255,.7);animation:portalLedPulse 2.8s ease-in-out infinite}
+.model-powerline{display:flex;gap:6px;flex-wrap:wrap;padding:12px 20px 20px}
+.model-powerline span{font-size:10px;letter-spacing:.05em;border:1px solid rgba(255,255,255,.13);border-radius:999px;padding:7px 9px;color:#c9c9cf;background:rgba(0,0,0,.22)}
+
+.css-vehicle{position:absolute;left:8%;right:8%;bottom:24px;height:82px;filter:drop-shadow(0 22px 18px rgba(0,0,0,.42))}
+.css-vehicle::before{content:"";position:absolute;left:3%;right:3%;bottom:14px;height:46px;border-radius:55% 46% 18% 20%/70% 70% 28% 34%;background:linear-gradient(180deg,#e8e8eb 0%,#9b9ba2 46%,#4b4b50 100%);transform:skewX(-6deg)}
+.css-vehicle::after{content:"";position:absolute;left:27%;right:22%;bottom:50px;height:31px;border-radius:66% 60% 6% 4%;background:linear-gradient(180deg,#2d2d33,#0b0b0d);transform:skewX(-10deg)}
+.css-vehicle.suv-shape::before{height:55px;border-radius:42% 34% 14% 16%/68% 70% 28% 32%}
+.css-vehicle.suv-shape::after{left:24%;right:18%;height:38px;bottom:55px;border-radius:35% 20% 5% 5%}
+.css-vehicle span{display:none}
+.css-vehicle{--wheel:#0b0b0d}
+.model-tile-stage::after,.recommend-art::after,.model-stage-large::after,.compare-visual::after{content:"";position:absolute;left:17%;bottom:29px;width:18px;height:18px;border:7px solid #0d0d0f;border-radius:50%;box-shadow:calc(100% + 150px) 0 0 -7px #aaa}
+
+.tone-electric .model-tile-stage,.tone-electric .recommend-art,.tone-electric .model-stage-large{background:radial-gradient(circle at 72% 30%,rgba(68,177,255,.23),transparent 32%),linear-gradient(145deg,#16212b,#08090b)!important}
+.tone-earth .model-tile-stage,.tone-earth .recommend-art,.tone-earth .model-stage-large{background:radial-gradient(circle at 70% 30%,rgba(154,132,93,.20),transparent 35%),linear-gradient(145deg,#28261f,#090909)!important}
+.tone-infrared .model-tile-stage,.tone-infrared .recommend-art,.tone-infrared .model-stage-large{background:radial-gradient(circle at 70% 30%,rgba(202,19,28,.20),transparent 34%),linear-gradient(145deg,#281014,#080808)!important}
+.tone-wavelength .model-tile-stage,.tone-wavelength .recommend-art,.tone-wavelength .model-stage-large{background:radial-gradient(circle at 70% 30%,rgba(142,163,176,.22),transparent 34%),linear-gradient(145deg,#172027,#08090a)!important}
+.tone-copper .model-tile-stage,.tone-copper .recommend-art,.tone-copper .model-stage-large{background:radial-gradient(circle at 70% 30%,rgba(187,104,62,.22),transparent 34%),linear-gradient(145deg,#291b16,#080808)!important}
+.tone-blue .model-tile-stage,.tone-blue .recommend-art,.tone-blue .model-stage-large{background:radial-gradient(circle at 70% 30%,rgba(52,90,139,.25),transparent 34%),linear-gradient(145deg,#111a28,#07080a)!important}
+
+.match-grid{display:grid;grid-template-columns:1fr;gap:14px}
+.recommend-card{height:auto!important;min-height:0!important;max-height:none!important;width:100%!important;max-width:none!important;display:grid;grid-template-columns:34% 1fr;border-radius:24px;overflow:hidden;padding:0;color:#fff;text-align:left;border:1px solid rgba(255,255,255,.13);background:rgba(8,8,10,.88)!important;position:relative}
+.recommend-rank{position:absolute;right:16px;top:12px;font-size:46px;font-weight:900;color:rgba(255,255,255,.06);z-index:4}
+.recommend-art{position:relative;min-height:210px;overflow:hidden;background:linear-gradient(145deg,#242428,#08080a)}
+.recommend-art>span{position:absolute;left:14px;top:16px;font-size:62px;font-weight:900;letter-spacing:-.08em;color:rgba(255,255,255,.08)}
+.recommend-copy{padding:24px}
+.recommend-copy h2{font-size:40px;margin:5px 0 10px;letter-spacing:-.05em}
+.recommend-copy p{color:#b9b9bf;line-height:1.45;margin-bottom:8px}
+.recommend-copy .model-powerline{padding:10px 0 0}
+
+.model-screen{padding-bottom:46px!important}
+.model-hero-card{border:1px solid rgba(255,255,255,.13);border-radius:32px;overflow:hidden;background:rgba(8,8,10,.64);backdrop-filter:blur(10px)}
+.model-stage-large{height:460px;position:relative;overflow:hidden;background:radial-gradient(circle at 70% 28%,rgba(255,255,255,.14),transparent 35%),linear-gradient(145deg,#222228,#08080a)}
+.model-stage-year{position:absolute;left:26px;top:24px;font-size:12px;letter-spacing:.2em;color:rgba(255,255,255,.65)}
+.model-stage-name{position:absolute;right:-10px;top:8px;font-size:210px;font-weight:900;line-height:.8;letter-spacing:-.09em;color:rgba(255,255,255,.055)}
+.model-stage-line{position:absolute;left:26px;right:26px;bottom:38px;height:1px;background:linear-gradient(90deg,transparent,#fff,#c91822,#fff,transparent);opacity:.45}
+.model-stage-note{position:absolute;left:26px;bottom:16px;font-size:9px;letter-spacing:.18em;color:rgba(255,255,255,.45)}
+.hero-vehicle{height:170px;left:10%;right:10%;bottom:92px;transform:scale(1.18)}
+.hero-vehicle::before{height:88px}
+.hero-vehicle::after{height:60px;bottom:84px}
+.hero-vehicle.suv-shape::before{height:102px}
+.hero-vehicle.suv-shape::after{height:72px;bottom:96px}
+.model-copy-large{padding:30px}
+.model-copy-large h1{font-size:72px;line-height:.88;margin:8px 0 14px;letter-spacing:-.07em}
+.model-tagline{font-size:23px;line-height:1.3;max-width:740px;color:#fff}
+.model-desc{font-size:15px;line-height:1.55;color:#aeafb5;max-width:760px;margin-top:12px}
+.model-spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:26px}
+.model-spec-grid>div{border:1px solid rgba(255,255,255,.11);border-radius:18px;padding:16px;background:rgba(0,0,0,.18)}
+.model-spec-grid span{display:block;font-size:9px;letter-spacing:.15em;color:#85858d;margin-bottom:7px}
+.model-spec-grid b{font-size:14px;line-height:1.35}
+.trait-row{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 24px}
+.trait-row span{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.07);font-size:11px;color:#d1d1d5}
+.model-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.model-actions .red-cta{grid-column:1/-1}
+
+.compare-empty{grid-column:1/-1;text-align:center;color:#999!important;height:auto!important;min-height:180px!important;display:grid;place-items:center}
+.compare-visual{height:150px;position:relative;overflow:hidden;margin:-24px -24px 18px;background:linear-gradient(145deg,#242428,#08080a)}
+.compare-visual>span{position:absolute;right:10px;top:6px;font-size:66px;font-weight:900;color:rgba(255,255,255,.07);letter-spacing:-.08em}
+
+@media(max-width:700px){
+  .lineup-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .model-tile{min-height:286px;border-radius:20px}
+  .model-tile-stage{height:145px}
+  .model-ghost{font-size:54px}
+  .model-tile h3{font-size:24px}
+  .model-tile-copy{padding:14px 14px 6px}
+  .model-tile p{padding:0 14px;font-size:11px;min-height:34px}
+  .model-powerline{padding:8px 14px 14px}
+  .model-powerline span{font-size:8px;padding:5px 6px}
+  .css-vehicle{bottom:14px;height:60px}
+  .recommend-card{grid-template-columns:38% 1fr}
+  .recommend-art{min-height:180px}
+  .recommend-copy{padding:18px}
+  .recommend-copy h2{font-size:31px}
+  .recommend-copy p{font-size:12px}
+  .model-stage-large{height:350px}
+  .model-stage-name{font-size:125px;top:24px}
+  .hero-vehicle{height:120px;bottom:82px}
+  .hero-vehicle::before{height:65px}
+  .hero-vehicle::after{height:44px;bottom:61px}
+  .hero-vehicle.suv-shape::before{height:75px}
+  .hero-vehicle.suv-shape::after{height:54px;bottom:69px}
+  .model-copy-large{padding:22px}
+  .model-copy-large h1{font-size:54px}
+  .model-tagline{font-size:18px}
+  .model-spec-grid{grid-template-columns:1fr 1fr}
 }
 </style>

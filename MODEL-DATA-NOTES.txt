@@ -1,0 +1,15 @@
+Priority Lexus Kiosk v0.20 — Model Discovery Data
+
+The Find Your Lexus experience is now based on the Lexus model family rather than live inventory.
+Primary current-model reference: Lexus USA 2026 lineup / Lexus model pages, researched September 2026.
+
+Model data is intentionally stored in the `models` JavaScript array in index.html so it can be updated
+without changing the presentation logic.
+
+IMPORTANT IMAGE NOTE:
+The Lexus USA Newsroom product photography page states that its downloadable materials are for editorial
+use only and not for advertising/marketing. Those restricted press images were therefore not packaged
+into this dealership kiosk prototype.
+
+For production, replace the CSS vehicle-stage art with Lexus-approved dealer/OEM DAM images or another
+asset source your dealership is licensed to use.
