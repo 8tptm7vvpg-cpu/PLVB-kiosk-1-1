@@ -131,7 +131,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
   <div class="prototype-footer-block">Prototype · Simulated Data</div>
-<footer class="version-footer">Priority Lexus Kiosk · Version 0.27</footer>
+<footer class="version-footer">Priority Lexus Kiosk · Version 0.28</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
@@ -2690,5 +2690,82 @@ button.force-red-cta{
 #lineupGrid [data-model="lcc"] .model-vehicle-img{
   top:0!important;
   height:100%!important;
+}
+</style>
+
+<style>
+/* v0.28 — All Models gallery background anchoring.
+   Vehicle artwork placement is intentionally unchanged. */
+#lineupGrid .model-tile{
+  position:relative!important;
+  isolation:isolate;
+}
+
+/* Put the stage artwork/background directly against the top edge of every card. */
+#lineupGrid .model-tile::before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  top:0;
+  left:0;
+  right:0;
+  height:190px;
+  background:
+    radial-gradient(circle at 72% 32%,rgba(255,255,255,.12),transparent 32%),
+    linear-gradient(145deg,#202025,#09090b);
+  pointer-events:none;
+}
+
+/* Tone variants now color the card-top background itself. */
+#lineupGrid .model-tile.tone-electric::before{
+  background:
+    radial-gradient(circle at 72% 30%,rgba(68,177,255,.23),transparent 32%),
+    linear-gradient(145deg,#16212b,#08090b);
+}
+#lineupGrid .model-tile.tone-earth::before{
+  background:
+    radial-gradient(circle at 70% 30%,rgba(154,132,93,.20),transparent 35%),
+    linear-gradient(145deg,#28261f,#090909);
+}
+#lineupGrid .model-tile.tone-infrared::before{
+  background:
+    radial-gradient(circle at 70% 30%,rgba(202,19,28,.20),transparent 34%),
+    linear-gradient(145deg,#281014,#080808);
+}
+#lineupGrid .model-tile.tone-wavelength::before{
+  background:
+    radial-gradient(circle at 70% 30%,rgba(142,163,176,.22),transparent 34%),
+    linear-gradient(145deg,#172027,#08090a);
+}
+#lineupGrid .model-tile.tone-copper::before{
+  background:
+    radial-gradient(circle at 70% 30%,rgba(187,104,62,.22),transparent 34%),
+    linear-gradient(145deg,#291b16,#080808);
+}
+#lineupGrid .model-tile.tone-blue::before{
+  background:
+    radial-gradient(circle at 70% 30%,rgba(52,90,139,.25),transparent 34%),
+    linear-gradient(145deg,#111a28,#07080a);
+}
+
+/* The original stage remains the positioning container for year/model/vehicle,
+   but its own background is transparent in the gallery so no inner gap can appear. */
+#lineupGrid .model-tile-stage{
+  position:relative!important;
+  z-index:1;
+  background:transparent!important;
+  margin-top:0!important;
+  top:0!important;
+  transform:none!important;
+}
+#lineupGrid .model-tile-copy,
+#lineupGrid .model-tile > p,
+#lineupGrid .model-powerline{
+  position:relative;
+  z-index:2;
+}
+
+@media(max-width:700px){
+  #lineupGrid .model-tile::before{height:145px}
 }
 </style>
