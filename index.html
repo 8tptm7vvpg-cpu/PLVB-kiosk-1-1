@@ -131,7 +131,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
   <div class="prototype-footer-block">Prototype · Simulated Data</div>
-<footer class="version-footer">Priority Lexus Kiosk · Version 0.17</footer>
+<footer class="version-footer">Priority Lexus Kiosk · Version 0.18</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
@@ -1795,4 +1795,105 @@ button.force-red-cta{
 .hero-copy{display:flex!important;flex-direction:column!important}
 .hero-copy .hero-logo{order:2!important}
 .hero-copy .welcome-to,.hero-copy .hero-eyebrow,.hero-copy .eyebrow{order:1!important}
+</style>
+
+<style>
+/* v0.18 — remove all edge fades / masks / blend effects around hero logo */
+
+/* The hero and hero-copy may position content, but must not visually affect logo pixels */
+.hero,
+.hero-copy,
+.hero-logo-wrap,
+.hero-brand,
+.hero-branding,
+.brand-area,
+.logo-wrap,
+.logo-container{
+  background:none!important;
+  background-image:none!important;
+  mask:none!important;
+  -webkit-mask:none!important;
+  mask-image:none!important;
+  -webkit-mask-image:none!important;
+  filter:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  mix-blend-mode:normal!important;
+  isolation:auto!important;
+  box-shadow:none!important;
+  clip-path:none!important;
+  -webkit-clip-path:none!important;
+}
+
+/* Remove likely legacy side-fade overlays/pseudo-elements */
+.hero::before,
+.hero::after,
+.hero-copy::before,
+.hero-copy::after,
+.hero-logo-wrap::before,
+.hero-logo-wrap::after,
+.hero-brand::before,
+.hero-brand::after,
+.hero-branding::before,
+.hero-branding::after,
+.brand-area::before,
+.brand-area::after,
+.logo-wrap::before,
+.logo-wrap::after,
+.logo-container::before,
+.logo-container::after{
+  content:none!important;
+  display:none!important;
+  background:none!important;
+  background-image:none!important;
+  opacity:0!important;
+  filter:none!important;
+  box-shadow:none!important;
+}
+
+/* Keep logo fully visible and unblended */
+.hero-logo{
+  display:block!important;
+  position:relative!important;
+  z-index:10!important;
+  width:min(90%,860px)!important;
+  max-width:860px!important;
+  height:auto!important;
+  margin:0 auto!important;
+  opacity:1!important;
+  filter:none!important;
+  transform:none!important;
+  mix-blend-mode:normal!important;
+  mask:none!important;
+  -webkit-mask:none!important;
+  clip-path:none!important;
+  -webkit-clip-path:none!important;
+  box-shadow:none!important;
+}
+
+/* Ensure parent does not clip the first/last letters */
+.hero-copy,
+.hero-logo-wrap,
+.hero-brand,
+.hero-branding,
+.brand-area,
+.logo-wrap,
+.logo-container{
+  overflow:visible!important;
+}
+
+/* Preserve particle effects */
+.hero .particles,
+.hero .particle,
+.hero-particles{
+  display:block!important;
+  pointer-events:none!important;
+}
+
+@media(max-width:700px){
+  .hero-logo{
+    width:min(94%,390px)!important;
+    max-width:390px!important;
+  }
+}
 </style>
