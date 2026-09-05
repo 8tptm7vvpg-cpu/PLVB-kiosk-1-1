@@ -110,6 +110,8 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
       <i class="particle red p5"></i><i class="particle p6"></i><i class="particle p7"></i><i class="particle red p8"></i>
     </div>
     <div class="hero-copy">
+<img class="hero-logo" src="./priority-lexus-vb-wordmark-white.png" alt="Priority Lexus Virginia Beach">
+
       <div class="hero-small">Welcome to</div>
       <div class="brand-lockup" aria-label="Priority Lexus Virginia Beach">
         <img class="hero-logo" src="./priority-lexus-vb-wordmark-white.png" alt="Priority Lexus Virginia Beach">
@@ -129,7 +131,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
   <div class="prototype-footer-block">Prototype · Simulated Data</div>
-<footer class="version-footer">Priority Lexus Kiosk · Version 0.15</footer>
+<footer class="version-footer">Priority Lexus Kiosk · Version 0.16</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
@@ -1732,4 +1734,59 @@ button.force-red-cta{
 
 /* Intentionally no width/height/max-size/object-fit/transform/filter/opacity/
    animation/text styling applied to .hero-logo or .cinematic-logo. */
+</style>
+
+<style>
+/* v0.16 — restore hero logo placement from v0.13 and safely contain cinematic logo */
+
+/* Hero logo: same visual placement/sizing as v0.13 */
+.hero-copy{
+  position:relative!important;
+  z-index:4!important;
+  width:100%!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+.hero-logo{
+  display:block!important;
+  width:min(90%,860px)!important;
+  max-width:860px!important;
+  height:auto!important;
+  margin:0 auto!important;
+}
+
+/* Cinematic logo: constrain to viewport only, without crop/effects */
+.cinematic-inner{
+  width:min(82vw,820px)!important;
+  max-width:82vw!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+.cinematic-logo{
+  display:block!important;
+  width:auto!important;
+  height:auto!important;
+  max-width:82vw!important;
+  max-height:34vh!important;
+  margin:0 auto!important;
+}
+
+@media(max-width:700px){
+  .hero-logo{
+    width:min(94%,390px)!important;
+    max-width:390px!important;
+  }
+  .cinematic-inner{
+    width:88vw!important;
+    max-width:88vw!important;
+  }
+  .cinematic-logo{
+    max-width:88vw!important;
+    max-height:28vh!important;
+  }
+}
 </style>
