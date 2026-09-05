@@ -131,7 +131,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
   <div class="prototype-footer-block">Prototype · Simulated Data</div>
-<footer class="version-footer">Priority Lexus Kiosk · Version 0.18</footer>
+<footer class="version-footer">Priority Lexus Kiosk · Version 0.19</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
@@ -1895,5 +1895,19 @@ button.force-red-cta{
     width:min(94%,390px)!important;
     max-width:390px!important;
   }
+}
+</style>
+
+<style>
+/* v0.19
+   The shared Priority Lexus PNG asset itself has been flattened:
+   white wordmark pixels are pure white, red checkmark remains red,
+   transparency is preserved. No emboss/bevel treatment is baked in now. */
+.hero-logo,
+.cinematic-logo{
+  filter:none!important;
+  text-shadow:none!important;
+  box-shadow:none!important;
+  mix-blend-mode:normal!important;
 }
 </style>
