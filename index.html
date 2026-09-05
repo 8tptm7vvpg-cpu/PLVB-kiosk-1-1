@@ -131,7 +131,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
   <div class="prototype-footer-block">Prototype · Simulated Data</div>
-<footer class="version-footer">Priority Lexus Kiosk · Version 0.21</footer>
+<footer class="version-footer">Priority Lexus Kiosk · Version 0.22</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
@@ -288,11 +288,11 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
 
 
   const pcBenefits = [
-    { title:'ENGINE', value:'Guaranteed FOR LIFE', copy:'Priority Certified protection for the engine.' },
-    { title:'TRANSMISSION', value:'Guaranteed FOR LIFE', copy:'Priority Certified protection for the transmission.' },
-    { title:'DRIVE SHAFT', value:'Guaranteed FOR LIFE', copy:'Priority Certified protection for the drive shaft.' },
-    { title:'DIFFERENTIAL', value:'Guaranteed FOR LIFE', copy:'Priority Certified protection for the differential.' },
-    { title:'AXLES', value:'Guaranteed FOR LIFE', copy:'Priority Certified protection for the axles.' }
+    {label:'ENGINE',big:'GUARANTEED FOR LIFE',desc:'Priority Certified protection for the engine.'},
+    {label:'TRANSMISSION',big:'GUARANTEED FOR LIFE',desc:'Priority Certified protection for the transmission.'},
+    {label:'DRIVE SHAFT',big:'GUARANTEED FOR LIFE',desc:'Priority Certified protection for the drive shaft.'},
+    {label:'DIFFERENTIAL',big:'GUARANTEED FOR LIFE',desc:'Priority Certified protection for the differential.'},
+    {label:'AXLES',big:'GUARANTEED FOR LIFE',desc:'Priority Certified protection for the axles.'}
   ];
   const lcBenefits = [
     {label:'L/CERTIFIED LIMITED WARRANTY',big:'UNLIMITED MILES',desc:'L/Certified coverage adds two years of unlimited-mileage limited warranty protection, with coverage timing subject to Lexus program terms.'},
@@ -2271,33 +2271,51 @@ button.force-red-cta{
 }
 </style>
 
+
+
 <script>
-/* v0.21 carousel autoplay — 5 seconds, infinite loop */
+/* v0.22 — exact 5-second infinite autoplay for both benefit carousels */
 (function(){
-  const WAIT=5000;
-  function nextButton(screen){
-    return screen.querySelector(
-      '[data-next],.carousel-next,.slide-next,.next-btn,'+
-      'button[aria-label*="Next"],button[aria-label*="next"]'
-    );
+  const WAIT = 5000;
+
+  function startCarouselAutoplay(screenId, nextButtonId){
+    const screen = document.querySelector('[data-screen="' + screenId + '"]');
+    const next = document.getElementById(nextButtonId);
+    if(!screen || !next) return;
+
+    setInterval(function(){
+      if(screen.classList.contains('active')){
+        next.click();
+      }
+    }, WAIT);
   }
-  function targetScreens(){
-    return [...document.querySelectorAll('.screen')].filter(screen=>{
-      const t=((screen.id||'')+' '+screen.textContent).toLowerCase();
-      return t.includes('priority certified') ||
-             t.includes('l/certified') ||
-             t.includes('l certified');
-    });
-  }
-  function advance(screen){
-    if(!screen.classList.contains('active')) return;
-    const b=nextButton(screen);
-    if(b) b.click();
-  }
-  document.addEventListener('DOMContentLoaded',()=>{
-    targetScreens().forEach(screen=>{
-      setInterval(()=>advance(screen),WAIT);
-    });
+
+  document.addEventListener('DOMContentLoaded', function(){
+    startCarouselAutoplay('priority-certified', 'pcNext');
+    startCarouselAutoplay('l-certified', 'lcNext');
+
+    /* Fallback in case those screen IDs differ in this build:
+       locate the screens from their actual carousel controls. */
+    const pcNext = document.getElementById('pcNext');
+    const lcNext = document.getElementById('lcNext');
+
+    if(pcNext && !document.querySelector('[data-screen="priority-certified"]')){
+      const pcScreen = pcNext.closest('.screen');
+      if(pcScreen){
+        setInterval(function(){
+          if(pcScreen.classList.contains('active')) pcNext.click();
+        }, WAIT);
+      }
+    }
+
+    if(lcNext && !document.querySelector('[data-screen="l-certified"]')){
+      const lcScreen = lcNext.closest('.screen');
+      if(lcScreen){
+        setInterval(function(){
+          if(lcScreen.classList.contains('active')) lcNext.click();
+        }, WAIT);
+      }
+    }
   });
 })();
 </script>
