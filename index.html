@@ -131,7 +131,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
   <div class="prototype-footer-block">Prototype · Simulated Data</div>
-<footer class="version-footer">Priority Lexus Kiosk · Version 0.23</footer>
+<footer class="version-footer">Priority Lexus Kiosk · Version 0.24</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
@@ -376,14 +376,14 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
 
   const models = [
     {id:'uxh', model:'UX', year:'2026', name:'UX HYBRID', category:'suv', body:'Compact Crossover', seats:'5', power:['Hybrid'], drive:'AWD available', traits:['Efficiency','City-friendly','Technology'], tagline:'Compact luxury with hybrid efficiency.', desc:'A nimble entry into Lexus luxury for drivers who value efficiency, an easy-to-place footprint and everyday refinement.', tone:'urban'},
-    {id:'nx', model:'NX', year:'2026', name:'NX', category:'suv', body:'Compact Luxury SUV', seats:'5', power:['Gas','Hybrid','Plug-in Hybrid'], drive:'AWD', traits:['Versatility','Efficiency','Technology'], tagline:'The stylish Lexus luxury crossover.', desc:'A flexible luxury crossover with three powertrain paths, responsive proportions and a polished cabin for everyday life.', tone:'silver'},
-    {id:'rx', model:'RX', year:'2026', name:'RX', category:'suv', body:'Midsize Luxury SUV', seats:'5', power:['Gas','Hybrid','Plug-in Hybrid'], drive:'AWD available', traits:['Comfort','Versatility','Luxury'], tagline:'The icon of refined everyday luxury.', desc:'The RX balances a composed ride, generous comfort and an unusually broad choice of powertrains.', tone:'graphite'},
-    {id:'rz', model:'RZ', year:'2026', name:'RZ', category:'suv', body:'All-Electric Luxury SUV', seats:'5', power:['Electric'], drive:'DIRECT4 AWD available', traits:['Electric','Technology','Performance'], tagline:'A distinctly Lexus battery-electric experience.', desc:'Quiet electric propulsion, expressive design and technology-forward driving define the RZ.', tone:'electric'},
-    {id:'tx', model:'TX', year:'2026', name:'TX', category:'suv', body:'Three-Row Luxury SUV', seats:'6–7', power:['Gas','Hybrid','Plug-in Hybrid'], drive:'AWD available', traits:['Family space','Comfort','Versatility'], tagline:'Three rows designed around real life.', desc:'The TX is the family-space specialist: three usable rows, flexible powertrains and an emphasis on passenger comfort.', tone:'pearl'},
-    {id:'gx', model:'GX', year:'2026', name:'GX', category:'suv', body:'Luxury Adventure SUV', seats:'5–7', power:['Gas'], drive:'Full-time 4WD', traits:['Adventure','Capability','Luxury'], tagline:'Luxury with a more adventurous point of view.', desc:'Body-on-frame capability, unmistakable presence and available Overtrail personality make the GX the rugged choice.', tone:'earth'},
-    {id:'lx', model:'LX', year:'2026', name:'LX', category:'suv', body:'Flagship Luxury SUV', seats:'4–7', power:['Gas','Hybrid'], drive:'Full-time 4WD', traits:['Flagship','Capability','Luxury'], tagline:'The flagship Lexus SUV.', desc:'The LX pairs commanding road presence and serious capability with the richest SUV expression in the Lexus family.', tone:'black'},
-    {id:'es', model:'ES', year:'2026', name:'ES', category:'car', body:'Luxury Sedan', seats:'5', power:['Hybrid','Electric'], drive:'FWD / AWD available', traits:['Comfort','Efficiency','Technology'], tagline:'A new era for the Lexus luxury sedan.', desc:'The redesigned ES combines a serene sedan experience with hybrid and battery-electric choices.', tone:'wavelength'},
-    {id:'is', model:'IS', year:'2026', name:'IS', category:'car', body:'Sport Sedan', seats:'5', power:['Gas'], drive:'RWD / AWD available', traits:['Performance','Driver-focused','Style'], tagline:'The driver-focused Lexus sport sedan.', desc:'Compact proportions, expressive design and a more connected driving personality make IS the athletic sedan choice.', tone:'infrared'},
+    {id:'nx', image:'./vehicle-images/nx.png', model:'NX', year:'2026', name:'NX', category:'suv', body:'Compact Luxury SUV', seats:'5', power:['Gas','Hybrid','Plug-in Hybrid'], drive:'AWD', traits:['Versatility','Efficiency','Technology'], tagline:'The stylish Lexus luxury crossover.', desc:'A flexible luxury crossover with three powertrain paths, responsive proportions and a polished cabin for everyday life.', tone:'silver'},
+    {id:'rx', image:'./vehicle-images/rx.png', model:'RX', year:'2026', name:'RX', category:'suv', body:'Midsize Luxury SUV', seats:'5', power:['Gas','Hybrid','Plug-in Hybrid'], drive:'AWD available', traits:['Comfort','Versatility','Luxury'], tagline:'The icon of refined everyday luxury.', desc:'The RX balances a composed ride, generous comfort and an unusually broad choice of powertrains.', tone:'graphite'},
+    {id:'rz', image:'./vehicle-images/rz.png', model:'RZ', year:'2026', name:'RZ', category:'suv', body:'All-Electric Luxury SUV', seats:'5', power:['Electric'], drive:'DIRECT4 AWD available', traits:['Electric','Technology','Performance'], tagline:'A distinctly Lexus battery-electric experience.', desc:'Quiet electric propulsion, expressive design and technology-forward driving define the RZ.', tone:'electric'},
+    {id:'tx', image:'./vehicle-images/tx.png', model:'TX', year:'2026', name:'TX', category:'suv', body:'Three-Row Luxury SUV', seats:'6–7', power:['Gas','Hybrid','Plug-in Hybrid'], drive:'AWD available', traits:['Family space','Comfort','Versatility'], tagline:'Three rows designed around real life.', desc:'The TX is the family-space specialist: three usable rows, flexible powertrains and an emphasis on passenger comfort.', tone:'pearl'},
+    {id:'gx', image:'./vehicle-images/gx.png', model:'GX', year:'2026', name:'GX', category:'suv', body:'Luxury Adventure SUV', seats:'5–7', power:['Gas'], drive:'Full-time 4WD', traits:['Adventure','Capability','Luxury'], tagline:'Luxury with a more adventurous point of view.', desc:'Body-on-frame capability, unmistakable presence and available Overtrail personality make the GX the rugged choice.', tone:'earth'},
+    {id:'lx', image:'./vehicle-images/lx.png', model:'LX', year:'2026', name:'LX', category:'suv', body:'Flagship Luxury SUV', seats:'4–7', power:['Gas','Hybrid'], drive:'Full-time 4WD', traits:['Flagship','Capability','Luxury'], tagline:'The flagship Lexus SUV.', desc:'The LX pairs commanding road presence and serious capability with the richest SUV expression in the Lexus family.', tone:'black'},
+    {id:'es', image:'./vehicle-images/es.png', model:'ES', year:'2026', name:'ES', category:'car', body:'Luxury Sedan', seats:'5', power:['Hybrid','Electric'], drive:'FWD / AWD available', traits:['Comfort','Efficiency','Technology'], tagline:'A new era for the Lexus luxury sedan.', desc:'The redesigned ES combines a serene sedan experience with hybrid and battery-electric choices.', tone:'wavelength'},
+    {id:'is', image:'./vehicle-images/is.png', model:'IS', year:'2026', name:'IS', category:'car', body:'Sport Sedan', seats:'5', power:['Gas'], drive:'RWD / AWD available', traits:['Performance','Driver-focused','Style'], tagline:'The driver-focused Lexus sport sedan.', desc:'Compact proportions, expressive design and a more connected driving personality make IS the athletic sedan choice.', tone:'infrared'},
     {id:'ls', model:'LS', year:'2026', name:'LS', category:'car', body:'Flagship Luxury Sedan', seats:'5', power:['Gas'], drive:'RWD / AWD available', traits:['Flagship','Comfort','Craftsmanship'], tagline:'The original Lexus flagship.', desc:'A quiet, deeply refined luxury sedan centered on craftsmanship, comfort and effortless long-distance travel.', tone:'midnight'},
     {id:'lc', model:'LC', year:'2026', name:'LC', category:'car', body:'Luxury Coupe', seats:'4', power:['Gas'], drive:'RWD', traits:['Performance','Design','Craftsmanship'], tagline:'A grand touring statement piece.', desc:'The LC is the emotional design flagship: dramatic proportions, naturally aspirated performance and handcrafted detail.', tone:'copper'},
     {id:'lcc', model:'LC', year:'2026', name:'LC CONVERTIBLE', category:'car', body:'Luxury Convertible', seats:'4', power:['Gas'], drive:'RWD', traits:['Open-air','Performance','Design'], tagline:'Open-air grand touring, the Lexus way.', desc:'The LC Convertible turns the grand touring formula into a more sensory, open-air Lexus experience.', tone:'blue'}
@@ -418,6 +418,13 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
 
   function isElectrified(m){ return m.power.some(p=>/Hybrid|Electric|Plug-in/i.test(p)); }
 
+  function modelArt(m, extraClass=''){
+    if(m.image){
+      return `<img class="model-vehicle-img ${extraClass}" src="${m.image}" alt="${m.year} Lexus ${m.name}" loading="eager">`;
+    }
+    return `<div class="css-vehicle ${extraClass} ${m.category==='car'?'car-shape':'suv-shape'}"></div>`;
+  }
+
   function renderLineup(){
     const wrap=document.getElementById('lineupGrid');
     const items=models.filter(m=>{
@@ -430,7 +437,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
         <div class="model-tile-stage">
           <span class="model-year">${m.year}</span>
           <span class="model-ghost">${m.model}</span>
-          <div class="css-vehicle ${m.category==='car'?'car-shape':'suv-shape'}"></div>
+          ${modelArt(m)}
         </div>
         <div class="model-tile-copy">
           <div><span class="model-type">${m.body}</span><h3>${m.name}</h3></div>
@@ -529,7 +536,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
       <button class="recommend-card tone-${m.tone}" data-model="${m.id}">
         <div class="recommend-rank">0${i+1}</div>
         <div class="recommend-art">
-          <span>${m.model}</span><div class="css-vehicle ${m.category==='car'?'car-shape':'suv-shape'}"></div>
+          <span>${m.model}</span>${modelArt(m)}
         </div>
         <div class="recommend-copy">
           <div class="eyebrow">${m.body}</div>
@@ -559,7 +566,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
           <div class="model-stage-year">${m.year}</div>
           <div class="model-stage-name">${m.model}</div>
           <div class="model-stage-line"></div>
-          <div class="css-vehicle hero-vehicle ${m.category==='car'?'car-shape':'suv-shape'}"></div>
+          ${modelArt(m,'hero-vehicle')}
           <div class="model-stage-note">MODEL DISCOVERY · NOT LIVE INVENTORY</div>
         </div>
         <div class="model-copy-large">
@@ -606,7 +613,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     hint.textContent='Your first two saved Lexus models are shown below.';
     grid.innerHTML=selected.map(m=>`
       <div class="compare-col tone-${m.tone}">
-        <div class="compare-visual"><span>${m.model}</span><div class="css-vehicle ${m.category==='car'?'car-shape':'suv-shape'}"></div></div>
+        <div class="compare-visual"><span>${m.model}</span>${modelArt(m)}</div>
         <div class="compare-model">${m.name}</div>
         ${[['Body',m.body],['Powertrain',m.power.join(' · ')],['Drive',m.drive],['Seats',m.seats],['Best for',m.traits.slice(0,2).join(' · ')]].map(r=>`<div class="compare-row"><span>${r[0]}</span><b>${r[1]}</b></div>`).join('')}
       </div>`).join('');
@@ -2574,3 +2581,60 @@ button.force-red-cta{
   });
 })();
 </script>
+
+<style>
+/* v0.24 — user-supplied Lexus vehicle artwork */
+.model-vehicle-img{
+  position:absolute;
+  left:50%;
+  bottom:4px;
+  width:94%;
+  height:88%;
+  object-fit:contain;
+  object-position:center bottom;
+  transform:translateX(-50%);
+  z-index:3;
+  pointer-events:none;
+  user-select:none;
+  -webkit-user-drag:none;
+  filter:drop-shadow(0 20px 18px rgba(0,0,0,.34));
+}
+.model-tile-stage .model-vehicle-img{
+  width:98%;
+  height:88%;
+  bottom:-2px;
+}
+.recommend-art .model-vehicle-img{
+  width:104%;
+  height:91%;
+  bottom:-4px;
+}
+.model-stage-large .model-vehicle-img.hero-vehicle{
+  width:96%;
+  height:78%;
+  bottom:36px;
+  left:50%;
+  right:auto;
+  transform:translateX(-50%);
+  filter:drop-shadow(0 34px 24px rgba(0,0,0,.38));
+}
+.compare-visual .model-vehicle-img{
+  width:94%;
+  height:84%;
+  bottom:-2px;
+}
+
+/* The old CSS wheel accents only belong to fallback artwork. */
+.model-tile-stage:has(.model-vehicle-img)::after,
+.recommend-art:has(.model-vehicle-img)::after,
+.model-stage-large:has(.model-vehicle-img)::after,
+.compare-visual:has(.model-vehicle-img)::after{
+  display:none;
+}
+
+@media(max-width:700px){
+  .model-tile-stage .model-vehicle-img{width:102%;height:86%}
+  .recommend-art .model-vehicle-img{width:110%;height:88%}
+  .model-stage-large .model-vehicle-img.hero-vehicle{width:102%;height:74%;bottom:30px}
+}
+</style>
