@@ -132,7 +132,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
   <div class="prototype-footer-block">Prototype · Simulated Data</div>
-<footer class="version-footer">Priority Lexus Kiosk · Version 0.37</footer>
+<footer class="version-footer">Priority Lexus Kiosk · Version 0.38</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
@@ -559,24 +559,55 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     }));
   }
 
+  function colorsFor(m){
+    /* Soft digital approximations for showroom education — not paint-match claims. */
+    const palette=[
+      {name:'Ultra White',hex:'#f4f4f1',type:'Light'},
+      {name:'Iridium',hex:'#aeb1b2',type:'Metallic'},
+      {name:'Cloudburst Gray',hex:'#56595b',type:'Metallic'},
+      {name:'Caviar',hex:'#111214',type:'Dark'},
+      {name:'Matador Red',hex:'#8f1720',type:'Pearl'},
+      {name:'Nori Green',hex:'#39463b',type:'Pearl'},
+      {name:'Nightfall Mica',hex:'#1d334d',type:'Mica'},
+      {name:'Copper Crest',hex:'#9b5946',type:'Premium'}
+    ];
+    const byModel={
+      uxh:['Ultra White','Iridium','Cloudburst Gray','Caviar','Nori Green'],
+      nx:['Ultra White','Iridium','Cloudburst Gray','Caviar','Nori Green','Matador Red'],
+      rx:['Ultra White','Iridium','Cloudburst Gray','Caviar','Nori Green','Nightfall Mica'],
+      rz:['Ultra White','Iridium','Cloudburst Gray','Caviar'],
+      tx:['Ultra White','Iridium','Cloudburst Gray','Caviar','Nightfall Mica'],
+      gx:['Ultra White','Iridium','Cloudburst Gray','Caviar','Nori Green'],
+      lx:['Ultra White','Iridium','Cloudburst Gray','Caviar','Nori Green'],
+      es:['Ultra White','Iridium','Cloudburst Gray','Caviar','Matador Red','Nightfall Mica'],
+      is:['Ultra White','Iridium','Cloudburst Gray','Caviar','Matador Red'],
+      lc:['Ultra White','Iridium','Caviar','Matador Red','Copper Crest'],
+      lcc:['Ultra White','Iridium','Caviar','Matador Red','Copper Crest']
+    };
+    return (byModel[m.id]||byModel.rx).map(n=>palette.find(x=>x.name===n)).filter(Boolean);
+  }
+
   function accessoriesFor(m){
-    const common=[
-      {icon:'◆',name:'All-Weather Protection',desc:'Floor liners and cargo-area protection.'},
-      {icon:'◇',name:'Exterior Protection',desc:'Paint protection film and door-edge protection.'},
-      {icon:'◈',name:'Style Details',desc:'Wheel locks, emblem and appearance accessories where available.'},
-      {icon:'✦',name:'Illuminated Details',desc:'Illuminated sills and lighting accents where available.'}
+    let a=[
+      {icon:'◉',name:'Custom Wheels & Tires',desc:'Explore wheel and tire packages selected to complement your Lexus.'},
+      {icon:'◐',name:'Professional Window Tint',desc:'Dealer-arranged tint options for comfort, privacy and UV reduction.'},
+      {icon:'◆',name:'Exterior Protection',desc:'Ask about paint, finish and exterior protection products applied by our team.'},
+      {icon:'▣',name:'Interior Protection',desc:'Protection options for seating, carpet and interior materials.'},
+      {icon:'◇',name:'Paint Protection Film',desc:'Protection for high-impact exterior areas where available.'},
+      {icon:'✦',name:'Appearance Upgrades',desc:'Model-specific styling, lighting and personalization options.'}
     ];
     if(m.category==='suv'){
-      common.splice(1,0,{icon:'▰',name:'Cargo & Utility',desc:'Cargo mats, nets and organization accessories.'});
-      if(m.id!=='rz') common.splice(2,0,{icon:'═',name:'Cross Bars',desc:'Add roof-carrying flexibility for compatible Lexus SUVs.'});
+      a.splice(2,0,{icon:'▰',name:'Cargo & Utility',desc:'Cargo protection, organization and utility accessories.'});
+      a.splice(3,0,{icon:'═',name:'Roof & Activity Gear',desc:'Cross bars and compatible activity-carrying solutions.'});
     }
     if(['gx','lx'].includes(m.id)){
-      common.unshift({icon:'▲',name:'Adventure Equipment',desc:'Model-specific utility and off-road accessories may be available.'});
+      a.unshift(
+        {icon:'▲',name:'Lift & Suspension',desc:'Ask about available lift, suspension and stance modifications for your build.'},
+        {icon:'⬡',name:'Off-Road Wheels & Tires',desc:'More aggressive wheel and tire packages for adventure-focused builds.'},
+        {icon:'▤',name:'Off-Road Accessories',desc:'Explore compatible protection, utility, lighting and adventure equipment.'}
+      );
     }
-    if(['rx','tx'].includes(m.id)){
-      common.unshift({icon:'○',name:'Activity & Travel',desc:'Travel, cargo and activity-mount solutions may be available.'});
-    }
-    return common.slice(0,6);
+    return a;
   }
 
   function openModel(id){
@@ -605,6 +636,20 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
             <div><span>PERSONALITY</span><b>${m.traits.slice(0,2).join(' · ')}</b></div>
           </div>
           <div class="trait-row">${m.traits.map(t=>`<span>${t}</span>`).join('')}</div>
+          <section class="color-panel">
+            <div class="color-panel-head">
+              <div><span class="eyebrow">MAKE IT YOURS</span><h3>Exterior color inspiration</h3></div>
+              <span class="accessory-badge">DIGITAL COLOR APPROXIMATION</span>
+            </div>
+            <div class="color-swatches">${colorsFor(m).map(c=>`
+              <div class="color-option">
+                <div class="color-chip" style="background:${c.hex}"></div>
+                <b>${c.name}</b><small>${c.type}</small>
+              </div>`).join('')}
+            </div>
+            <p class="color-note">Screen colors are visual approximations only and may not represent actual Lexus paint appearance. Available colors vary by model, grade and production.</p>
+          </section>
+
           <section class="accessory-panel">
             <div class="accessory-head">
               <div><span class="eyebrow">PERSONALIZE YOUR LEXUS</span><h3>Accessory possibilities</h3></div>
@@ -616,7 +661,13 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
                 <div><b>${a.name}</b><small>${a.desc}</small></div>
               </div>`).join('')}
             </div>
-            <p class="accessory-note">Accessory availability varies by model, model year, grade and region and may require special order. See Priority Lexus for current fitment and availability.</p>
+            <p class="accessory-note">Accessory and modification availability varies by vehicle, model year, grade, fitment and supplier. Some options shown may be aftermarket rather than Lexus Genuine Accessories.</p>
+            <div class="design-team-callout">
+              <span class="eyebrow">BEYOND THE FACTORY</span>
+              <h3>Your Lexus. Your vision.</h3>
+              <p>Priority Lexus can help coordinate more than factory accessories. From <strong>custom wheels and tires</strong> and <strong>window tint</strong> to <strong>vehicle protection products</strong> and select <strong>aftermarket modifications</strong>, our dealership can help take your Lexus from factory-delivered to distinctly yours. GX and LX owners can also ask about available adventure-focused and off-road build options.</p>
+              <span class="design-team-tag">ASK FOR THE DESIGN TEAM</span>
+            </div>
           </section>
           <div class="model-actions">
             <button class="ghost-cta" id="saveModel">${isSaved?'♥ SAVED':'♡ SAVE TO MY LIST'}</button>
@@ -3029,3 +3080,38 @@ body.auto-tour-running .auto-tour-badge{opacity:.72}
 
 
 
+
+<style>
+/* v0.38 — temporarily hide shortlist controls without removing functionality */
+#saveModel,#compareModels{display:none!important}
+
+/* Model color presentation */
+.color-panel{margin:26px 0 20px;padding:22px;border:1px solid rgba(255,255,255,.12);border-radius:24px;background:rgba(255,255,255,.035)}
+.color-panel-head{display:flex;justify-content:space-between;gap:16px;align-items:end;margin-bottom:16px}
+.color-panel h3{font-size:25px;margin:5px 0 0;letter-spacing:-.035em}
+.color-note{font-size:9px;color:#777;line-height:1.45;margin:13px 2px 0}
+.color-swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.color-option{min-width:0}
+.color-chip{height:58px;border-radius:16px;border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 8px 18px rgba(0,0,0,.18);position:relative;overflow:hidden}
+.color-chip:after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.24),transparent 38%,rgba(0,0,0,.16))}
+.color-option b{display:block;font-size:9px;margin-top:7px;line-height:1.25;color:#d7d7da}
+.color-option small{display:block;font-size:8px;color:#777;margin-top:2px}
+
+/* Design Team / customization */
+.design-team-callout{margin:20px 0 18px;padding:24px;border-radius:24px;border:1px solid rgba(210,18,32,.38);background:linear-gradient(145deg,rgba(197,13,27,.18),rgba(8,8,10,.52));position:relative;overflow:hidden}
+.design-team-callout:before{content:"DESIGN";position:absolute;right:-8px;top:-18px;font-size:78px;font-weight:900;letter-spacing:-.07em;color:rgba(255,255,255,.035)}
+.design-team-callout h3{font-size:27px;margin:5px 0 8px;letter-spacing:-.04em}
+.design-team-callout p{font-size:12px;line-height:1.55;color:#c1c1c5;max-width:650px;margin:0}
+.design-team-callout strong{color:#fff}
+.design-team-tag{display:inline-flex;margin-top:14px;padding:8px 11px;border-radius:999px;background:#fff;color:#08080a;font-size:9px;font-weight:900;letter-spacing:.1em}
+.accessory-section-label{grid-column:1/-1;font-size:9px;letter-spacing:.14em;color:#777;margin:7px 2px 0;text-transform:uppercase}
+
+@media(max-width:700px){
+ .color-panel{padding:16px}
+ .color-swatches{grid-template-columns:repeat(3,1fr)}
+ .color-chip{height:50px}
+ .color-panel-head{flex-direction:column;align-items:flex-start}
+ .design-team-callout{padding:19px}
+ .design-team-callout h3{font-size:23px}
+}
+</style>
