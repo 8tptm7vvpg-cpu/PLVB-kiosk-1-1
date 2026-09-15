@@ -82,6 +82,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
 </video>
 <div class="page-video-dim" aria-hidden="true"></div>
 
+<button id="fullscreenToggle" class="fullscreen-toggle" aria-label="Enter full screen" title="Full screen">⛶</button>
 <div id="cinematicIntro" class="cinematic-intro active play" aria-hidden="true">
   <div class="cinematic-particles" aria-hidden="true"></div><div class="cinematic-inner">
     <img src="./priority-lexus-vb-wordmark-white.png" alt="" class="cinematic-logo">
@@ -131,7 +132,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
   <div class="prototype-footer-block">Prototype · Simulated Data</div>
-<footer class="version-footer">Priority Lexus Kiosk · Version 0.28</footer>
+<footer class="version-footer">Priority Lexus Kiosk · Version 0.29</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
@@ -554,6 +555,26 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     }));
   }
 
+  function accessoriesFor(m){
+    const common=[
+      {icon:'◆',name:'All-Weather Protection',desc:'Floor liners and cargo-area protection.'},
+      {icon:'◇',name:'Exterior Protection',desc:'Paint protection film and door-edge protection.'},
+      {icon:'◈',name:'Style Details',desc:'Wheel locks, emblem and appearance accessories where available.'},
+      {icon:'✦',name:'Illuminated Details',desc:'Illuminated sills and lighting accents where available.'}
+    ];
+    if(m.category==='suv'){
+      common.splice(1,0,{icon:'▰',name:'Cargo & Utility',desc:'Cargo mats, nets and organization accessories.'});
+      if(m.id!=='rz') common.splice(2,0,{icon:'═',name:'Cross Bars',desc:'Add roof-carrying flexibility for compatible Lexus SUVs.'});
+    }
+    if(['gx','lx'].includes(m.id)){
+      common.unshift({icon:'▲',name:'Adventure Equipment',desc:'Model-specific utility and off-road accessories may be available.'});
+    }
+    if(['rx','tx'].includes(m.id)){
+      common.unshift({icon:'○',name:'Activity & Travel',desc:'Travel, cargo and activity-mount solutions may be available.'});
+    }
+    return common.slice(0,6);
+  }
+
   function openModel(id){
     const m=models.find(x=>x.id===id); if(!m) return;
     currentModelId=id;
@@ -580,6 +601,19 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
             <div><span>PERSONALITY</span><b>${m.traits.slice(0,2).join(' · ')}</b></div>
           </div>
           <div class="trait-row">${m.traits.map(t=>`<span>${t}</span>`).join('')}</div>
+          <section class="accessory-panel">
+            <div class="accessory-head">
+              <div><span class="eyebrow">PERSONALIZE YOUR LEXUS</span><h3>Accessory possibilities</h3></div>
+              <span class="accessory-badge">LEXUS GENUINE ACCESSORIES</span>
+            </div>
+            <div class="accessory-grid">${accessoriesFor(m).map(a=>`
+              <div class="accessory-card">
+                <span class="accessory-icon">${a.icon}</span>
+                <div><b>${a.name}</b><small>${a.desc}</small></div>
+              </div>`).join('')}
+            </div>
+            <p class="accessory-note">Accessory availability varies by model, model year, grade and region and may require special order. See Priority Lexus for current fitment and availability.</p>
+          </section>
           <div class="model-actions">
             <button class="ghost-cta" id="saveModel">${isSaved?'♥ SAVED':'♡ SAVE TO MY LIST'}</button>
             <button class="ghost-cta" id="compareModels">COMPARE SAVED</button>
@@ -637,6 +671,154 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
       '… Waiting for staff claim'
     ]; let i=0; const timer=setInterval(()=>{if(current!=='requesting'){clearInterval(timer);return} if(i<lines.length){const d=document.createElement('div');d.className='line '+(i<6?'ok':'');d.textContent=lines[i++];consoleEl.appendChild(d)} else {clearInterval(timer);setTimeout(()=>finishClaim(guest,context),1000)}},420); }
   function finishClaim(guest,context){if(current!=='requesting')return; const staff=staffNames[Math.floor(Math.random()*staffNames.length)];document.getElementById('claimedName').textContent=staff;document.getElementById('claimGuest').textContent=`${guest} · Main Showroom`;document.getElementById('claimContext').textContent=context;document.getElementById('claimedMessage').textContent=`${guest==='Guest'?'A Lexus specialist':staff+' has'} been given the context of your request so you won't have to start over.`;show('claimed')}
+})();
+</script>
+
+<div class="auto-tour-badge">AUTO SHOWCASE</div>
+<div id="autoTourPreview" class="auto-tour-preview" aria-hidden="true">
+  <div id="autoTourPreviewCard" class="auto-tour-preview-card"></div>
+</div>
+
+<script>
+/* v0.29 — Android fullscreen + autonomous showroom showcase */
+(function(){
+  const fs=document.getElementById('fullscreenToggle');
+  function syncFs(){
+    const on=!!document.fullscreenElement;
+    fs.textContent=on?'⊡':'⛶';
+    fs.setAttribute('aria-label',on?'Exit full screen':'Enter full screen');
+    fs.title=on?'Exit full screen':'Full screen';
+  }
+  fs.addEventListener('click',async function(e){
+    e.stopPropagation();
+    try{
+      if(!document.fullscreenElement) await document.documentElement.requestFullscreen();
+      else await document.exitFullscreen();
+    }catch(err){}
+  });
+  document.addEventListener('fullscreenchange',syncFs);
+  syncFs();
+
+  const TOUR_IDLE=45000;
+  let tourToken=0, idleHandle=null, running=false, internalAction=false;
+  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+  const tokenOK=t=>running && t===tourToken;
+  const activeScreen=()=>document.querySelector('.screen.active');
+
+  function tourShow(id){
+    internalAction=true;
+    if(typeof show==='function') show(id);
+    setTimeout(()=>internalAction=false,60);
+  }
+  function tourClick(el){
+    if(!el)return;
+    internalAction=true; el.click(); setTimeout(()=>internalAction=false,60);
+  }
+  async function smoothScrollTo(y,duration=7000){
+    const start=window.scrollY, dist=y-start, begin=performance.now();
+    return new Promise(resolve=>{
+      function frame(now){
+        if(!running){resolve();return}
+        const p=Math.min(1,(now-begin)/duration);
+        const ease=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
+        window.scrollTo(0,start+dist*ease);
+        if(p<1) requestAnimationFrame(frame); else resolve();
+      }
+      requestAnimationFrame(frame);
+    });
+  }
+  async function scrollScreen(t,holdTop=2500,scrollMs=6500,holdBottom=2200){
+    window.scrollTo({top:0,behavior:'auto'});
+    await sleep(holdTop); if(!tokenOK(t))return;
+    const max=Math.max(0,document.documentElement.scrollHeight-innerHeight);
+    if(max>40) await smoothScrollTo(max,scrollMs);
+    if(!tokenOK(t))return;
+    await sleep(holdBottom);
+  }
+  async function playCarousel(t,screenId,nextId,count){
+    tourShow(screenId); window.scrollTo(0,0);
+    await sleep(1600);
+    for(let i=0;i<count;i++){
+      if(!tokenOK(t))return;
+      await sleep(5000);
+      if(i<count-1) tourClick(document.getElementById(nextId));
+    }
+  }
+  function previewModel(m){
+    const overlay=document.getElementById('autoTourPreview');
+    const card=document.getElementById('autoTourPreviewCard');
+    card.innerHTML=`
+      <div class="auto-tour-preview-art">
+        <div class="auto-tour-preview-name">${m.model}</div>
+        ${m.image?`<img src="${m.image}" alt="">`:''}
+      </div>
+      <div class="auto-tour-preview-copy">
+        <div class="eyebrow">${m.year} · ${m.body}</div>
+        <h2>${m.name}</h2>
+        <p>${m.tagline} · ${m.power.join(' · ')} · ${m.seats} seats</p>
+      </div>`;
+    overlay.classList.add('show');
+  }
+  function closePreview(){document.getElementById('autoTourPreview').classList.remove('show')}
+
+  async function startTour(){
+    if(running)return;
+    running=true; tourToken++; const t=tourToken;
+    document.body.classList.add('auto-tour-running');
+    closePreview();
+
+    // Landing page
+    tourShow('home'); window.scrollTo(0,0);
+    await sleep(7000); if(!tokenOK(t))return;
+
+    // Priorities for Life: top -> animated hooks at bottom
+    tourShow('pfl');
+    await scrollScreen(t,3000,8500,6500); if(!tokenOK(t))return;
+
+    // L/Certified: six benefit slides
+    await playCarousel(t,'lcertified','lcNext',6); if(!tokenOK(t))return;
+
+    // Priority Certified: five lifetime component slides
+    await playCarousel(t,'priority-certified','pcNext',5); if(!tokenOK(t))return;
+
+    // Lexus model gallery
+    if(typeof renderLineup==='function'){lineupFilter='all';renderLineup();}
+    tourShow('lineup');
+    await scrollScreen(t,3000,14000,2200); if(!tokenOK(t))return;
+
+    // Quick-look model spotlights using supplied artwork.
+    const featured=['rx','gx','es','tx','rz'];
+    for(const id of featured){
+      if(!tokenOK(t))return;
+      const m=models.find(x=>x.id===id); if(!m)continue;
+      previewModel(m); await sleep(4800); closePreview(); await sleep(500);
+    }
+
+    // Loop back to the landing page and begin again.
+    tourShow('home'); window.scrollTo(0,0); await sleep(5500);
+    if(tokenOK(t)){running=false;document.body.classList.remove('auto-tour-running');startTour();}
+  }
+
+  function stopTour(){
+    if(!running)return;
+    running=false; tourToken++; closePreview();
+    document.body.classList.remove('auto-tour-running');
+  }
+  function scheduleTour(){
+    clearTimeout(idleHandle);
+    idleHandle=setTimeout(startTour,TOUR_IDLE);
+  }
+
+  // Any genuine guest interaction immediately hands control back to the guest.
+  ['pointerdown','touchstart','keydown','wheel'].forEach(evt=>{
+    document.addEventListener(evt,function(){
+      if(internalAction)return;
+      stopTour(); scheduleTour();
+    },{passive:true,capture:true});
+  });
+
+  // Start automatically after the initial cinematic/home presentation.
+  window.addEventListener('load',function(){scheduleTour()});
 })();
 </script>
 </body>
@@ -2767,5 +2949,92 @@ button.force-red-cta{
 
 @media(max-width:700px){
   #lineupGrid .model-tile::before{height:145px}
+}
+</style>
+
+<style>
+/* v0.29 — information-only deployment */
+[data-help],
+#askModel,
+.concierge-dock,
+#help,
+#help-confirm,
+#requesting,
+#claimed{
+  display:none!important;
+}
+
+/* Persistent Android/Chrome fullscreen control */
+.fullscreen-toggle{
+  position:fixed;
+  top:max(10px,env(safe-area-inset-top));
+  right:12px;
+  z-index:10050;
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.24);
+  background:rgba(4,4,6,.58);
+  backdrop-filter:blur(12px);
+  color:#fff;
+  font-size:23px;
+  line-height:1;
+  display:grid;
+  place-items:center;
+  box-shadow:0 8px 24px rgba(0,0,0,.24);
+  opacity:.62;
+  transition:.25s ease;
+}
+.fullscreen-toggle:hover,.fullscreen-toggle:active{opacity:1;transform:scale(1.04)}
+:fullscreen .fullscreen-toggle{opacity:.38}
+
+/* Accessories */
+.accessory-panel{
+  margin:26px 0 24px;
+  padding:22px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:24px;
+  background:rgba(255,255,255,.035);
+}
+.accessory-head{display:flex;justify-content:space-between;gap:18px;align-items:end;margin-bottom:16px}
+.accessory-head h3{font-size:25px;margin:5px 0 0;letter-spacing:-.035em}
+.accessory-badge{font-size:9px;letter-spacing:.13em;color:#aaa;border:1px solid rgba(255,255,255,.13);padding:8px 10px;border-radius:999px;white-space:nowrap}
+.accessory-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.accessory-card{display:flex;gap:12px;align-items:center;padding:13px;border:1px solid rgba(255,255,255,.09);border-radius:16px;background:rgba(0,0,0,.18)}
+.accessory-icon{width:30px;height:30px;border-radius:10px;background:#fff;color:#09090a;display:grid;place-items:center;flex:0 0 auto;font-size:13px}
+.accessory-card b{display:block;font-size:12px}
+.accessory-card small{display:block;color:#8f9096;font-size:10px;line-height:1.35;margin-top:3px}
+.accessory-note{font-size:9px!important;color:#777!important;line-height:1.45!important;margin:12px 2px 0!important}
+
+/* Auto-tour indicator */
+.auto-tour-badge{
+  position:fixed;left:14px;top:max(12px,env(safe-area-inset-top));z-index:10020;
+  padding:8px 11px;border-radius:999px;background:rgba(5,5,7,.48);
+  border:1px solid rgba(255,255,255,.11);backdrop-filter:blur(10px);
+  font-size:8px;letter-spacing:.14em;color:#a8a8ae;opacity:0;transition:.35s ease;pointer-events:none
+}
+body.auto-tour-running .auto-tour-badge{opacity:.72}
+.auto-tour-preview{
+  position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,.54);backdrop-filter:blur(5px);
+  display:grid;place-items:center;padding:6vw;opacity:0;pointer-events:none;transition:.45s ease
+}
+.auto-tour-preview.show{opacity:1}
+.auto-tour-preview-card{
+  width:min(84vw,760px);border-radius:30px;overflow:hidden;background:#0b0b0d;
+  border:1px solid rgba(255,255,255,.16);box-shadow:0 35px 100px rgba(0,0,0,.55)
+}
+.auto-tour-preview-art{height:42vh;max-height:520px;position:relative;overflow:hidden;background:linear-gradient(145deg,#202025,#070708)}
+.auto-tour-preview-art img{width:100%;height:100%;object-fit:contain;position:relative;z-index:2;filter:drop-shadow(0 28px 22px rgba(0,0,0,.35))}
+.auto-tour-preview-name{position:absolute;right:3%;top:1%;font-size:min(22vw,210px);font-weight:900;letter-spacing:-.09em;color:rgba(255,255,255,.055);line-height:.9}
+.auto-tour-preview-copy{padding:24px}
+.auto-tour-preview-copy .eyebrow{margin-bottom:5px}
+.auto-tour-preview-copy h2{font-size:48px;line-height:.95;margin:0 0 10px;letter-spacing:-.05em}
+.auto-tour-preview-copy p{color:#aaa;line-height:1.45;margin:0}
+@media(max-width:700px){
+  .fullscreen-toggle{width:38px;height:38px;border-radius:12px;font-size:20px}
+  .accessory-grid{grid-template-columns:1fr 1fr}
+  .accessory-panel{padding:16px}
+  .accessory-head{align-items:flex-start;flex-direction:column}
+  .auto-tour-preview-copy h2{font-size:38px}
 }
 </style>
