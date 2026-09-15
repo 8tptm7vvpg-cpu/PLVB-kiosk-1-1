@@ -132,7 +132,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
   <div class="prototype-footer-block">Prototype · Simulated Data</div>
-<footer class="version-footer">Priority Lexus Kiosk · Version 0.38</footer>
+<footer class="version-footer">Priority Lexus Kiosk · Version 0.39</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
@@ -587,6 +587,74 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     return (byModel[m.id]||byModel.rx).map(n=>palette.find(x=>x.name===n)).filter(Boolean);
   }
 
+  function interiorsFor(m){
+    /* Showroom-oriented interior color families. Exact availability varies by grade/configuration. */
+    const palettes={
+      uxh:[
+        {name:'Black',hex:'#171719',type:'Interior'},
+        {name:'Palomino',hex:'#a77e58',type:'Interior'},
+        {name:'Birch',hex:'#d7cbbb',type:'Interior'}
+      ],
+      nx:[
+        {name:'Black',hex:'#171719',type:'Interior'},
+        {name:'Palomino',hex:'#a77e58',type:'Interior'},
+        {name:'Rioja Red',hex:'#6d2026',type:'Interior'},
+        {name:'Macadamia',hex:'#d8c5aa',type:'Interior'}
+      ],
+      rx:[
+        {name:'Black',hex:'#171719',type:'Interior'},
+        {name:'Palomino',hex:'#a77e58',type:'Interior'},
+        {name:'Birch',hex:'#d7cbbb',type:'Interior'},
+        {name:'Peppercorn',hex:'#51463f',type:'Interior'}
+      ],
+      rz:[
+        {name:'Dapple Gray',hex:'#7e7c79',type:'Interior'},
+        {name:'Thunderstorm',hex:'#35373a',type:'Interior'},
+        {name:'Palomino',hex:'#a77e58',type:'Interior'}
+      ],
+      tx:[
+        {name:'Black',hex:'#171719',type:'Interior'},
+        {name:'Birch',hex:'#d7cbbb',type:'Interior'},
+        {name:'Peppercorn',hex:'#51463f',type:'Interior'}
+      ],
+      gx:[
+        {name:'Black',hex:'#171719',type:'Interior'},
+        {name:'Dapple Gray',hex:'#7e7c79',type:'Interior'},
+        {name:'Saddle Tan',hex:'#8c5d3e',type:'Interior'}
+      ],
+      lx:[
+        {name:'Black',hex:'#171719',type:'Interior'},
+        {name:'Palomino',hex:'#a77e58',type:'Interior'},
+        {name:'White / Dark Brown',hex:'linear-gradient(135deg,#e8e2d8 0 49%,#3a2923 51% 100%)',type:'Two-Tone'}
+      ],
+      es:[
+        {name:'Black',hex:'#171719',type:'Interior'},
+        {name:'Palomino',hex:'#a77e58',type:'Interior'},
+        {name:'Macadamia',hex:'#d8c5aa',type:'Interior'},
+        {name:'Rioja Red',hex:'#6d2026',type:'Interior'}
+      ],
+      is:[
+        {name:'Black',hex:'#171719',type:'Interior'},
+        {name:'Rioja Red',hex:'#6d2026',type:'Interior'},
+        {name:'Circuit Red',hex:'#8e1f28',type:'Interior'},
+        {name:'White',hex:'#e7e5df',type:'Interior'}
+      ],
+      lc:[
+        {name:'Black',hex:'#171719',type:'Interior'},
+        {name:'Toasted Caramel',hex:'#9c673d',type:'Interior'},
+        {name:'Circuit Red',hex:'#8e1f28',type:'Interior'},
+        {name:'Blue / White',hex:'linear-gradient(135deg,#253b55 0 49%,#e7e5df 51% 100%)',type:'Two-Tone'}
+      ],
+      lcc:[
+        {name:'Black',hex:'#171719',type:'Interior'},
+        {name:'Toasted Caramel',hex:'#9c673d',type:'Interior'},
+        {name:'Circuit Red',hex:'#8e1f28',type:'Interior'},
+        {name:'Blue / White',hex:'linear-gradient(135deg,#253b55 0 49%,#e7e5df 51% 100%)',type:'Two-Tone'}
+      ]
+    };
+    return palettes[m.id]||palettes.rx;
+  }
+
   function accessoriesFor(m){
     let a=[
       {icon:'◉',name:'Custom Wheels & Tires',desc:'Explore wheel and tire packages selected to complement your Lexus.'},
@@ -648,6 +716,20 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
               </div>`).join('')}
             </div>
             <p class="color-note">Screen colors are visual approximations only and may not represent actual Lexus paint appearance. Available colors vary by model, grade and production.</p>
+          </section>
+
+          <section class="color-panel interior-color-panel">
+            <div class="color-panel-head">
+              <div><span class="eyebrow">INSIDE YOUR LEXUS</span><h3>Interior color inspiration</h3></div>
+              <span class="accessory-badge">DIGITAL COLOR APPROXIMATION</span>
+            </div>
+            <div class="color-swatches">${interiorsFor(m).map(c=>`
+              <div class="color-option">
+                <div class="color-chip interior-chip" style="background:${c.hex}"></div>
+                <b>${c.name}</b><small>${c.type}</small>
+              </div>`).join('')}
+            </div>
+            <p class="color-note">Interior colors shown are digital approximations for presentation purposes. Upholstery, material, trim and color availability varies by model, grade, package and production.</p>
           </section>
 
           <section class="accessory-panel">
@@ -3113,5 +3195,18 @@ body.auto-tour-running .auto-tour-badge{opacity:.72}
  .color-panel-head{flex-direction:column;align-items:flex-start}
  .design-team-callout{padding:19px}
  .design-team-callout h3{font-size:23px}
+}
+</style>
+
+<style>
+/* v0.39 — interior color presentation */
+.interior-color-panel{background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.02))}
+.interior-chip:before{
+  content:"";
+  position:absolute;
+  inset:8px;
+  border-radius:11px;
+  border:1px solid rgba(255,255,255,.13);
+  box-shadow:inset 0 0 16px rgba(0,0,0,.13);
 }
 </style>
