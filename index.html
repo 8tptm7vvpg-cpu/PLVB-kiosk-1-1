@@ -132,7 +132,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
   <div class="prototype-footer-block">Prototype · Simulated Data</div>
-<footer class="version-footer">Priority Lexus Kiosk · Version 0.33</footer>
+<footer class="version-footer">Priority Lexus Kiosk · Version 0.34</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
@@ -2862,7 +2862,7 @@ body.auto-tour-running .auto-tour-badge{opacity:.72}
 
 
 <script>
-/* v0.33 — direct model-detail showroom loop */
+/* v0.34 — corrected direct model-detail showroom loop */
 (function(){
   const INITIAL_DELAY=8000, IDLE_DELAY=18000;
   let generation=0,running=false,idleTimer=null,programmatic=false;
@@ -2917,16 +2917,17 @@ body.auto-tour-running .auto-tour-badge{opacity:.72}
     try{
       if(typeof openModel==='function'){
         openModel(m.id);
-      }else{
-        selectedModel=m;
-        if(typeof renderModelDetail==='function')renderModelDetail();
-        directShow('model-detail');
       }
     }catch(_){}
+    /* The real model presentation screen is data-screen="model". */
+    const modelScreen=document.querySelector('[data-screen="model"]');
+    if(modelScreen){
+      document.querySelectorAll('.screen').forEach(x=>x.classList.toggle('active',x===modelScreen));
+    }
     setTimeout(()=>programmatic=false,120);
-    await sleep(1400); if(!ok(g))return;
+    await sleep(1700); if(!ok(g))return;
     window.scrollTo(0,0);
-    await scrollActive(g,2300,8500,2000);
+    await scrollActive(g,2600,9000,2200);
   }
 
   async function cycle(){
