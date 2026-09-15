@@ -132,7 +132,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
   <div class="prototype-footer-block">Prototype · Simulated Data</div>
-<footer class="version-footer">Priority Lexus Kiosk · Version 0.32</footer>
+<footer class="version-footer">Priority Lexus Kiosk · Version 0.33</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
@@ -2858,11 +2858,14 @@ body.auto-tour-running .auto-tour-badge{opacity:.72}
 </style>
 
 
+
+
+
 <script>
-/* v0.32 — single-authority autonomous presentation controller */
+/* v0.33 — direct model-detail showroom loop */
 (function(){
   const INITIAL_DELAY=8000, IDLE_DELAY=18000;
-  let generation=0, running=false, idleTimer=null, programmatic=false;
+  let generation=0,running=false,idleTimer=null,programmatic=false;
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
   const ok=g=>running&&g===generation;
 
@@ -2872,27 +2875,24 @@ body.auto-tour-running .auto-tour-badge{opacity:.72}
     if(target){
       document.querySelectorAll('.screen').forEach(x=>x.classList.toggle('active',x===target));
       window.scrollTo(0,0);
-      // Keep the app's own state synchronized where possible.
-      try{ current=id; }catch(_){}
-      if(id==='lineup' && typeof renderLineup==='function') renderLineup();
-      if(id==='compare' && typeof renderCompare==='function') renderCompare();
+      try{current=id}catch(_){}
     }
-    setTimeout(()=>programmatic=false,80);
+    setTimeout(()=>programmatic=false,100);
   }
 
-  async function scrollActive(g, topHold, duration, bottomHold){
-    window.scrollTo(0,0);
+  async function scrollActive(g,topHold=2000,duration=8000,bottomHold=1800){
+    window.scrollTo({top:0,behavior:'auto'});
     await sleep(topHold); if(!ok(g))return;
     const max=Math.max(0,document.documentElement.scrollHeight-window.innerHeight);
-    if(max>20){
+    if(max>25){
       const start=performance.now();
       await new Promise(done=>{
         function frame(now){
           if(!ok(g)){done();return}
           const p=Math.min(1,(now-start)/duration);
-          const eased=p*p*(3-2*p);
-          window.scrollTo(0,Math.round(max*eased));
-          if(p<1)requestAnimationFrame(frame); else done();
+          const e=p*p*(3-2*p);
+          window.scrollTo(0,Math.round(max*e));
+          p<1?requestAnimationFrame(frame):done();
         }
         requestAnimationFrame(frame);
       });
@@ -2901,97 +2901,75 @@ body.auto-tour-running .auto-tour-badge{opacity:.72}
   }
 
   async function playSlides(g,screen,nextId,count){
-    directShow(screen);
-    await sleep(1400);
+    directShow(screen); await sleep(1400);
     const next=document.getElementById(nextId);
     for(let i=0;i<count;i++){
       if(!ok(g))return;
       await sleep(4800);
-      if(i<count-1 && next){
-        programmatic=true; next.click(); setTimeout(()=>programmatic=false,80);
+      if(i<count-1&&next){
+        programmatic=true;next.click();setTimeout(()=>programmatic=false,100);
       }
     }
   }
 
-  async function modelPage(g,m){
+  async function openAndPresentModel(g,m){
     programmatic=true;
-    if(typeof openModel==='function') openModel(m.id);
-    setTimeout(()=>programmatic=false,100);
-    await sleep(1300); if(!ok(g))return;
-    await scrollActive(g,1800,7200,1500);
+    try{
+      if(typeof openModel==='function'){
+        openModel(m.id);
+      }else{
+        selectedModel=m;
+        if(typeof renderModelDetail==='function')renderModelDetail();
+        directShow('model-detail');
+      }
+    }catch(_){}
+    setTimeout(()=>programmatic=false,120);
+    await sleep(1400); if(!ok(g))return;
+    window.scrollTo(0,0);
+    await scrollActive(g,2300,8500,2000);
   }
 
   async function cycle(){
     if(running)return;
-    running=true;
-    const g=++generation;
+    running=true; const g=++generation;
     document.body.classList.add('auto-tour-running');
 
-    // HOME
-    directShow('home');
-    await sleep(4500); if(!ok(g))return;
-
-    // 1 — PRIORITIES FOR LIFE
+    // 1 — Priorities for Life
     directShow('pfl');
-    await scrollActive(g,2400,9500,4500); if(!ok(g))return;
+    await scrollActive(g,2500,9500,4200); if(!ok(g))return;
 
-    // 2 — PRIORITY CERTIFIED
+    // 2 — Priority Certified
     await playSlides(g,'priority-certified','pcNext',5); if(!ok(g))return;
 
-    // 3 — L/CERTIFIED
+    // 3 — L/Certified
     await playSlides(g,'lcertified','lcNext',6); if(!ok(g))return;
 
-    // 4 — FIND YOUR LEXUS intro
-    directShow('finder');
-    await sleep(3200); if(!ok(g))return;
-
-    // 5 — EXPLORE THE LINEUP
-    try{
-      lineupFilter='all';
-      document.querySelectorAll('[data-lineup-filter]').forEach(x=>x.classList.toggle('on',x.dataset.lineupFilter==='all'));
-      if(typeof renderLineup==='function')renderLineup();
-    }catch(_){}
-    directShow('lineup');
-    await scrollActive(g,2200,14000,2500); if(!ok(g))return;
-
-    // 6 — EVERY MODEL DETAIL PAGE
-    if(typeof models!=='undefined' && Array.isArray(models)){
+    // 4 — Skip Finder + Lineup entirely. Present every model detail page directly.
+    if(typeof models!=='undefined'&&Array.isArray(models)){
       for(const m of models){
         if(!ok(g))return;
-        await modelPage(g,m);
+        await openAndPresentModel(g,m);
       }
     }
 
-    // 7 — HOME, THEN LOOP
-    directShow('home');
-    await sleep(5000);
-    if(ok(g)){
-      running=false;
-      document.body.classList.remove('auto-tour-running');
-      cycle();
-    }
+    // 5 — No homepage pause: return directly to PFL and continue forever.
+    running=false;
+    document.body.classList.remove('auto-tour-running');
+    if(g===generation) cycle();
   }
 
   function stop(){
     if(!running)return;
-    running=false;
-    ++generation;
+    running=false;++generation;
     document.body.classList.remove('auto-tour-running');
   }
-  function rearm(){
-    clearTimeout(idleTimer);
-    idleTimer=setTimeout(cycle,IDLE_DELAY);
-  }
+  function rearm(){clearTimeout(idleTimer);idleTimer=setTimeout(cycle,IDLE_DELAY)}
 
-  // A real guest touch/scroll/key takes control. Programmatic carousel clicks do not.
   ['pointerdown','touchstart','wheel','keydown'].forEach(evt=>{
-    document.addEventListener(evt,function(){
-      if(programmatic)return;
-      stop(); rearm();
-    },{capture:true,passive:true});
+    document.addEventListener(evt,()=>{if(programmatic)return;stop();rearm()},{capture:true,passive:true});
   });
 
-  // Fullscreen button
+  // Preserve fullscreen control.
   const fs=document.getElementById('fullscreenToggle');
   if(fs){
     const sync=()=>{const on=!!document.fullscreenElement;fs.textContent=on?'⊡':'⛶';fs.title=on?'Exit full screen':'Full screen'};
@@ -2999,9 +2977,6 @@ body.auto-tour-running .auto-tour-badge{opacity:.72}
     document.addEventListener('fullscreenchange',sync);sync();
   }
 
-  window.addEventListener('load',()=>{
-    clearTimeout(idleTimer);
-    idleTimer=setTimeout(cycle,INITIAL_DELAY);
-  });
+  window.addEventListener('load',()=>{clearTimeout(idleTimer);idleTimer=setTimeout(cycle,INITIAL_DELAY)});
 })();
 </script>
