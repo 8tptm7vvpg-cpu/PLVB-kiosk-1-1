@@ -132,7 +132,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
   <div class="prototype-footer-block">Prototype · Simulated Data</div>
-<footer class="version-footer">Priority Lexus Kiosk · Version 0.36</footer>
+<footer class="version-footer">Priority Lexus Kiosk · Version 0.37</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
@@ -388,6 +388,10 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     {id:'lc', image:'./vehicle-images/lc.png', model:'LC', year:'2026', name:'LC', category:'car', body:'Luxury Coupe', seats:'4', power:['Gas'], drive:'RWD', traits:['Performance','Design','Craftsmanship'], tagline:'A grand touring statement piece.', desc:'The LC is the emotional design flagship: dramatic proportions, naturally aspirated performance and handcrafted detail.', tone:'copper'},
     {id:'lcc', image:'./vehicle-images/lc.png', model:'LC', year:'2026', name:'LC CONVERTIBLE', category:'car', body:'Luxury Convertible', seats:'4', power:['Gas'], drive:'RWD', traits:['Open-air','Performance','Design'], tagline:'Open-air grand touring, the Lexus way.', desc:'The LC Convertible turns the grand touring formula into a more sensory, open-air Lexus experience.', tone:'blue'}
   ];
+  /* v0.37 early autoplay bridge */
+  window.kioskModels = models;
+  window.kioskOpenModel = openModel;
+
 
   const quiz=[
     {q:'What kind of Lexus feels right?',key:'body',choices:[
@@ -673,9 +677,6 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
   function finishClaim(guest,context){if(current!=='requesting')return; const staff=staffNames[Math.floor(Math.random()*staffNames.length)];document.getElementById('claimedName').textContent=staff;document.getElementById('claimGuest').textContent=`${guest} · Main Showroom`;document.getElementById('claimContext').textContent=context;document.getElementById('claimedMessage').textContent=`${guest==='Guest'?'A Lexus specialist':staff+' has'} been given the context of your request so you won't have to start over.`;show('claimed')}
 })();
 
-  /* v0.36 autoplay bridge — expose existing app functions without changing them */
-  window.kioskModels = models;
-  window.kioskOpenModel = openModel;
 </script>
 
 <div class="auto-tour-badge">AUTO SHOWCASE</div>
@@ -746,9 +747,20 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
 
   async function presentModel(g,m){
     synthetic=true;
-    try{ window.kioskOpenModel(m.id); }
-    finally{ setTimeout(()=>synthetic=false,150); }
-    await wait(1800); if(!alive(g))return;
+    try{
+      if(typeof window.kioskOpenModel==='function'){
+        window.kioskOpenModel(m.id);
+      }else{
+        /* Fallback: render lineup, then click the exact model tile. */
+        if(typeof show==='function') show('lineup');
+        if(typeof renderLineup==='function') renderLineup();
+        const tile=document.querySelector('[data-model="'+m.id+'"]');
+        if(tile) tile.click();
+      }
+    }catch(err){
+      console.warn('Autoplay model open failed:',m.id,err);
+    }finally{ setTimeout(()=>synthetic=false,180); }
+    await wait(2200); if(!alive(g))return;
 
     // Safety: explicitly keep the actual model screen visible.
     const screen=document.querySelector('[data-screen="model"]');
@@ -763,12 +775,15 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     document.body.classList.add('auto-tour-running');
 
     activate('pfl');
-    await slowScroll(g,2500,9500,4200); if(!alive(g))return;
+    await slowScroll(g,2500,9500,14200); if(!alive(g))return;
 
     await slides(g,'priority-certified','pcNext',5); if(!alive(g))return;
     await slides(g,'lcertified','lcNext',6); if(!alive(g))return;
 
-    const list=window.kioskModels||[];
+    const fallbackIds=['uxh','nx','rx','rz','tx','gx','lx','es','is','lc','lcc'];
+    const list=(window.kioskModels&&window.kioskModels.length)
+      ? window.kioskModels
+      : fallbackIds.map(id=>({id:id}));
     for(const m of list){
       if(!alive(g))return;
       await presentModel(g,m);
@@ -823,6 +838,19 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
   sync();
 })();
 </script>
+
+<style>
+/* v0.37 — mobile hero correction only */
+@media (max-width:700px){
+  #home .hero-copy .hero-small{
+    position:relative!important;
+    top:18px!important;
+    margin-top:0!important;
+    margin-bottom:10px!important;
+    transform:none!important;
+  }
+}
+</style>
 </body>
 </html>
 
