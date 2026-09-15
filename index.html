@@ -132,7 +132,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
   <div class="prototype-footer-block">Prototype · Simulated Data</div>
-<footer class="version-footer">Priority Lexus Kiosk · Version 0.29</footer>
+<footer class="version-footer">Priority Lexus Kiosk · Version 0.30</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
@@ -679,146 +679,134 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
   <div id="autoTourPreviewCard" class="auto-tour-preview-card"></div>
 </div>
 
+
+
 <script>
-/* v0.29 — Android fullscreen + autonomous showroom showcase */
+/* v0.30 — robust showroom autoplay */
 (function(){
+  const IDLE_MS=18000;
+  let runId=0, running=false, timer=null, internal=false;
+  const wait=ms=>new Promise(r=>setTimeout(r,ms));
+  const alive=id=>running && id===runId;
+
+  // Fullscreen control
   const fs=document.getElementById('fullscreenToggle');
-  function syncFs(){
-    const on=!!document.fullscreenElement;
-    fs.textContent=on?'⊡':'⛶';
-    fs.setAttribute('aria-label',on?'Exit full screen':'Enter full screen');
-    fs.title=on?'Exit full screen':'Full screen';
-  }
-  fs.addEventListener('click',async function(e){
-    e.stopPropagation();
-    try{
-      if(!document.fullscreenElement) await document.documentElement.requestFullscreen();
-      else await document.exitFullscreen();
-    }catch(err){}
-  });
-  document.addEventListener('fullscreenchange',syncFs);
-  syncFs();
-
-  const TOUR_IDLE=45000;
-  let tourToken=0, idleHandle=null, running=false, internalAction=false;
-  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-  const tokenOK=t=>running && t===tourToken;
-  const activeScreen=()=>document.querySelector('.screen.active');
-
-  function tourShow(id){
-    internalAction=true;
-    if(typeof show==='function') show(id);
-    setTimeout(()=>internalAction=false,60);
-  }
-  function tourClick(el){
-    if(!el)return;
-    internalAction=true; el.click(); setTimeout(()=>internalAction=false,60);
-  }
-  async function smoothScrollTo(y,duration=7000){
-    const start=window.scrollY, dist=y-start, begin=performance.now();
-    return new Promise(resolve=>{
-      function frame(now){
-        if(!running){resolve();return}
-        const p=Math.min(1,(now-begin)/duration);
-        const ease=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
-        window.scrollTo(0,start+dist*ease);
-        if(p<1) requestAnimationFrame(frame); else resolve();
-      }
-      requestAnimationFrame(frame);
+  if(fs && !fs.dataset.bound){
+    fs.dataset.bound='1';
+    const sync=()=>{const on=!!document.fullscreenElement;fs.textContent=on?'⊡':'⛶';fs.title=on?'Exit full screen':'Full screen'};
+    fs.addEventListener('click',async e=>{
+      e.stopPropagation();
+      try{document.fullscreenElement?await document.exitFullscreen():await document.documentElement.requestFullscreen()}catch(_){}
+      sync();
     });
+    document.addEventListener('fullscreenchange',sync); sync();
   }
-  async function scrollScreen(t,holdTop=2500,scrollMs=6500,holdBottom=2200){
-    window.scrollTo({top:0,behavior:'auto'});
-    await sleep(holdTop); if(!tokenOK(t))return;
+
+  function clickText(text){
+    const wanted=text.toLowerCase();
+    const els=[...document.querySelectorAll('button,a,[role="button"],.portal')];
+    const el=els.find(x=>(x.innerText||x.textContent||'').trim().toLowerCase().includes(wanted) && getComputedStyle(x).display!=='none');
+    if(el){internal=true;el.click();setTimeout(()=>internal=false,100);return true}
+    return false;
+  }
+  function active(){return document.querySelector('.screen.active') || document.querySelector('.screen:not([hidden])')}
+  function goHome(){
+    const home=document.querySelector('.home-btn,#homeBtn,[data-home]');
+    if(home){internal=true;home.click();setTimeout(()=>internal=false,100);return}
+    if(typeof show==='function'){internal=true;show('home');setTimeout(()=>internal=false,100)}
+  }
+  async function scrollCurrent(id, topHold=1800, duration=6500, bottomHold=1600){
+    window.scrollTo(0,0); await wait(topHold); if(!alive(id))return;
     const max=Math.max(0,document.documentElement.scrollHeight-innerHeight);
-    if(max>40) await smoothScrollTo(max,scrollMs);
-    if(!tokenOK(t))return;
-    await sleep(holdBottom);
+    if(max>20){
+      const y0=window.scrollY, t0=performance.now();
+      await new Promise(resolve=>{
+        function step(t){
+          if(!alive(id)){resolve();return}
+          const p=Math.min(1,(t-t0)/duration);
+          window.scrollTo(0,y0+(max-y0)*(p*p*(3-2*p)));
+          p<1?requestAnimationFrame(step):resolve();
+        } requestAnimationFrame(step);
+      });
+    }
+    await wait(bottomHold);
   }
-  async function playCarousel(t,screenId,nextId,count){
-    tourShow(screenId); window.scrollTo(0,0);
-    await sleep(1600);
-    for(let i=0;i<count;i++){
-      if(!tokenOK(t))return;
-      await sleep(5000);
-      if(i<count-1) tourClick(document.getElementById(nextId));
+  async function sectionByHomeLabel(id,label){
+    goHome(); await wait(700); if(!alive(id))return false;
+    const ok=clickText(label); await wait(900);
+    return ok;
+  }
+  async function carousel(id,label,nextId,slides){
+    if(!await sectionByHomeLabel(id,label))return;
+    window.scrollTo(0,0); await wait(1700);
+    const next=document.getElementById(nextId);
+    for(let i=0;i<slides;i++){
+      if(!alive(id))return;
+      await wait(4300);
+      if(i<slides-1 && next){internal=true;next.click();setTimeout(()=>internal=false,80)}
     }
   }
-  function previewModel(m){
-    const overlay=document.getElementById('autoTourPreview');
-    const card=document.getElementById('autoTourPreviewCard');
-    card.innerHTML=`
-      <div class="auto-tour-preview-art">
-        <div class="auto-tour-preview-name">${m.model}</div>
-        ${m.image?`<img src="${m.image}" alt="">`:''}
-      </div>
-      <div class="auto-tour-preview-copy">
-        <div class="eyebrow">${m.year} · ${m.body}</div>
-        <h2>${m.name}</h2>
-        <p>${m.tagline} · ${m.power.join(' · ')} · ${m.seats} seats</p>
-      </div>`;
+  function showPreview(m){
+    const overlay=document.getElementById('autoTourPreview'), card=document.getElementById('autoTourPreviewCard');
+    if(!overlay||!card||!m)return;
+    card.innerHTML=`<div class="auto-tour-preview-art"><div class="auto-tour-preview-name">${m.model||m.name}</div>${m.image?`<img src="${m.image}" alt="">`:''}</div>
+      <div class="auto-tour-preview-copy"><div class="eyebrow">${m.year||''} · ${m.body||''}</div><h2>${m.name}</h2>
+      <p>${m.tagline||''}${m.power?' · '+m.power.join(' · '):''}${m.seats?' · '+m.seats+' seats':''}</p></div>`;
     overlay.classList.add('show');
   }
-  function closePreview(){document.getElementById('autoTourPreview').classList.remove('show')}
+  function hidePreview(){document.getElementById('autoTourPreview')?.classList.remove('show')}
 
-  async function startTour(){
+  async function run(){
     if(running)return;
-    running=true; tourToken++; const t=tourToken;
+    running=true; const id=++runId;
     document.body.classList.add('auto-tour-running');
-    closePreview();
 
-    // Landing page
-    tourShow('home'); window.scrollTo(0,0);
-    await sleep(7000); if(!tokenOK(t))return;
+    // Home
+    goHome(); window.scrollTo(0,0); await wait(5000); if(!alive(id))return;
 
-    // Priorities for Life: top -> animated hooks at bottom
-    tourShow('pfl');
-    await scrollScreen(t,3000,8500,6500); if(!tokenOK(t))return;
+    // Priorities for Life
+    if(await sectionByHomeLabel(id,'Priorities for Life')) await scrollCurrent(id,2200,8000,5200);
+    if(!alive(id))return;
 
-    // L/Certified: six benefit slides
-    await playCarousel(t,'lcertified','lcNext',6); if(!tokenOK(t))return;
+    // L/Certified
+    await carousel(id,'L/Certified','lcNext',6); if(!alive(id))return;
 
-    // Priority Certified: five lifetime component slides
-    await playCarousel(t,'priority-certified','pcNext',5); if(!tokenOK(t))return;
+    // Priority Certified
+    await carousel(id,'Priority Certified','pcNext',5); if(!alive(id))return;
 
-    // Lexus model gallery
-    if(typeof renderLineup==='function'){lineupFilter='all';renderLineup();}
-    tourShow('lineup');
-    await scrollScreen(t,3000,14000,2200); if(!tokenOK(t))return;
+    // Find Your Lexus -> Explore the Lineup
+    if(await sectionByHomeLabel(id,'Find Your Lexus')){
+      await wait(800); clickText('Explore the Lineup'); await wait(1200);
+      await scrollCurrent(id,2200,13000,1800);
+    }
+    if(!alive(id))return;
 
-    // Quick-look model spotlights using supplied artwork.
-    const featured=['rx','gx','es','tx','rz'];
-    for(const id of featured){
-      if(!tokenOK(t))return;
-      const m=models.find(x=>x.id===id); if(!m)continue;
-      previewModel(m); await sleep(4800); closePreview(); await sleep(500);
+    // Vehicle quick looks
+    if(typeof models!=='undefined'){
+      for(const mid of ['uxh','nx','rx','tx','gx','lx','es','is','lc','rz']){
+        if(!alive(id))return;
+        const m=models.find(x=>x.id===mid); if(!m)continue;
+        showPreview(m); await wait(3000); hidePreview(); await wait(350);
+      }
     }
 
-    // Loop back to the landing page and begin again.
-    tourShow('home'); window.scrollTo(0,0); await sleep(5500);
-    if(tokenOK(t)){running=false;document.body.classList.remove('auto-tour-running');startTour();}
+    goHome(); window.scrollTo(0,0); await wait(4500);
+    if(alive(id)){running=false;document.body.classList.remove('auto-tour-running');run()}
   }
 
-  function stopTour(){
+  function stop(){
     if(!running)return;
-    running=false; tourToken++; closePreview();
-    document.body.classList.remove('auto-tour-running');
+    running=false;runId++;hidePreview();document.body.classList.remove('auto-tour-running');
   }
-  function scheduleTour(){
-    clearTimeout(idleHandle);
-    idleHandle=setTimeout(startTour,TOUR_IDLE);
-  }
+  function arm(){clearTimeout(timer);timer=setTimeout(run,IDLE_MS)}
 
-  // Any genuine guest interaction immediately hands control back to the guest.
-  ['pointerdown','touchstart','keydown','wheel'].forEach(evt=>{
-    document.addEventListener(evt,function(){
-      if(internalAction)return;
-      stopTour(); scheduleTour();
-    },{passive:true,capture:true});
+  // Real human input interrupts the tour; programmatic clicks do not.
+  ['pointerdown','touchstart','wheel','keydown'].forEach(type=>{
+    document.addEventListener(type,()=>{if(internal)return;stop();arm()},{capture:true,passive:true});
   });
 
-  // Start automatically after the initial cinematic/home presentation.
-  window.addEventListener('load',function(){scheduleTour()});
+  // Start once the intro has had time to finish; if a user interacts, idle timing resets.
+  window.addEventListener('load',()=>{clearTimeout(timer);timer=setTimeout(run,9000)});
 })();
 </script>
 </body>
