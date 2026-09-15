@@ -132,7 +132,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
   <div class="prototype-footer-block">Prototype · Simulated Data</div>
-<footer class="version-footer">Priority Lexus Kiosk · Version 0.34</footer>
+<footer class="version-footer">Priority Lexus Kiosk · Version 0.35</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
@@ -672,6 +672,112 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     ]; let i=0; const timer=setInterval(()=>{if(current!=='requesting'){clearInterval(timer);return} if(i<lines.length){const d=document.createElement('div');d.className='line '+(i<6?'ok':'');d.textContent=lines[i++];consoleEl.appendChild(d)} else {clearInterval(timer);setTimeout(()=>finishClaim(guest,context),1000)}},420); }
   function finishClaim(guest,context){if(current!=='requesting')return; const staff=staffNames[Math.floor(Math.random()*staffNames.length)];document.getElementById('claimedName').textContent=staff;document.getElementById('claimGuest').textContent=`${guest} · Main Showroom`;document.getElementById('claimContext').textContent=context;document.getElementById('claimedMessage').textContent=`${guest==='Guest'?'A Lexus specialist':staff+' has'} been given the context of your request so you won't have to start over.`;show('claimed')}
 })();
+
+  /* v0.35 — showroom autoplay in the app's lexical scope */
+  (function(){
+    const AUTO_INITIAL=8000, AUTO_IDLE=18000;
+    let autoGen=0,autoRunning=false,autoTimer=null,autoSynthetic=false;
+    const autoWait=ms=>new Promise(r=>setTimeout(r,ms));
+    const autoOK=g=>autoRunning&&g===autoGen;
+
+    function autoShow(id){
+      autoSynthetic=true;
+      show(id);
+      window.scrollTo(0,0);
+      setTimeout(()=>autoSynthetic=false,100);
+    }
+
+    async function autoScroll(g,topHold=2200,duration=9000,bottomHold=2000){
+      window.scrollTo(0,0);
+      await autoWait(topHold); if(!autoOK(g))return;
+      const max=Math.max(0,document.documentElement.scrollHeight-window.innerHeight);
+      if(max>20){
+        const t0=performance.now();
+        await new Promise(done=>{
+          function frame(now){
+            if(!autoOK(g)){done();return}
+            const p=Math.min(1,(now-t0)/duration);
+            const e=p*p*(3-2*p);
+            window.scrollTo(0,Math.round(max*e));
+            p<1?requestAnimationFrame(frame):done();
+          }
+          requestAnimationFrame(frame);
+        });
+      }
+      if(autoOK(g))await autoWait(bottomHold);
+    }
+
+    async function autoSlides(g,screen,nextId,count){
+      autoShow(screen);
+      await autoWait(1400);
+      const next=document.getElementById(nextId);
+      for(let i=0;i<count;i++){
+        if(!autoOK(g))return;
+        await autoWait(4800);
+        if(i<count-1&&next){
+          autoSynthetic=true; next.click(); setTimeout(()=>autoSynthetic=false,100);
+        }
+      }
+    }
+
+    async function autoModel(g,m){
+      autoSynthetic=true;
+      openModel(m.id); // direct lexical access: renders content + show('model')
+      setTimeout(()=>autoSynthetic=false,120);
+      await autoWait(1700); if(!autoOK(g))return;
+      await autoScroll(g,2600,9500,2300);
+    }
+
+    async function autoCycle(){
+      if(autoRunning)return;
+      autoRunning=true;
+      const g=++autoGen;
+      document.body.classList.add('auto-tour-running');
+
+      // Priorities for Life
+      autoShow('pfl');
+      await autoScroll(g,2500,9500,4200); if(!autoOK(g))return;
+
+      // Priority Certified
+      await autoSlides(g,'priority-certified','pcNext',5); if(!autoOK(g))return;
+
+      // L/Certified
+      await autoSlides(g,'lcertified','lcNext',6); if(!autoOK(g))return;
+
+      // Every model detail page directly — no Finder/Lineup screens.
+      for(const m of models){
+        if(!autoOK(g))return;
+        await autoModel(g,m);
+      }
+
+      // Continuous loop directly back to PFL.
+      autoRunning=false;
+      document.body.classList.remove('auto-tour-running');
+      if(g===autoGen) autoCycle();
+    }
+
+    function autoStop(){
+      if(!autoRunning)return;
+      autoRunning=false;++autoGen;
+      document.body.classList.remove('auto-tour-running');
+    }
+    function autoArm(){
+      clearTimeout(autoTimer);
+      autoTimer=setTimeout(autoCycle,AUTO_IDLE);
+    }
+
+    ['pointerdown','touchstart','wheel','keydown'].forEach(evt=>{
+      document.addEventListener(evt,()=>{
+        if(autoSynthetic)return;
+        autoStop();autoArm();
+      },{capture:true,passive:true});
+    });
+
+    window.addEventListener('load',()=>{
+      clearTimeout(autoTimer);
+      autoTimer=setTimeout(autoCycle,AUTO_INITIAL);
+    });
+  })();
 </script>
 
 <div class="auto-tour-badge">AUTO SHOWCASE</div>
@@ -2861,123 +2967,4 @@ body.auto-tour-running .auto-tour-badge{opacity:.72}
 
 
 
-<script>
-/* v0.34 — corrected direct model-detail showroom loop */
-(function(){
-  const INITIAL_DELAY=8000, IDLE_DELAY=18000;
-  let generation=0,running=false,idleTimer=null,programmatic=false;
-  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-  const ok=g=>running&&g===generation;
 
-  function directShow(id){
-    programmatic=true;
-    const target=document.querySelector('[data-screen="'+id+'"]');
-    if(target){
-      document.querySelectorAll('.screen').forEach(x=>x.classList.toggle('active',x===target));
-      window.scrollTo(0,0);
-      try{current=id}catch(_){}
-    }
-    setTimeout(()=>programmatic=false,100);
-  }
-
-  async function scrollActive(g,topHold=2000,duration=8000,bottomHold=1800){
-    window.scrollTo({top:0,behavior:'auto'});
-    await sleep(topHold); if(!ok(g))return;
-    const max=Math.max(0,document.documentElement.scrollHeight-window.innerHeight);
-    if(max>25){
-      const start=performance.now();
-      await new Promise(done=>{
-        function frame(now){
-          if(!ok(g)){done();return}
-          const p=Math.min(1,(now-start)/duration);
-          const e=p*p*(3-2*p);
-          window.scrollTo(0,Math.round(max*e));
-          p<1?requestAnimationFrame(frame):done();
-        }
-        requestAnimationFrame(frame);
-      });
-    }
-    if(ok(g))await sleep(bottomHold);
-  }
-
-  async function playSlides(g,screen,nextId,count){
-    directShow(screen); await sleep(1400);
-    const next=document.getElementById(nextId);
-    for(let i=0;i<count;i++){
-      if(!ok(g))return;
-      await sleep(4800);
-      if(i<count-1&&next){
-        programmatic=true;next.click();setTimeout(()=>programmatic=false,100);
-      }
-    }
-  }
-
-  async function openAndPresentModel(g,m){
-    programmatic=true;
-    try{
-      if(typeof openModel==='function'){
-        openModel(m.id);
-      }
-    }catch(_){}
-    /* The real model presentation screen is data-screen="model". */
-    const modelScreen=document.querySelector('[data-screen="model"]');
-    if(modelScreen){
-      document.querySelectorAll('.screen').forEach(x=>x.classList.toggle('active',x===modelScreen));
-    }
-    setTimeout(()=>programmatic=false,120);
-    await sleep(1700); if(!ok(g))return;
-    window.scrollTo(0,0);
-    await scrollActive(g,2600,9000,2200);
-  }
-
-  async function cycle(){
-    if(running)return;
-    running=true; const g=++generation;
-    document.body.classList.add('auto-tour-running');
-
-    // 1 — Priorities for Life
-    directShow('pfl');
-    await scrollActive(g,2500,9500,4200); if(!ok(g))return;
-
-    // 2 — Priority Certified
-    await playSlides(g,'priority-certified','pcNext',5); if(!ok(g))return;
-
-    // 3 — L/Certified
-    await playSlides(g,'lcertified','lcNext',6); if(!ok(g))return;
-
-    // 4 — Skip Finder + Lineup entirely. Present every model detail page directly.
-    if(typeof models!=='undefined'&&Array.isArray(models)){
-      for(const m of models){
-        if(!ok(g))return;
-        await openAndPresentModel(g,m);
-      }
-    }
-
-    // 5 — No homepage pause: return directly to PFL and continue forever.
-    running=false;
-    document.body.classList.remove('auto-tour-running');
-    if(g===generation) cycle();
-  }
-
-  function stop(){
-    if(!running)return;
-    running=false;++generation;
-    document.body.classList.remove('auto-tour-running');
-  }
-  function rearm(){clearTimeout(idleTimer);idleTimer=setTimeout(cycle,IDLE_DELAY)}
-
-  ['pointerdown','touchstart','wheel','keydown'].forEach(evt=>{
-    document.addEventListener(evt,()=>{if(programmatic)return;stop();rearm()},{capture:true,passive:true});
-  });
-
-  // Preserve fullscreen control.
-  const fs=document.getElementById('fullscreenToggle');
-  if(fs){
-    const sync=()=>{const on=!!document.fullscreenElement;fs.textContent=on?'⊡':'⛶';fs.title=on?'Exit full screen':'Full screen'};
-    fs.onclick=async e=>{e.stopPropagation();try{document.fullscreenElement?await document.exitFullscreen():await document.documentElement.requestFullscreen()}catch(_){}sync()};
-    document.addEventListener('fullscreenchange',sync);sync();
-  }
-
-  window.addEventListener('load',()=>{clearTimeout(idleTimer);idleTimer=setTimeout(cycle,INITIAL_DELAY)});
-})();
-</script>
