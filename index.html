@@ -132,7 +132,7 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
     <button class="mini-cta" data-help="General showroom assistance">ASK OUR TEAM</button>
   </div>
   <div class="prototype-footer-block">Prototype · Simulated Data</div>
-<footer class="version-footer">Priority Lexus Kiosk · Version 0.30</footer>
+<footer class="version-footer">Priority Lexus Kiosk · Version 0.31</footer>
 </section>
 
 <section id="pfl" class="screen" data-screen="pfl">
@@ -681,132 +681,151 @@ h1,h2,h3,p{margin:0}.title{font-size:clamp(40px,6vw,76px);line-height:.96;letter
 
 
 
+
+
 <script>
-/* v0.30 — robust showroom autoplay */
+/* v0.31 — deterministic showroom presentation */
 (function(){
-  const IDLE_MS=18000;
-  let runId=0, running=false, timer=null, internal=false;
-  const wait=ms=>new Promise(r=>setTimeout(r,ms));
-  const alive=id=>running && id===runId;
+  const IDLE=18000;
+  let token=0, playing=false, idleTimer=null, synthetic=false;
+  const pause=ms=>new Promise(r=>setTimeout(r,ms));
+  const valid=t=>playing&&t===token;
 
-  // Fullscreen control
+  // Fullscreen
   const fs=document.getElementById('fullscreenToggle');
-  if(fs && !fs.dataset.bound){
-    fs.dataset.bound='1';
-    const sync=()=>{const on=!!document.fullscreenElement;fs.textContent=on?'⊡':'⛶';fs.title=on?'Exit full screen':'Full screen'};
-    fs.addEventListener('click',async e=>{
-      e.stopPropagation();
-      try{document.fullscreenElement?await document.exitFullscreen():await document.documentElement.requestFullscreen()}catch(_){}
-      sync();
-    });
-    document.addEventListener('fullscreenchange',sync); sync();
+  if(fs&&!fs.dataset.v31){
+    fs.dataset.v31='1';
+    const sync=()=>{let on=!!document.fullscreenElement;fs.textContent=on?'⊡':'⛶';fs.title=on?'Exit full screen':'Full screen'};
+    fs.addEventListener('click',async e=>{e.stopPropagation();try{document.fullscreenElement?await document.exitFullscreen():await document.documentElement.requestFullscreen()}catch(_){}sync()});
+    document.addEventListener('fullscreenchange',sync);sync();
   }
 
-  function clickText(text){
-    const wanted=text.toLowerCase();
-    const els=[...document.querySelectorAll('button,a,[role="button"],.portal')];
-    const el=els.find(x=>(x.innerText||x.textContent||'').trim().toLowerCase().includes(wanted) && getComputedStyle(x).display!=='none');
-    if(el){internal=true;el.click();setTimeout(()=>internal=false,100);return true}
-    return false;
+  function invoke(fn){synthetic=true;try{fn()}finally{setTimeout(()=>synthetic=false,120)}}
+  function go(screen){invoke(()=>{if(typeof show==='function')show(screen)})}
+  function home(){go('home');window.scrollTo(0,0)}
+  function visibleButton(fragment){
+    fragment=fragment.toLowerCase();
+    return [...document.querySelectorAll('button,a,[role=button],.portal')].find(el=>{
+      const txt=(el.innerText||el.textContent||'').trim().toLowerCase();
+      const cs=getComputedStyle(el);
+      return txt.includes(fragment)&&cs.display!=='none'&&cs.visibility!=='hidden';
+    });
   }
-  function active(){return document.querySelector('.screen.active') || document.querySelector('.screen:not([hidden])')}
-  function goHome(){
-    const home=document.querySelector('.home-btn,#homeBtn,[data-home]');
-    if(home){internal=true;home.click();setTimeout(()=>internal=false,100);return}
-    if(typeof show==='function'){internal=true;show('home');setTimeout(()=>internal=false,100)}
+  function tapText(fragment){
+    const b=visibleButton(fragment); if(!b)return false;
+    invoke(()=>b.click()); return true;
   }
-  async function scrollCurrent(id, topHold=1800, duration=6500, bottomHold=1600){
-    window.scrollTo(0,0); await wait(topHold); if(!alive(id))return;
-    const max=Math.max(0,document.documentElement.scrollHeight-innerHeight);
-    if(max>20){
-      const y0=window.scrollY, t0=performance.now();
-      await new Promise(resolve=>{
-        function step(t){
-          if(!alive(id)){resolve();return}
-          const p=Math.min(1,(t-t0)/duration);
-          window.scrollTo(0,y0+(max-y0)*(p*p*(3-2*p)));
-          p<1?requestAnimationFrame(step):resolve();
-        } requestAnimationFrame(step);
+
+  async function scrollPage(t,topHold=1700,scrollTime=7000,bottomHold=1500){
+    window.scrollTo({top:0,behavior:'auto'});await pause(topHold);if(!valid(t))return;
+    let max=Math.max(0,document.documentElement.scrollHeight-innerHeight);
+    if(max>30){
+      const start=performance.now();
+      await new Promise(done=>{
+        const tick=now=>{
+          if(!valid(t)){done();return}
+          const p=Math.min(1,(now-start)/scrollTime);
+          const e=p*p*(3-2*p);
+          window.scrollTo(0,max*e);
+          p<1?requestAnimationFrame(tick):done();
+        };requestAnimationFrame(tick);
       });
     }
-    await wait(bottomHold);
+    if(valid(t))await pause(bottomHold);
   }
-  async function sectionByHomeLabel(id,label){
-    goHome(); await wait(700); if(!alive(id))return false;
-    const ok=clickText(label); await wait(900);
-    return ok;
+
+  async function enterFromHome(t,label){
+    home();await pause(650);if(!valid(t))return false;
+    const ok=tapText(label);await pause(950);return ok&&valid(t);
   }
-  async function carousel(id,label,nextId,slides){
-    if(!await sectionByHomeLabel(id,label))return;
-    window.scrollTo(0,0); await wait(1700);
+
+  async function carousel(t,label,nextId,count){
+    if(!await enterFromHome(t,label))return;
+    window.scrollTo(0,0);await pause(1600);
     const next=document.getElementById(nextId);
-    for(let i=0;i<slides;i++){
-      if(!alive(id))return;
-      await wait(4300);
-      if(i<slides-1 && next){internal=true;next.click();setTimeout(()=>internal=false,80)}
+    for(let i=0;i<count;i++){
+      if(!valid(t))return;
+      await pause(5000);
+      if(i<count-1&&next)invoke(()=>next.click());
     }
   }
-  function showPreview(m){
-    const overlay=document.getElementById('autoTourPreview'), card=document.getElementById('autoTourPreviewCard');
-    if(!overlay||!card||!m)return;
-    card.innerHTML=`<div class="auto-tour-preview-art"><div class="auto-tour-preview-name">${m.model||m.name}</div>${m.image?`<img src="${m.image}" alt="">`:''}</div>
-      <div class="auto-tour-preview-copy"><div class="eyebrow">${m.year||''} · ${m.body||''}</div><h2>${m.name}</h2>
-      <p>${m.tagline||''}${m.power?' · '+m.power.join(' · '):''}${m.seats?' · '+m.seats+' seats':''}</p></div>`;
-    overlay.classList.add('show');
-  }
-  function hidePreview(){document.getElementById('autoTourPreview')?.classList.remove('show')}
 
-  async function run(){
-    if(running)return;
-    running=true; const id=++runId;
+  async function lineup(t){
+    if(!await enterFromHome(t,'Find Your Lexus'))return false;
+    await pause(500);tapText('Explore the Lineup');await pause(1000);
+    if(typeof renderLineup==='function')invoke(()=>{lineupFilter='all';renderLineup()});
+    await scrollPage(t,1800,12000,1800);
+    return valid(t);
+  }
+
+  async function modelDetail(t,m){
+    // Open through the app's model-detail function so all existing content/accessories render.
+    window.scrollTo(0,0);
+    if(typeof openModel==='function')invoke(()=>openModel(m.id));
+    else {
+      // Fallback: return to lineup and tap the matching model card.
+      await lineup(t);
+      const card=[...document.querySelectorAll('.model-tile,button,a')].find(x=>(x.innerText||'').includes(m.name));
+      if(card)invoke(()=>card.click());
+    }
+    await pause(1000);if(!valid(t))return;
+    await scrollPage(t,1900,7000,1600);
+  }
+
+  async function play(){
+    if(playing)return;
+    playing=true;const t=++token;
     document.body.classList.add('auto-tour-running');
 
-    // Home
-    goHome(); window.scrollTo(0,0); await wait(5000); if(!alive(id))return;
+    // 1. Priorities for Life — full page
+    if(await enterFromHome(t,'Priorities for Life')) await scrollPage(t,2200,9000,2600);
+    if(!valid(t))return;
 
-    // Priorities for Life
-    if(await sectionByHomeLabel(id,'Priorities for Life')) await scrollCurrent(id,2200,8000,5200);
-    if(!alive(id))return;
+    // 2. Priority Certified — all five slides
+    await carousel(t,'Priority Certified','pcNext',5);
+    if(!valid(t))return;
 
-    // L/Certified
-    await carousel(id,'L/Certified','lcNext',6); if(!alive(id))return;
+    // 3. L/Certified — all six slides
+    await carousel(t,'L/Certified','lcNext',6);
+    if(!valid(t))return;
 
-    // Priority Certified
-    await carousel(id,'Priority Certified','pcNext',5); if(!alive(id))return;
+    // 4. Explore full Lexus lineup
+    await lineup(t);
+    if(!valid(t))return;
 
-    // Find Your Lexus -> Explore the Lineup
-    if(await sectionByHomeLabel(id,'Find Your Lexus')){
-      await wait(800); clickText('Explore the Lineup'); await wait(1200);
-      await scrollCurrent(id,2200,13000,1800);
-    }
-    if(!alive(id))return;
-
-    // Vehicle quick looks
+    // 5. Every model, one by one, top-to-bottom
     if(typeof models!=='undefined'){
-      for(const mid of ['uxh','nx','rx','tx','gx','lx','es','is','lc','rz']){
-        if(!alive(id))return;
-        const m=models.find(x=>x.id===mid); if(!m)continue;
-        showPreview(m); await wait(3000); hidePreview(); await wait(350);
+      for(const m of models){
+        if(!valid(t))return;
+        await modelDetail(t,m);
+        if(!valid(t))return;
       }
     }
 
-    goHome(); window.scrollTo(0,0); await wait(4500);
-    if(alive(id)){running=false;document.body.classList.remove('auto-tour-running');run()}
+    // 6. Return home and repeat
+    home();await pause(5000);
+    if(valid(t)){
+      playing=false;document.body.classList.remove('auto-tour-running');
+      play();
+    }
   }
 
   function stop(){
-    if(!running)return;
-    running=false;runId++;hidePreview();document.body.classList.remove('auto-tour-running');
+    if(!playing)return;
+    playing=false;++token;
+    document.body.classList.remove('auto-tour-running');
   }
-  function arm(){clearTimeout(timer);timer=setTimeout(run,IDLE_MS)}
+  function arm(){
+    clearTimeout(idleTimer);
+    idleTimer=setTimeout(play,IDLE);
+  }
 
-  // Real human input interrupts the tour; programmatic clicks do not.
-  ['pointerdown','touchstart','wheel','keydown'].forEach(type=>{
-    document.addEventListener(type,()=>{if(internal)return;stop();arm()},{capture:true,passive:true});
+  ['pointerdown','touchstart','wheel','keydown'].forEach(evt=>{
+    document.addEventListener(evt,()=>{if(synthetic)return;stop();arm()},{capture:true,passive:true});
   });
 
-  // Start once the intro has had time to finish; if a user interacts, idle timing resets.
-  window.addEventListener('load',()=>{clearTimeout(timer);timer=setTimeout(run,9000)});
+  // Initial cinematic gets a moment, then the deterministic presentation starts.
+  window.addEventListener('load',()=>{clearTimeout(idleTimer);idleTimer=setTimeout(play,9000)});
 })();
 </script>
 </body>
